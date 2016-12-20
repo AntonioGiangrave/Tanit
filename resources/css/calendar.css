@@ -1,0 +1,30 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5-lug-2016, 15.55.48
+    Author     : Tony
+*/
+
+
+#calendario .panel {
+    margin-bottom: 0px !important;
+}
+
+#calendario .panel-body{
+	padding: 1px !important;
+}
+
+#calendario .panel-title{
+    font-size: 13px !important;
+    font-weight: bold;
+    padding: 0px;
+}
+
+.autoWidth {
+    width: auto;
+    margin:10px;
+}
+
