@@ -8,6 +8,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
@@ -15,7 +16,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     use Authenticatable,
         CanResetPassword;
 
-
+    use HasRoles;
     /**
      * The database table used by the model.
      *

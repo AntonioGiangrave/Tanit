@@ -160,6 +160,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         'Barryvdh\Debugbar\ServiceProvider',
 
+        Spatie\Permission\PermissionServiceProvider::class,
+
     ],
 
     /*
