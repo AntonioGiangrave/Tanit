@@ -156,6 +156,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        'Illuminate\Broadcasting\BroadcastServiceProvider',
+        Collective\Html\HtmlServiceProvider::class,
+        'Barryvdh\Debugbar\ServiceProvider',
+
     ],
 
     /*
@@ -202,6 +206,16 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+
+        'Input' => Illuminate\Support\Facades\Input::class,
+
+
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        
+        
+        
     ],
 
 ];

@@ -17,7 +17,7 @@ elixir(function(mix) {
 
 
     mix.copy('bower_components/bootstrap/dist/fonts', 'httpdocs/assets/fonts');
-    mix.copy('bower_components/font-awesome/fonts', 'httpdocs/assets/fonts');
+    mix.copy('bower_components/fontawesome/fonts', 'httpdocs/assets/fonts');
     mix.styles([
         'bower_components/bootstrap/dist/css/bootstrap.css',
         'bower_components/fontawesome/css/font-awesome.css',
