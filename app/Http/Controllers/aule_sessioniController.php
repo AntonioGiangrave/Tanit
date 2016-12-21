@@ -16,10 +16,7 @@ class aule_sessioniController extends Controller
     public function index()
     {
         $data['sessioni'] = \App\aule_sessioni::with('_corso', '_aula' ,'_prenotazioni')->orderBy('dal', 'asc')->get();
-
-
         return view('aule.aule_sessioni', $data);
-
     }
 
     /**

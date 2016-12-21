@@ -20,7 +20,7 @@
             <div class="row row-bottom-padded-md">
                 <div class="col-md-8 col-md-offset-2 text-center ts-intro">
                     <h1>Kairos formazione</h1>
-                    <p class="fh5co-lead">La storia di Kairos è recente, quella delle persone che le compongono invece si erge su un passato di  esperienze consolidate  di 							FORMAZIONE   E   CONSULENZA </p>
+                    <p class="fh5co-lead">La storia di TANIT è recente, quella delle persone che le compongono invece si erge su un passato di  esperienze consolidate  di 							FORMAZIONE   E   CONSULENZA </p>
                 </div>
             </div>
             <div class="row row-bottom-padded-sm">
@@ -61,8 +61,8 @@
                     <p><img src="images/puzzle.png" alt="Free HTML5 Bootstrap Template" class="img-responsive img-bordered"></p>
                 </div>
                 <div class="col-md-6 padded-top">
-                    <h3>L'identità di Kairos?</h3>
-                    <p>Kairos nasce nel 2014 con tre soci fondatori SicurNet Liguria, attiva dal 2004  nel settore sicurezza ed antincendio,</p>
+                    <h3>L'identità di Tanit?</h3>
+                    <p>Tanit nasce nel 2014 con tre soci fondatori SicurNet Liguria, attiva dal 2004  nel settore sicurezza ed antincendio,</p>
                     <ul class="ul_style_1">
                         <li>SicurNet Liguria, attiva dal 2004  nel settore sicurezza ed antincendio</li>
                         <li>Tanit Srl, società di consulenza in materia di Salute e Sicurezza sul Lavoro, Privacy e Sistemi di Gestione</li>
@@ -70,8 +70,8 @@
                     </ul>
 
                 </div>
-                <p>Dalla  loro comunanza di intenti origina Kairos, Centro di Formazione Accreditato in Liguria per la Formazione Continua e Permanente.</p>
-                <p>				L'identità di Kairos?   Competenze condivise e supporto costante al cliente,  in ogni fase del progetto formativo: dall’ analisi dei bisogni alla stesura dei progetti formativi, dal reperimento dei finanziamenti tramite Fondi Pubblici e Interprofessionali alla rendicontazione dei progetti, dalla ricerca dei docenti all’ erogazione della formazione. Grazie al lavoro  con le persone e sulle persone - migliorando efficienza ed efficacia- siamo in grado di offrire alle imprese maggiore produttività e un incremento della competitività, mediante lo sviluppo delle competenze e del benessere delle loro risorse umane.</p>
+                <p>Dalla  loro comunanza di intenti origina Tanit, Centro di Formazione Accreditato in Liguria per la Formazione Continua e Permanente.</p>
+                <p>				L'identità di Tanit?   Competenze condivise e supporto costante al cliente,  in ogni fase del progetto formativo: dall’ analisi dei bisogni alla stesura dei progetti formativi, dal reperimento dei finanziamenti tramite Fondi Pubblici e Interprofessionali alla rendicontazione dei progetti, dalla ricerca dei docenti all’ erogazione della formazione. Grazie al lavoro  con le persone e sulle persone - migliorando efficienza ed efficacia- siamo in grado di offrire alle imprese maggiore produttività e un incremento della competitività, mediante lo sviluppo delle competenze e del benessere delle loro risorse umane.</p>
             </div>
 
 
@@ -87,7 +87,7 @@
                     <div class="fh5co-service text-center">
                         <img src="images/slider_2.jpg" class="img-responsive img-bordered" alt="Free HTML5 Bootstrap Template by FreeHTML5.co">
                         <h3>Integrazione</h3>
-                        <p>Kairos lavora sul benessere delle persone a 360° apportando grandi benefici anche al
+                        <p>Tanit lavora sul benessere delle persone a 360° apportando grandi benefici anche al
                             contesto di cui sono parte. Per noi un elevato livello di coinvolgimento e soddisfazione delle persone
                             è fondamentale per raggiungere grandi risultati.</p>
                     </div>

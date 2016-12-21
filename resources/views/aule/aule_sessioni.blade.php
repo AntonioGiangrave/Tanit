@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
 
-                <?php $canedit = Auth::user()->hasAnyGroups('admin'); ?>
+
                 @foreach($sessioni as $single)
 
                     <tr>
@@ -43,10 +43,9 @@
                         <td> {{ $single->_prenotazioni->count() }}</td>
 
                         <td>
-                            @if($canedit)
-                                <a class="btn btn-warning btn-xs "   href="/aule_sessioni/{{$single->id}}/edit">modifica</a>
-
-                            @endif
+                            @role(['admin' , 'superuser'])
+                            <a class="btn btn-warning btn-xs "   href="/aule_sessioni/{{$single->id}}/edit">modifica</a>
+                            @endrole
                         </td>
                     </tr>
 

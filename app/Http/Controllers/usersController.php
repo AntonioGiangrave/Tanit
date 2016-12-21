@@ -9,6 +9,9 @@ use App\Usergroups;
 use App\registro_formazione;
 use Illuminate\Http\Request;
 
+use Spatie\Permission\Models\Role;
+
+
 class usersController extends Controller {
 
     //
@@ -26,8 +29,11 @@ class usersController extends Controller {
 
         $data['societa'] = Societa::lists('ragione_sociale', 'id');
 
-        $usergroups = new Usergroups();
-        $data['usergroups'] = $usergroups->getTree();
+
+//        $data['usergroups'] = $usergroups->getTree();
+        $data['roles'] = Role::lists('name' , 'id');
+
+        \Debugbar::info($data['roles']);
 
         /******************************************************************
         DA COMPLETARE !!!!!!

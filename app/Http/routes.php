@@ -21,17 +21,27 @@ Route::get('/', function() {
 //    return View::make('cache.home');
 //});
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 Route::get('/test', function() {
 
-//    $cur = Auth::user();
-//    $cur->givePermissionTo('superUser');
+
+//    $role
+
+
 
 
     $users = \App\User::all()->take(10);
 
     return View::make('cache.test')->with('users' , $users);
 });
+
+
+
+
+
 
 
 
@@ -52,40 +62,20 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('ateco', 'atecoController');
     Route::resource('registro_formazione', 'registro_formazioneController');
 
-    //    Route::resource('fad', 'registro_formazioneController');
-    //    Route::resource('aule', 'registro_formazioneController');
-    Route::resource('aule_sessioni', 'aule_sessioniController');
+    Route::resource('fad', 'registro_formazioneController');
+//        Route::resource('aule', 'registro_formazioneController');
 
 
+    Route::group(['middleware' => ['role:admin']], function () {
+//
+        Route::resource('aule_sessioni', 'aule_sessioniController');
+    });
 
 
 
 
 
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
-
-
-
-//
-//    Route::resource('commesse', 'commesseController');
-//    Route::get('userPerCommessa', 'commesseController@userPerCommessa');
-//
-//
-//
-//
-//    Route::resource('calendario', 'calendarioController');
-//    Route::resource('calendario.destroy', 'calendarioController@destroy');
-//
-//
-//    Route::resource('calendar', 'calendarioController@calendar');
-//    Route::resource('feriepermessi', 'calendarioController@feriepermessi');
-//    Route::resource('approvazione', 'calendarioController@approvazione');
-//    Route::resource('rilevazione', 'calendarioController@rilevazione');
-//    Route::resource('do_rileva', 'calendarioController@do_rileva');
-//
-//    Route::resource('google', 'googleController');
-//
-
 
 
     //AUTOCOMPLETE

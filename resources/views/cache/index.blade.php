@@ -67,8 +67,8 @@
 
 						@endif
 
-						@if( Auth::user())
-							@if( Auth::user()->hasAnyGroups('admin') )
+
+							@role(['admin'])
 
 								<li class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -93,9 +93,7 @@
 
 									</ul>
 								</li>
-
-								@endif
-								@endif
+								@endrole
 
 										<!--
             <li class="has-sub">

@@ -47,16 +47,17 @@
 
             <div class="col-md-4">
 
-                @if(Auth::user()->hasAnyGroups('Admin'))
+
+                @role(['admin'])
                     {{ Form::label('Autorizzazioni', 'Gruppi:') }}
                     <div class='form-group'>
-                        @foreach ($usergroups as $key => $val)
+                        @foreach ($roles as $key => $val)
                             <br>
                             {{ Form::checkbox('groups[]', $key) }}
                             {{ Form::label('groups', $val) }}
                         @endforeach
                     </div>
-                @endif
+                @endrole
 
             </div>
 

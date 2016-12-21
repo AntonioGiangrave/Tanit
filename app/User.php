@@ -49,10 +49,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('App\user_profiles' , 'id' , 'id');
     }
 
-    public function groups()
-    {
-        return $this->belongsToMany('\App\Usergroups' , 'user_group' , 'user_id', 'group_id' );
-    }
+//    public function groups()
+//    {
+//        return $this->belongsToMany('\App\Usergroups' , 'user_group' , 'user_id', 'group_id' );
+//    }
 
     public function commesse()
     {
@@ -106,40 +106,37 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $tot;
     }
 
-
-
-
     public function getFullName()
     {
         return $this->cognome. " " . $this->nome;
     }
 
-    public function hasAnyGroups($groups)
-    {
-        if(is_array($groups))
-        {
-            foreach ($groups as $group) {
-                if($this->hasGroup($group))
-                    return true;
-            }
-        }
-        else
-        {
-            if($this->hasGroup($groups))
-                return true;
-        }
-        return false;
-    }
-
-    public function hasGroup($group)
-    {
-        $chk = $this->groups()->where('name', $group)->first();
-        \Debugbar::info($chk);
-        if($chk){
-            return true;
-        }
-        return false;
-    }
+//    public function hasAnyGroups($groups)
+//    {
+//        if(is_array($groups))
+//        {
+//            foreach ($groups as $group) {
+//                if($this->hasGroup($group))
+//                    return true;
+//            }
+//        }
+//        else
+//        {
+//            if($this->hasGroup($groups))
+//                return true;
+//        }
+//        return false;
+//    }
+//
+//    public function hasGroup($group)
+//    {
+//        $chk = $this->groups()->where('name', $group)->first();
+//        \Debugbar::info($chk);
+//        if($chk){
+//            return true;
+//        }
+//        return false;
+//    }
 
 
 
