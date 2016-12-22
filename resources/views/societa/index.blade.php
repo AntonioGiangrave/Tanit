@@ -7,6 +7,10 @@
         <div class="col-sm-12">
 
 
+
+
+
+
             <table class="table table-striped">
 
                 <thead>  <tr>
@@ -20,7 +24,7 @@
                 </thead>
                 <tbody>
 
-                <?php $canedit = Auth::user()->hasAnyGroups('admin'); ?>
+
 
                 @foreach($societa as $single)
 
@@ -39,10 +43,9 @@
                         <td align="center"><b>{{$single->user->count()}}</b></td>
 
                         <td>
-                            @if($canedit)
-                                <a class="btn btn-warning btn-xs "   href="/societa/{{$single->id}}/edit">modifica</a>
-
-                            @endif
+                            @role(['admin' ,'superuser' , 'gestoremultiplo' ,'azienda'])
+                            <a class="btn btn-warning btn-xs "   href="/societa/{{$single->id}}/edit">modifica</a>
+                            @endrole
                         </td>
                     </tr>
 

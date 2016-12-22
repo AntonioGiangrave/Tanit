@@ -7,6 +7,8 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Auth;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -24,20 +26,13 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
-
-    /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -50,8 +45,13 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
+            'nome' => 'required|max:255',
+            'cognome' => 'required|max:255',
+            
+            
+            
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|confirmed|min:6',
         ]);
     }
 
@@ -63,10 +63,32 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+
+        $user = User::create([
             'name' => $data['name'],
+            
+            'nome' => $data['nome'],
+            'cognome' => $data['cognome'],
+            
+            
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+
+            'societa_id' =>$data['societa_id']
         ]);
+
+        $user->assignRole('user');
+
+        $user_profile = new \App\user_profiles();
+        $user_profile->id= $user->id;
+        $user_profile->user_id= $user->id;
+        $user_profile->save();
+
+        Auth::login($user);
+
+        return $user;
+
     }
+
+
 }

@@ -5,30 +5,54 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\societa;
 use App\User;
-use App\Usergroups;
+
 use App\registro_formazione;
 use Illuminate\Http\Request;
 
 use Spatie\Permission\Models\Role;
 
+use Auth;
+
 
 class usersController extends Controller {
 
     //
-    public function index() {
+    public function index(Request $request) {
 
-        $data = User::with('societa')
-            ->where('bloccato', 0)
-            ->orderBy('cognome')->get();
 
-        return view('users.index', compact('data'));
+        //Recupero gli utenti della societa
+        $data = User::where('bloccato', 0)
+            ->orderBy('cognome');
+
+        if(Auth::user()->hasRole('azienda')) 
+            $data->where('societa_id', Auth::user()->societa_id);
+
+        if(Auth::user()->hasAnyRole(['admin', 'gestoremultiplo', 'superuser'])) {
+            if($societa = \App\societa::find($request->input('societa_id'))) {
+
+                $allinea = new registro_formazione();
+                $allinea->sync_azienda($societa->id);
+
+                $data->where('societa_id', $societa->id);
+            }
+            else $data->where('societa_id', 1);
+        }
+
+
+
+        $data= $data->with('_registro_formazione');
+        $data= $data->get();
+
+        //Recupero se sono gestore multiplo recupero le societa
+        $societa = \App\societa::lists('ragione_sociale', 'id');
+
+        return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $request->input('societa_id'));
     }
 
     public function edit($id) {
         $data['datiRecuperati'] = User::with('user_profiles' , '_albi_professionali' , '_incarichi_sicurezza' , '_mansioni')->find($id);
 
         $data['societa'] = Societa::lists('ragione_sociale', 'id');
-
 
 //        $data['usergroups'] = $usergroups->getTree();
         $data['roles'] = Role::lists('name' , 'id');
@@ -90,7 +114,7 @@ class usersController extends Controller {
 
         $user->save();
 
-        $user->groups()->sync($request->get('groups'));
+//        $user->groups()->sync($request->get('groups'));
 
         $user->_albi_professionali()->sync( (array) $request->get('_albi_professionali'));
 
@@ -101,7 +125,7 @@ class usersController extends Controller {
         $allinea = new registro_formazione();
         $allinea->sync_utente($id);
 
-        return redirect('users')->with('ok_message', 'La tua rubrica è stata aggiornata');
+        return redirect('/users/'.$user->id.'/edit')->with('ok_message', 'Il profilo è stato aggiornato');
     }
 
 

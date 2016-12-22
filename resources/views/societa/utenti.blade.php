@@ -10,7 +10,7 @@
             </thead>
             <tbody>
 
-            <?php $canedit = Auth::user()->hasAnyGroups('admin'); ?>
+
 
             @foreach($utentiSocieta as $dip)
                 <tr>
@@ -33,11 +33,11 @@
 
                     </td>
                     <td>
-                        @if($canedit)
+
+                        @role(['admin', 'azienda'])
                             <a class="btn btn-warning btn-xs" href="/usersformazione/{{$dip->id}}/edit"><i class="fa fa-pencil"></i></a>
+                        @endrole
 
-
-                        @endif
                     </td>
                 </tr>
             @endforeach

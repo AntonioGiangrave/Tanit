@@ -28,6 +28,15 @@ class RoleMiddleware
             abort(403);
         }
 
+
+        \Debugbar::info('loginazienda');
+        if ($request->user()->hasRole('azienda')) {
+            \Debugbar::info('loginazienda');
+            return redirect('/societa/' . $request->user()->societa_id . '/edit')->with('error', 'Devi aggiornare l\'ateco della società ' . $request->user()->societa->ragione_sociale . 'prima di procedere');
+        }
+
+
+
 //        if (! $request->user()->hasPermissionTo($permission)) {
 //            abort(403);
 //        }

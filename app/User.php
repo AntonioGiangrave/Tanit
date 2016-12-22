@@ -29,7 +29,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'nome', 'cognome', 'email', 'password'];
+    protected $fillable = ['name', 'nome', 'cognome', 'email', 'password' , 'societa_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -49,10 +49,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('App\user_profiles' , 'id' , 'id');
     }
 
-//    public function groups()
-//    {
+    public function groups()
+    {
 //        return $this->belongsToMany('\App\Usergroups' , 'user_group' , 'user_id', 'group_id' );
-//    }
+        return $this->roles();
+
+    }
 
     public function commesse()
     {

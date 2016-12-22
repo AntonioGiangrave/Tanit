@@ -15,7 +15,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="collapse1" class="panel-collapse collapse ">
+                    <div id="collapse1" class="panel-collapse collapse in ">
                         <div class="panel-body">
                             @include('societa.details', $datiRecuperati)
                         </div>
@@ -35,9 +35,9 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="collapse2" class="panel-collapse collapse in ">
+                    <div id="collapse2" class="panel-collapse collapse  ">
                         <div class="panel-body">
-                            @include('societa.utenti', $utentiSocieta)
+                            {{--@include('societa.utenti', $utentiSocieta)--}}
                         </div>
                     </div>
                 </div>

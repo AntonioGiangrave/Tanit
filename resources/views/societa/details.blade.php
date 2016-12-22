@@ -132,7 +132,7 @@
     <div class="col-sm-4">
         <div class="form-group">
             {{ Form::label('ateco_id', 'Codice ATECO:') }}
-            {{ Form::select('ateco_id', $lista_ateco ,$datiRecuperati->ateco_id, ['class' => 'form-control']) }}
+            {{ Form::select('ateco_id',  $lista_ateco ,$datiRecuperati->ateco_id, ['class' => 'form-control']) }}
         </div>
     </div>
 

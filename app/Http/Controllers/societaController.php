@@ -6,6 +6,7 @@ use App\registro_formazione;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\societa;
 
 class societaController extends Controller
 {
@@ -16,9 +17,10 @@ class societaController extends Controller
      */
     public function index()
     {
-        $data['societa'] = \App\societa::with('ateco' )->orderBy('ragione_sociale')->get();
-        
-        
+        $data['societa'] = societa::with('ateco' )->orderBy('ragione_sociale');
+
+        $data['societa'] = $data['societa']->get();
+
 
         return view('societa.index', $data);
     }
@@ -62,15 +64,16 @@ class societaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { 
+    {
 
-        $allinea = new registro_formazione();
-        $allinea->sync_azienda($id);
+//        $allinea = new registro_formazione();
+//        $allinea->sync_azienda($id);
 
         $data['datiRecuperati'] = \App\societa::with('ateco', '_settori' )->find($id);
-        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione')->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
 
-        $data['lista_ateco'] = \App\ateco::lists('codice' , 'id');
+//        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione')->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
+
+        $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
         $data['lista_settori'] = \App\settori::lists('settore' , 'id');
 
         return view('societa.edit', $data);
@@ -90,10 +93,12 @@ class societaController extends Controller
             'ragione_sociale' => 'required'
             ,'tipo' => 'required'
             ,'piva' => 'required'
+            ,'ateco_id' => 'required'
         ], [
             'ragione_sociale.required' => 'La ragione sociale è obbligatoria!'
             ,'tipo.required' => 'Per favore, anche il tipo'
             ,'piva.required' => 'La partita IVA è obbligatoria'
+            ,'ateco_id.required' => 'L\'ateco è Obbligatorio'
 //            ,'email.email' => 'L\'email non è in formato corretto'
         ]);
 

@@ -1,13 +1,12 @@
-@extends('layouts.plane')
-@section('page_heading','Login')
+@extends('cache.index')
 
-
+@section('page_heading','Registrazione')
 @section('body')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="panel panel-default">
-				<div class="panel-heading">Register</div>
+
 				<div class="panel-body">
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
@@ -55,6 +54,16 @@
 						</div>
 
 						<div class="form-group">
+							<label class="col-md-4 control-label">Società</label>
+							<div class="col-md-6">
+								{{ Form::select('societa_id', \App\societa::all()->pluck('ragione_sociale','id'), null, ['class' => 'form-control']) }}
+							</div>
+						</div>
+
+
+
+
+						<div class="form-group">
 							<label class="col-md-4 control-label">Password</label>
 							<div class="col-md-6">
 								<input type="password" class="form-control" name="password">
@@ -68,10 +77,13 @@
 							</div>
 						</div>
 
+
+
+
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">
-									Register
+									Conferma
 								</button>
 							</div>
 						</div>

@@ -29,6 +29,9 @@ class registro_formazione extends Model
     }
 
     public function sync_utente($id){
+
+        \Debugbar::info('SyncUtente');
+
         $utente= User::find($id);
         $affectedRows = registro_formazione::whereNull('data_superamento')->where('user_id', '=', $id)->delete();
         foreach ($utente->_mansioni as $mansione) {
@@ -51,23 +54,30 @@ class registro_formazione extends Model
 
 // DA OTTIMIZZARE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-        $classe_rischio_ateco = $utente->societa->ateco->classe_rischio;
-        $classe_rischio_utente = null;
+//        if(!$utente->societa->ateco_id) {
+//            return view()->back()->with('error', 'Something went wrong.');
+//            return redirect('/societa/'.$utente->societa->id.'/edit')->with('errore', 'Devi aggiornare l\'ateco della società '. $utente->societa->ragione_sociale . 'prima di procedere');
+//        }
 
-        foreach ($utente->_mansioni as $mansione){
-            if($mansione->classe_rischio == null ){
-                $classe_rischio_utente = null;
-                break;
-            }
-            elseif ($mansione->classe_rischio >= $classe_rischio_utente ) {
-                $classe_rischio_utente = $mansione->classe_rischio;
-            }
-        }
 
-        if($classe_rischio_utente)
-            $classe_rischio_riferimento = $classe_rischio_utente;
-        else
-            $classe_rischio_riferimento = $classe_rischio_ateco;
+
+            $classe_rischio_ateco = $utente->societa->ateco->classe_rischio;
+
+            $classe_rischio_utente = null;
+
+            foreach ($utente->_mansioni as $mansione) {
+                if ($mansione->classe_rischio == null) {
+                    $classe_rischio_utente = null;
+                    break;
+                } elseif ($mansione->classe_rischio >= $classe_rischio_utente) {
+                    $classe_rischio_utente = $mansione->classe_rischio;
+                }
+            }
+
+            if ($classe_rischio_utente)
+                $classe_rischio_riferimento = $classe_rischio_utente;
+            else
+                $classe_rischio_riferimento = $classe_rischio_ateco;
 
 
 
@@ -151,13 +161,22 @@ class registro_formazione extends Model
 
     public function sync_azienda($id)
     {
+        \Debugbar::info('SyncAzienda');
         $societa = societa::with('user')->find($id);
+
+//        if(!$societa->ateco_id) {
+//            \Debugbar::info('/societa/' . $societa->id . '/edit');
+//            return redirect('/societa/' . $societa->id . '/edit')->with('errore', 'Devi aggiornare l\'ateco della società ' . $societa->ragione_sociale . 'prima di procedere');
+//            \Debugbar::info('fine');
+//        }
+
         foreach ($societa->user as $utente) {
             $this->sync_utente($utente->id);
         }
     }
 
     public function sync_tutto(){
+        \Debugbar::info('SyncTutto');
         $societa = societa::all();
         foreach ($societa as $singola){
             $this->sync_azienda($singola->id);

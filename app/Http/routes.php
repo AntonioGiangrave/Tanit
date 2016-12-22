@@ -1,5 +1,8 @@
 <?php
 
+
+use Spatie\Permission\Models\Role;
+
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -12,7 +15,6 @@
  */
 
 
-
 Route::get('/', function() {
     return View::make('cache.home');
 });
@@ -21,24 +23,16 @@ Route::get('/', function() {
 //    return View::make('cache.home');
 //});
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 
+//TEST
 Route::get('/test', function() {
-
-
-//    $role
-
-
-
-
-    $users = \App\User::all()->take(10);
-
-    return View::make('cache.test')->with('users' , $users);
+    $role=Role::where('name', 'admin')->first();
+    $role->givePermissionTo('edit-societa');
+    \Debugbar::info($role);
+//    return View::make('cache.test');
 });
-
-
+//FINE TEST
 
 
 
@@ -100,8 +94,57 @@ Route::group(array('middleware' => 'auth'), function() {
 
 Route::get('login', 'Auth\AuthController@getLogin');
 Route::post('login', 'Auth\AuthController@postLogin');
+
+
+
 Route::get('logout', 'Auth\AuthController@getLogout');
+
 
 Route::get('register', 'Auth\AuthController@getRegister');
 Route::post('register', 'Auth\AuthController@postRegister');
 
+
+
+
+/////LOGIN AS
+
+Route::get('/loginuser', function() {
+    $user= \App\User::find(4);
+    Auth::login($user);
+    return View::make('cache.home_loggato');
+});
+
+
+Route::get('/loginadmin', function() {
+    $user= \App\User::find(1);
+    Auth::login($user);
+    return View::make('cache.home_loggato');
+});
+
+
+Route::get('/loginazienda', function() {
+    $user= \App\User::find(5);
+    Auth::login($user);
+    return View::make('cache.home_loggato');
+});
+
+
+Route::get('/logingestoremultiplo', function() {
+    $user= \App\User::find(3);
+    Auth::login($user);
+    return View::make('cache.home_loggato');
+});
+
+Route::get('/loginsuperuser', function() {
+    $user= \App\User::find(2);
+    Auth::login($user);
+    return View::make('cache.home_loggato');
+});
+
+
+
+
+
+
+
+/////FINE LOGIN AS

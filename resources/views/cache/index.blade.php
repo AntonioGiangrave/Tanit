@@ -48,54 +48,60 @@
 				<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Kairos"></a></div>
 				<nav id="fh5co-main-nav" role="navigation">
 					<ul>
-						@if( Auth::check() )
 
-							<li><a href="/users">Utenti</a></li>
+						@role(['admin' , 'superuser', 'gestoremultiplo' , 'azienda'])
+						<li><a href="/users">Utenti</a></li>
+						@endrole
 
-							<li><a href="/societa">Aziende</a></li>
+						@role(['admin' , 'superuser', 'gestoremultiplo' ])
+						<li><a href="/societa">Aziende</a></li>
+						@endrole
 
-							<li><a href="/corsi">Corsi</a></li>
+						@role(['azienda' ])
+						<li><a href="/societa/{{ Auth::user()->societa_id }}/edit">Dettagli azienda</a></li>
+						@endrole
+
+						@role(['admin','superuser'])
+						<li><a href="/corsi">Corsi</a></li>
+						@endrole
 
 
-						@else
-
-
+						@if(Auth::guest())
 							<li><a href="/login">Accedi</a></li>
 
 							<li><a href="/register">Registrati</a></li>
-
-
 						@endif
 
 
-							@role(['admin'])
 
-								<li class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-										<i class="fa fa-cogs fa-fw"></i> Risorse <i class="fa fa-caret-down"></i>
-									</a>
-									<ul class="dropdown-menu dropdown-user">
+						@role(['admin'])
 
-										<li><a href="/mansioni">Mansioni</a></li>
-										<br>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="fa fa-cogs fa-fw"></i> Risorse <i class="fa fa-caret-down"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
 
-										<li><a href="/ateco">Ateco</a></li>
-										<br>
+								<li><a href="/mansioni">Mansioni</a></li>
+								<br>
 
-										<li><a href="/aule">Aule</a></li>
-										<br>
+								<li><a href="/ateco">Ateco</a></li>
+								<br>
 
-										<li><a href="/fad">Fad</a></li>
-										<br>
+								<li><a href="/aule">Aule</a></li>
+								<br>
 
-										<li><a href="/aule_sessioni">Sessioni aula / prenotazioni </a></li>
-										<br>
+								<li><a href="/fad">Fad</a></li>
+								<br>
 
-									</ul>
-								</li>
-								@endrole
+								<li><a href="/aule_sessioni">Sessioni aula / prenotazioni </a></li>
+								<br>
 
-										<!--
+							</ul>
+						</li>
+						@endrole
+
+								<!--
             <li class="has-sub">
                 <div class="drop-down-menu">
                     <a href="#">Strumenti</a>
@@ -109,29 +115,29 @@
 
             -->
 
-								<ul class="nav navbar-top-links navbar-right">
-									@if( Auth::check() )
-										<li class="dropdown">
-											<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-												<i class="fa fa-user fa-fw"></i> {{ Auth::user()->name }} <i class="fa fa-caret-down"></i>
-											</a>
+						<ul class="nav navbar-top-links navbar-right">
+							@if( Auth::check() )
+								<li class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+										<i class="fa fa-user fa-fw"></i> {{ Auth::user()->name }} <i class="fa fa-caret-down"></i>
+									</a>
 
 
 
-											<ul class="dropdown-menu dropdown-user">
-												<li><a href="users/{{ Auth::user()->id }}/edit"><i class="fa fa-user fa-fw"></i> User Profile</a>
-												</li>
-
-												<li class="divider"></li>
-												<li><a href="{{ url ('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout </a></li>
-											</ul>
-
-											<!-- /.dropdown-user -->
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="users/{{ Auth::user()->id }}/edit"><i class="fa fa-user fa-fw"></i> User Profile</a>
 										</li>
 
-										@endif
-												<!-- /.dropdown -->
-								</ul>
+										<li class="divider"></li>
+										<li><a href="{{ url ('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout </a></li>
+									</ul>
+
+									<!-- /.dropdown-user -->
+								</li>
+
+								@endif
+										<!-- /.dropdown -->
+						</ul>
 
 
 					</ul>
@@ -157,7 +163,6 @@
 
 		<div class="row bodygg">
 			<div class="col-sm-12">
-
 				@if(count($errors->all()) > 0)
 					<div class="alert alert-danger" role="alert">
 						<p><b>OOOPS!</b></p>
@@ -175,6 +180,12 @@
 					</div>
 				@endif
 
+				@if (session('error_message'))
+					<div class="alert alert-warning">
+						{{ session('error_message') }}
+					</div>
+				@endif
+
 				@yield('body')
 
 			</div>
@@ -186,7 +197,7 @@
 				<div class="row row-bottom-padded-sm">
 					<div class="col-md-4 col-sm-12">
 						<div class="fh5co-footer-widget">
-							<h3>CONSORZIO KAIROS</h3>
+							<h3>TANIT</h3>
 							<p>Via Carlo Innocenzo Frugoni 15/5 - 16121 GENOVA
 								Telefono- Fax:  010. 8683343
 								Email: segreteria@kairosformazione.it
@@ -199,8 +210,6 @@
 							<h3>Links</h3>
 							<ul class="fh5co-footer-link">
 								<li><a href="#">Home</a></li>
-								<li><a href="#">-</a></li>
-								<li><a href="#">-</a></li>
 								<li><a href="#">-</a></li>
 							</ul>
 						</div>
@@ -219,6 +228,31 @@
 					</div>
 				</div>
 
+
+
+				<div class="row">
+					<div class="col-md-2">
+						<p class="pull-left">Accedi come:</p>
+					</div>
+					<div class="col-md-2">
+						<a href="/loginuser">Utente</a>
+					</div>
+					<div class="col-md-2">
+						<a href="/loginazienda">Azienda</a>
+					</div>
+					<div class="col-md-2">
+						<a href="/logingestoremultiplo">Gestore Multiplo</a>
+					</div>
+					<div class="col-md-2">
+						<a href="/loginsuperuser">SuperUser</a>
+					</div>
+					<div class="col-md-2">
+						<a href="/loginadmin">Admin</a>
+					</div>
+				</div>
+
+
+
 				<div class="row">
 					<div class="col-md-12">
 						<div class="fh5co-copyright">
@@ -227,9 +261,17 @@
 						</div>
 					</div>
 				</div>
+
+
+
+
 			</div>
-		</footer>
 	</div>
+
+
+</div>
+</footer>
+</div>
 </div>
 
 <div class="gototop js-top">
