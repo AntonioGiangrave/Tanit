@@ -56,8 +56,8 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('ateco', 'atecoController');
     Route::resource('registro_formazione', 'registro_formazioneController');
 
-    Route::resource('fad', 'registro_formazioneController');
-//        Route::resource('aule', 'registro_formazioneController');
+    Route::resource('fad', 'fadController');
+    Route::resource('aule', 'auleController');
 
 
     Route::group(['middleware' => ['role:admin']], function () {

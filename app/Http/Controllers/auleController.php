@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\registro_formazione;
 
-class registro_formazioneController extends Controller
+class auleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +15,8 @@ class registro_formazioneController extends Controller
      */
     public function index()
     {
-
-//        $registro_formazione = new registro_formazione();
-
-//        $registro_formazione->sync_tutto();
-
-        $data['items'] = registro_formazione::with('_user', '_corsi')->get();
-        return view('registro_formazione.index', $data);
+        $data['aule'] = \App\aule::all();
+        return view('aule.index', $data);
     }
 
     /**

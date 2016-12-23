@@ -1,11 +1,11 @@
 @extends('cache.index')
 
 @section('page_heading','Libretto formativo di
- <a href="/users/' . $datiRecuperati->id . '/edit">' . $datiRecuperati->cognome .' '.$datiRecuperati->nome . '</a>'
+ <a href="/users/'.$datiRecuperati->societa_id . '/edit">' . $datiRecuperati->cognome .' '.$datiRecuperati->nome . '</a>'
  )
 @section('body')
 
-    <h4>Società: <a href="/societa/' . $datiRecuperati->societa->id . '/edit">{{$datiRecuperati->societa->ragione_sociale}}</a>,  ateco {{$datiRecuperati->societa->ateco->codice}}, classe di rischio {{$datiRecuperati->societa->ateco->classe_rischio}} </h4>
+    <h4>Società: <a href="/societa/{{$datiRecuperati->societa->id}}/edit">{{$datiRecuperati->societa->ragione_sociale}}</a>,  ateco {{$datiRecuperati->societa->ateco->codice}}, classe di rischio {{$datiRecuperati->societa->ateco->classe_rischio}} </h4>
 
 
     <div class="row">
@@ -20,8 +20,6 @@
 
         </div>
         <div class="col-sm-6">
-
-
 
             <div class="progress progress-tall ">
                 <div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ round($avanzamentoRuolo/$totaleFormazione*100) . '%' }}">

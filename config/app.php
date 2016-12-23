@@ -217,8 +217,8 @@ return [
 
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        
-        
+
+        'Helper' => App\Helpers\Helper::class,
         
     ],
 

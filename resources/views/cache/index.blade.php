@@ -50,7 +50,7 @@
 					<ul>
 
 						@role(['admin' , 'superuser', 'gestoremultiplo' , 'azienda'])
-						<li><a href="/users">Utenti</a></li>
+						<li><a href="/users">Dipendenti</a></li>
 						@endrole
 
 						@role(['admin' , 'superuser', 'gestoremultiplo' ])
@@ -74,7 +74,7 @@
 
 
 
-						@role(['admin'])
+						@role(['admin','superuser'])
 
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">

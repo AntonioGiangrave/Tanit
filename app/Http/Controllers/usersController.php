@@ -79,7 +79,6 @@ class usersController extends Controller {
     public function formazione($id){
 
         $registro_formazione = new registro_formazione();
-
         $registro_formazione->sync_utente($id);
 
         $data['datiRecuperati'] = User::with('_registro_formazione', '_avanzamento_formazione' )->find($id);
