@@ -66,10 +66,14 @@ Route::group(array('middleware' => 'auth'), function() {
     });
 
 
-
-
-
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
+    
+    Route::get('sync_azienda/{id}',function ($id){
+        $registro_formazione = new \App\registro_formazione();
+        $registro_formazione->sync_azienda($id);
+        return Redirect::back()->with('ok_message','Formazione dipendenti aggiornata');
+    });
+
 
 
     //AUTOCOMPLETE

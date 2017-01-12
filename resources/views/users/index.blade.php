@@ -1,10 +1,17 @@
 @extends('cache.index')
 
-@section('page_heading','Utenti')
+@section('page_heading','Dipendenti azienda')
+
+@section('action_button')
+    @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
+    <a href="/sync_azienda/{{$societa_id}}"><i class="fa fa-refresh">Sincronizza formazione</i></a>
+    @endrole
+@stop
+
+
 @section('body')
 
-
-@role((['admin', 'gestoremultiplo' , 'superuser']))
+    @role((['admin', 'gestoremultiplo' , 'superuser']))
     {{ Form::open(array('url' => '/users', 'action'=>'index' , 'method' => 'get')) }}
     <div class="row">
         <div class="col-sm-4">
@@ -16,7 +23,7 @@
     </div>
     {{Form::close()}}
 
-@endrole
+    @endrole
 
 
 
@@ -37,6 +44,12 @@
 
                 @foreach($data as $dip)
 
+                    @if($dip->_registro_formazione->count()==0)
+                        <?php $percentuale=0; ?>
+                    @else
+                        <?php $percentuale= round($dip->_avanzamento_formazione->count()/$dip->_registro_formazione->count()*100); ?>
+                    @endif
+
                     <tr>
                         <td>{{ $dip->cognome }}</td>
                         <td>{{ $dip->nome }}</td>
@@ -50,8 +63,8 @@
                                      aria-valuenow="{{$dip->_avanzamento_formazione->count() }}"
                                      aria-valuemin="0"
                                      aria-valuemax="{{$dip->_registro_formazione->count() }}"
-                                     style="width: {{ round($dip->_avanzamento_formazione->count()/$dip->_registro_formazione->count()*100) }}%;">
-                                    {{ round($dip->_avanzamento_formazione->count()/$dip->_registro_formazione->count()*100) . '%' }}
+                                     style="width: {{ $percentuale }}%;">
+                                    {{ $percentuale . '%' }}
                                 </div>
                             </div>
 

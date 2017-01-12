@@ -28,141 +28,149 @@ class registro_formazione extends Model
         DB::insert('INSERT IGNORE INTO '.$a->table.' ('.implode(',',array_keys($array)).') values (?'.str_repeat(',?',count($array) - 1).')',array_values($array));
     }
 
-    public function sync_utente($id){
 
-        \Debugbar::info('SyncUtente');
-
-        $utente= User::find($id);
+    public function clean_formazione_user($id){
         $affectedRows = registro_formazione::whereNull('data_superamento')->where('user_id', '=', $id)->delete();
+    }
+
+    public function formazione_mansioni($utente){
+        \Debugbar::info('fomrazione_mansioni');
         foreach ($utente->_mansioni as $mansione) {
             foreach ($mansione->_corsi as $corso) {
                 $registro_formazione =  new registro_formazione();
-                $registro_formazione->user_id= $id;
-                $registro_formazione->corso_id=$corso->id;
+                $registro_formazione->user_id= $utente->id;
+                $registro_formazione->corso_id= $corso->id;
+                $registro_formazione->description= 'formazione_mansioni';
                 $registro_formazione->insertIgnore($registro_formazione->toArray());
             }
         }
-        if($utente->societa->ateco_id) {
-            foreach ($utente->societa->ateco->_corsi as $corso) {
+    }
 
-                $registro_formazione = new registro_formazione();
-                $registro_formazione->user_id = $id;
-                $registro_formazione->corso_id = $corso->id;
-                $registro_formazione->insertIgnore($registro_formazione->toArray());
-            }
-        }
-
-// DA OTTIMIZZARE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-//        if(!$utente->societa->ateco_id) {
-//            return view()->back()->with('error', 'Something went wrong.');
-//            return redirect('/societa/'.$utente->societa->id.'/edit')->with('errore', 'Devi aggiornare l\'ateco della società '. $utente->societa->ragione_sociale . 'prima di procedere');
-//        }
-
-
-
-            $classe_rischio_ateco = $utente->societa->ateco->classe_rischio;
-
-            $classe_rischio_utente = null;
-
-            foreach ($utente->_mansioni as $mansione) {
-                if ($mansione->classe_rischio == null) {
-                    $classe_rischio_utente = null;
-                    break;
-                } elseif ($mansione->classe_rischio >= $classe_rischio_utente) {
-                    $classe_rischio_utente = $mansione->classe_rischio;
-                }
-            }
-
-            if ($classe_rischio_utente)
-                $classe_rischio_riferimento = $classe_rischio_utente;
-            else
-                $classe_rischio_riferimento = $classe_rischio_ateco;
-
-
-
-//  DA OTTIMIZZARE ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-        /*
-         *
-         * FORMAZIONE GENERALE
-         *
-         *
-        */
-
+    public function formazione_sicurezza_generale($utente){
+        \Debugbar::info('formazione_sicurezza_generale');
         $formazione_generale = \App\incarichi_sicurezza::find(1);
         $registro_formazione = new registro_formazione();
-        $registro_formazione->user_id = $id;
+        $registro_formazione->user_id = $utente->id;
         $registro_formazione->corso_id = $formazione_generale->id_rischio_basso; //unico
+        $registro_formazione->description= 'formazione_sicurezza_generale';
         $registro_formazione->insertIgnore($registro_formazione->toArray());
+    }
 
+    public function formazione_sicurezza_specifica($utente){
+        \Debugbar::info('formazione_sicurezza_specifica -  Ateco_id:' . $utente->societa->ateco_id);
 
-        /*
-         *
-         * FORMAZIONE SPECIFICA
-         *
-         */
+        if($utente->societa->ateco_id) {
+            foreach ($utente->societa->ateco->_corsi_sicurezza_specifica as $corso) {
 
-
-        $formazione_specifica = \App\incarichi_sicurezza::find(2);
-        $registro_formazione = new registro_formazione();
-        $registro_formazione->user_id = $id;
-
-        switch($classe_rischio_riferimento){
-            case  1 :
-                $registro_formazione->corso_id = $formazione_specifica->id_rischio_basso;
-                break;
-
-            case  2 :
-                $registro_formazione->corso_id = $formazione_specifica->id_rischio_medio;
-                break;
-
-            case  3 :
-                $registro_formazione->corso_id = $formazione_specifica->id_rischio_alto;
-                break;
-
+                $registro_formazione = new registro_formazione();
+                $registro_formazione->user_id = $utente->id;
+                $registro_formazione->corso_id = $corso->id;
+                $registro_formazione->description= 'formazione_sicurezza_specifica';
+                $registro_formazione->insertIgnore($registro_formazione->toArray());
+            }
         }
-        $registro_formazione->insertIgnore($registro_formazione->toArray());
+    }
 
+    public function formazione_rspp($utente){
+        \Debugbar::info('formazione_rspp');
+        if($utente->societa->ateco_id) {
+            foreach ($utente->societa->ateco->_corsi_rspp as $corso) {
 
-        /*
-         *
-         * INCARICHI SICUREZZA
-         *
-         *
-        */
+                $registro_formazione = new registro_formazione();
+                $registro_formazione->user_id = $utente->id;
+                $registro_formazione->corso_id = $corso->id;
+                $registro_formazione->description= 'formazione_rspp';
+                $registro_formazione->insertIgnore($registro_formazione->toArray());
+            }
+        }
+    }
+
+    public function formazione_aspp($utente){
+        \Debugbar::info('formazione_aspp');
+        if($utente->societa->ateco_id) {
+            foreach ($utente->societa->ateco->_corsi_aspp as $corso) {
+
+                $registro_formazione = new registro_formazione();
+                $registro_formazione->user_id = $utente->id;
+                $registro_formazione->corso_id = $corso->id;
+                $registro_formazione->description= 'formazione_aspp';
+                $registro_formazione->insertIgnore($registro_formazione->toArray());
+            }
+        }
+    }
+
+    public function formazione_incarichi_sicurezza($utente){
+        \Debugbar::info('formazione_incarichi_sicurezza');
         foreach ($utente->_incarichi_sicurezza as $singolo_incarico){
 
             $registro_formazione = new registro_formazione();
-            $registro_formazione->user_id = $id;
+            $registro_formazione->user_id = $utente->id;
 
-            switch($classe_rischio_ateco){
-                case  1 :
-                    $registro_formazione->corso_id = $singolo_incarico->id_rischio_basso;
+            switch ($singolo_incarico->id){
+
+                case 3://DIRIGENTE
+                case 4://PREPOSTO
+                case 5:// RLS
+                    $registro_formazione->description= 'Dirigente/Preposto/RLS';
+                    $registro_formazione->corso_id = $singolo_incarico->id_rischio_basso; //uno qualungue
+                    $registro_formazione->insertIgnore($registro_formazione->toArray());
                     break;
 
-                case  2 :
-                    $registro_formazione->corso_id = $singolo_incarico->id_rischio_medio;
+                case 6://ADDETTO PRONTO SOCCORSO
+                case 7://ADDETTO ANTINCENDIO
+                case 8://DATORE DI LAVORO / RSPP
+                    switch($utente->societa->ateco->classe_rischio){
+                        case  1 :
+                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_basso;
+                            break;
+
+                        case  2 :
+                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_medio;
+                            break;
+
+                        case  3 :
+                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_alto;
+                            break;
+
+                    }
+                    $registro_formazione->description= 'Primosoccorso/Antincendio/RSPP';
+                    $registro_formazione->insertIgnore($registro_formazione->toArray());
                     break;
 
-                case  3 :
-                    $registro_formazione->corso_id = $singolo_incarico->id_rischio_alto;
+                case 9:
+                    $this->formazione_rspp($utente);
+                    break;
+
+                case 10:
+                    $this->formazione_aspp($utente);
                     break;
 
             }
-
-            $registro_formazione->insertIgnore($registro_formazione->toArray());
         }
+    }
 
+    public function sync_utente($id){
+
+        $utente= User::find($id);
+
+        \Debugbar::info('SyncUtente: ' . $utente->cognome);
+
+        $this->clean_formazione_user($id);
+
+        $this->formazione_mansioni($utente);
+
+        $this->formazione_sicurezza_generale($utente);
+
+        $this->formazione_sicurezza_specifica($utente);
+
+        $this->formazione_incarichi_sicurezza($utente);
 
     }
 
     public function sync_azienda($id)
     {
-        \Debugbar::info('SyncAzienda');
         $societa = societa::with('user')->find($id);
+        \Debugbar::info('SyncAzienda: '.$societa->ragione_sociale );
 
 //        if(!$societa->ateco_id) {
 //            \Debugbar::info('/societa/' . $societa->id . '/edit');

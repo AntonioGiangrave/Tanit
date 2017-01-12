@@ -108,37 +108,43 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $tot;
     }
 
-    public function getFullName()
-    {
-        return $this->cognome. " " . $this->nome;
+    public function _get_classe_rischio(){
+//        DA OTTIMIZZARE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+//        if(!$utente->societa->ateco_id) {
+//            return view()->back()->with('error', 'Something went wrong.');
+//            return redirect('/societa/'.$utente->societa->id.'/edit')->with('errore', 'Devi aggiornare l\'ateco della società '. $utente->societa->ragione_sociale . 'prima di procedere');
+//        }
+
+        $classe_rischio_ateco = $this->societa->ateco->classe_rischio;
+
+        $classe_rischio_utente = null;
+
+        foreach ($this->_mansioni as $mansione) {
+            if ($mansione->classe_rischio == null) {
+                $classe_rischio_utente = null;
+                break;
+            } elseif ($mansione->classe_rischio >= $classe_rischio_utente) {
+                $classe_rischio_utente = $mansione->classe_rischio;
+            }
+        }
+
+        if ($classe_rischio_utente)
+            $classe_rischio_riferimento = $classe_rischio_utente;
+        else
+            $classe_rischio_riferimento = $classe_rischio_ateco;
+
+
+//  DA OTTIMIZZARE ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return $classe_rischio_riferimento;
     }
 
-//    public function hasAnyGroups($groups)
+//    public function getFullName()
 //    {
-//        if(is_array($groups))
-//        {
-//            foreach ($groups as $group) {
-//                if($this->hasGroup($group))
-//                    return true;
-//            }
-//        }
-//        else
-//        {
-//            if($this->hasGroup($groups))
-//                return true;
-//        }
-//        return false;
+//        return $this->cognome. " " . $this->nome;
 //    }
-//
-//    public function hasGroup($group)
-//    {
-//        $chk = $this->groups()->where('name', $group)->first();
-//        \Debugbar::info($chk);
-//        if($chk){
-//            return true;
-//        }
-//        return false;
-//    }
+    
 
 
 

@@ -24,29 +24,25 @@ class usersController extends Controller {
         $data = User::where('bloccato', 0)
             ->orderBy('cognome');
 
-        if(Auth::user()->hasRole('azienda')) 
-            $data->where('societa_id', Auth::user()->societa_id);
-
-        if(Auth::user()->hasAnyRole(['admin', 'gestoremultiplo', 'superuser'])) {
-            if($societa = \App\societa::find($request->input('societa_id'))) {
-
-                $allinea = new registro_formazione();
-                $allinea->sync_azienda($societa->id);
-
-                $data->where('societa_id', $societa->id);
-            }
-            else $data->where('societa_id', 1);
+        if(Auth::user()->hasRole('azienda')) {
+            $societa_id=Auth::user()->societa_id;
+            $data->where('societa_id', $societa_id);
         }
 
-
+        if(Auth::user()->hasAnyRole(['admin', 'gestoremultiplo', 'superuser'])) {
+            $societa_id=$request->input('societa_id');
+            if($societa = \App\societa::find($societa_id))
+                $data->where('societa_id', $societa->id);
+            else $data->where('societa_id', 1);
+        }
 
         $data= $data->with('_registro_formazione');
         $data= $data->get();
 
-        //Recupero se sono gestore multiplo recupero le societa
+        //Recupero le societa nel caso fossi gestore multiplo
         $societa = \App\societa::lists('ragione_sociale', 'id');
 
-        return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $request->input('societa_id'));
+        return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $societa_id);
     }
 
     public function edit($id) {
@@ -69,7 +65,7 @@ class usersController extends Controller {
         );
 
         $data['lista_albi'] =   \App\albi_professionali::orderBy('nome')->lists('nome' , 'id');
-        $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('nome')->lists('nome' , 'id');
+        $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('ordinamento')->lists('nome' , 'id');
         $data['lista_mansioni'] =  \App\mansioni::orderBy('nome')->lists('nome' , 'id');
 
 
@@ -126,7 +122,5 @@ class usersController extends Controller {
 
         return redirect('/users/'.$user->id.'/edit')->with('ok_message', 'Il profilo è stato aggiornato');
     }
-
-
 
 }
