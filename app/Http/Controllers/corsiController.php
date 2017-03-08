@@ -138,7 +138,7 @@ class corsiController extends Controller
 
         ini_set('max_execution_time', 900); //300 seconds = 5 minutes
         $items = DB::table('_trasposter')->get();
-        $table = 'ateco_corsi_aspp';
+        $table = 'ateco_corsi_rspp';
         $campo1 = 'ateco_id';
         $campo2 = 'corso_id';
 
@@ -157,6 +157,5 @@ class corsiController extends Controller
             }
             echo "</pre>";
         }
-
     }
 }

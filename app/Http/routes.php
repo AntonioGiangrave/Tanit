@@ -49,25 +49,45 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::resource('users', 'usersController');
     Route::resource('usersformazione', 'usersController@formazione');
+//    Route::get('user_classe_rischio/{id}', function($id){
+//        $data['datiRecuperati'] = \App\User::find($id);
+//        return View::make('users.edit_classe_rischio', $data);
+//    });
 
     Route::resource('societa', 'societaController');
     Route::resource('corsi', 'corsiController');
     Route::resource('mansioni', 'mansioniController');
     Route::resource('ateco', 'atecoController');
     Route::resource('registro_formazione', 'registro_formazioneController');
+    Route::resource('set_data_superamento', 'registro_formazioneController@update');
+
 
     Route::resource('fad', 'fadController');
     Route::resource('aule', 'auleController');
 
 
-    Route::group(['middleware' => ['role:admin']], function () {
+    Route::group(['middleware' => ['role:superuser' ]], function () {
 //
         Route::resource('aule_sessioni', 'aule_sessioniController');
     });
+    
+    Route::get('/set_ajax_session/',function (){
+        $var = Input::all();
+
+//        \Debugbar::log(Session::all());
+        \Debugbar::log($var);
+
+        foreach ($var['data_session'] as $key => $val) {
+            Session::put($key, $val);
+        }
+
+        return 'true';
+    });
+
 
 
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
-    
+
     Route::get('sync_azienda/{id}',function ($id){
         $registro_formazione = new \App\registro_formazione();
         $registro_formazione->sync_azienda($id);
@@ -76,9 +96,13 @@ Route::group(array('middleware' => 'auth'), function() {
 
 
 
+
+
+
+
+
     //AUTOCOMPLETE
     Route::get('autocomplete/commesse', 'ajaxRequestController@Commesse');
-
 
 //    Route::get('autocomplete', function() {
 //        return View::make('autocomplete');
@@ -144,11 +168,6 @@ Route::get('/loginsuperuser', function() {
     Auth::login($user);
     return View::make('cache.home_loggato');
 });
-
-
-
-
-
 
 
 /////FINE LOGIN AS

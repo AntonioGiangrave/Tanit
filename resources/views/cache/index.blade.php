@@ -57,12 +57,16 @@
 						<li><a href="/societa">Aziende</a></li>
 						@endrole
 
-						@role(['azienda' ])
+						@role(['azienda'])
 						<li><a href="/societa/{{ Auth::user()->societa_id }}/edit">Dettagli azienda</a></li>
 						@endrole
 
 						@role(['admin','superuser'])
 						<li><a href="/corsi">Corsi</a></li>
+						@endrole
+
+						@role(['admin', 'superuser', 'gestoremultiplo'])
+						<li><a href="/registro_formazione">Prenotazione corsi</a></li>
 						@endrole
 
 

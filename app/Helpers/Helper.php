@@ -13,6 +13,35 @@ class Helper
         {
             return "Non previsto";
         }
-        
+
     }
+
+
+    public static function classe_rischio_to_text($data)
+    {
+        switch($data){
+            case 1:
+                return 'rischio basso';
+                break;
+
+            case 2:
+                return 'rischio medio';
+                break;
+
+            case 3:
+                return 'rischio alto';
+                break;
+
+            default:
+                return 'non disponibile';
+                break;
+            
+        }
+
+    }
+
+
+
+
+
 }

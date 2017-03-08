@@ -15,7 +15,7 @@ class aule_sessioniController extends Controller
      */
     public function index()
     {
-        $data['sessioni'] = \App\aule_sessioni::with('_corso', '_aula' ,'_prenotazioni')->orderBy('dal', 'asc')->get();
+        $data['sessioni'] = \App\aule_sessioni::with('_corso', '_aula' )->orderBy('dal', 'asc')->get();
         return view('aule.aule_sessioni', $data);
     }
 
@@ -86,7 +86,7 @@ class aule_sessioniController extends Controller
      */
     public function edit($id)
     {
-        $data['datiRecuperati'] = \App\aule_sessioni::with('_aula', '_corso' ,'_prenotazioni')->find($id);
+        $data['datiRecuperati'] = \App\aule_sessioni::with('_aula', '_corso'  )->find($id);
         $data['aule'] = \App\aule::lists('descrizione' , 'id');
         $data['corsi'] = \App\corsi::lists('titolo', 'id')->all();
         

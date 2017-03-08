@@ -75,6 +75,7 @@ class societaController extends Controller
 
         $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
         $data['lista_settori'] = \App\settori::lists('settore' , 'id');
+        $data['lista_fondi'] = \App\fondiprofessionali::lists('name' , 'id');
 
         return view('societa.edit', $data);
 
@@ -124,9 +125,11 @@ class societaController extends Controller
         $soc->so_indirizzo= $request->input('so_indirizzo');
         $soc->so_citta= $request->input('so_citta');
         $soc->so_cap= $request->input('so_cap');
-        $soc->fondo_interprofessionale= $request->input('fondo_interprofessionale');
-        $soc->fi_dipendenti= $request->input('fi_dipendenti');
-        $soc->fi_dirigenti= $request->input('fi_dirigenti');
+
+        $soc->fondo_id= $request->input('fondo_id');
+//        $soc->fondo_interprofessionale= $request->input('fondo_interprofessionale');
+//        $soc->fi_dipendenti= $request->input('fi_dipendenti');
+//        $soc->fi_dirigenti= $request->input('fi_dirigenti');
 
         $soc->save();
 

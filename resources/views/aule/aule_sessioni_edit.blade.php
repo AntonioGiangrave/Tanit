@@ -108,15 +108,15 @@
                 <div id="collapse1" class="panel-collapse collapse in ">
                     <div class="panel-body">
                         <table class="table table-striped">
-                            @foreach($datiRecuperati->_prenotazioni as $user)
+                            @foreach($datiRecuperati->_posti_occupati() as $rf)
                                 <tr>
-                                    <td>{{ $user->cognome }} </td>
-                                    <td>{{ $user->nome}} </td>
-                                    <td>{{ $user->societa->ragione_sociale}} </td>
-                                    <td>{{ $user->societa->ateco->descrizione}} </td>
+                                    <td>{{ $rf->_user->cognome }} </td>
+                                    <td>{{ $rf->_user->nome}} </td>
+                                    <td>{{ $rf->_user->societa->ragione_sociale}} </td>
+                                    <td>{{ $rf->_user->societa->ateco->descrizione}} </td>
                                     <td>
-                                        <a class="btn btn-warning btn-xs" href="/users/{{$user->id}}/edit" title="modfica"><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-warning btn-xs" href="/usersformazione/{{$user->id}}/edit"><i class="fa fa-mortar-board "></i></a>
+                                        <a class="btn btn-warning btn-xs" href="/users/{{$rf->_user->id}}/edit" title="modfica"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-warning btn-xs" href="/usersformazione/{{$rf->_user->id}}/edit"><i class="fa fa-mortar-board "></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -139,9 +139,6 @@
 
         $( document ).ready(function()
         {
-
-
-
             $( ".giorno" ).datepicker({
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,

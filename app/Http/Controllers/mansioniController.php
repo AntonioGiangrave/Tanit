@@ -12,7 +12,7 @@ class mansioniController extends Controller
 
     public function __construct()
     {
-        $this->middleware('groups');
+//        $this->middleware('groups');
     }
 
     /**

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
 use Auth;
+use DB;
 
 
 class usersController extends Controller {
@@ -21,8 +22,7 @@ class usersController extends Controller {
 
 
         //Recupero gli utenti della societa
-        $data = User::where('bloccato', 0)
-            ->orderBy('cognome');
+        $data = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles')->orderBy('cognome');
 
         if(Auth::user()->hasRole('azienda')) {
             $societa_id=Auth::user()->societa_id;
@@ -36,11 +36,10 @@ class usersController extends Controller {
             else $data->where('societa_id', 1);
         }
 
-        $data= $data->with('_registro_formazione');
         $data= $data->get();
 
         //Recupero le societa nel caso fossi gestore multiplo
-        $societa = \App\societa::lists('ragione_sociale', 'id');
+        $societa = \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id');
 
         return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $societa_id);
     }
@@ -67,6 +66,7 @@ class usersController extends Controller {
         $data['lista_albi'] =   \App\albi_professionali::orderBy('nome')->lists('nome' , 'id');
         $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('ordinamento')->lists('nome' , 'id');
         $data['lista_mansioni'] =  \App\mansioni::orderBy('nome')->lists('nome' , 'id');
+//        $data['lista_mansioni'] = \App\mansioni::select(DB::raw("CONCAT(nome,' ', classe_rischio) AS nome, id"))->orderBy('nome')->lists('nome', 'id');
 
 
         return view('users.edit', $data);
@@ -77,7 +77,7 @@ class usersController extends Controller {
         $registro_formazione = new registro_formazione();
         $registro_formazione->sync_utente($id);
 
-        $data['datiRecuperati'] = User::with('_registro_formazione', '_avanzamento_formazione' )->find($id);
+        $data['datiRecuperati'] = User::with('_registro_formazione', '_avanzamento_formazione', 'user_profiles')->find($id);
 
         $data['totaleFormazione']=$data['datiRecuperati']->_registro_formazione->count();
         $data['avanzamentoFormazione']=$data['datiRecuperati']->_avanzamento_formazione()->count();
@@ -87,6 +87,13 @@ class usersController extends Controller {
         return view('users.formazione', $data);
 
     }
+
+//    public function classe_rischio($id){
+//
+//        $datiRecuperati = \App\User::find($id);
+//        return view('users.edit_classe_rischio', $datiRecuperati);
+//
+//    }
 
     public function update(Request $request, $id) {
         $this->validate($request, [
@@ -106,8 +113,11 @@ class usersController extends Controller {
         $user->email = $request->input('email');
         $user->bloccato= $request->input('bloccato');
         $user->referente_id= $request->input('referente_id');
+        $user->societa_id= $request->input('societa_id');
 
-        $user->save();
+        $user->user_profiles->classe_rischio = $request->input('classe_rischio');
+
+        $user->push();
 
 //        $user->groups()->sync($request->get('groups'));
 

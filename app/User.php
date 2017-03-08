@@ -38,7 +38,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
-    
+
     public function societa() {
 
         return $this->belongsTo('App\societa');
@@ -60,6 +60,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->belongsToMany('\App\commesse' , 'cm_calendario', 'dipendenti_id' , 'commessa_id');
     }
+
+    public function aule_prenotazioni(){
+        return $this->belongsToMany('\App\aule_prenotazioni' , 'aule_prenotazioni', 'id_utente' );
+    }
+
+
 
     public function _albi_professionali()
     {
@@ -108,13 +114,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $tot;
     }
 
-    public function _get_classe_rischio(){
-//        DA OTTIMIZZARE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-//        if(!$utente->societa->ateco_id) {
-//            return view()->back()->with('error', 'Something went wrong.');
-//            return redirect('/societa/'.$utente->societa->id.'/edit')->with('errore', 'Devi aggiornare l\'ateco della società '. $utente->societa->ragione_sociale . 'prima di procedere');
-//        }
+    public function _get_classe_rischio(){
+        if(!$this->user_profiles->classe_rischio) {
+            \Debugbar::log('questo non ha la classe rischio');
+            $this->user_profiles->classe_rischio = $this->_set_classe_rischio();
+            $this->save();
+        }
+      
+        
+        return  $this->user_profiles->classe_rischio;
+    }
+
+    public function _set_classe_rischio(){
+        \Debugbar::log('set classe rischio');
+//        DA OTTIMIZZARE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
         $classe_rischio_ateco = $this->societa->ateco->classe_rischio;
 
@@ -140,11 +154,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $classe_rischio_riferimento;
     }
 
-//    public function getFullName()
-//    {
-//        return $this->cognome. " " . $this->nome;
-//    }
-    
+    public function getFullName()
+    {
+        return $this->cognome. " " . $this->nome;
+    }
+
 
 
 

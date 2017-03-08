@@ -49,19 +49,17 @@
 
 
                 @role(['admin'])
-                    {{ Form::label('Autorizzazioni', 'Gruppi:') }}
-                    <div class='form-group'>
-                        @foreach ($roles as $key => $val)
-                            <br>
-                            {{ Form::checkbox('groups[]', $key) }}
-                            {{ Form::label('groups', $val) }}
-                        @endforeach
-                    </div>
+                {{ Form::label('Autorizzazioni', 'Gruppi:') }}
+                <div class='form-group'>
+                    @foreach ($roles as $key => $val)
+                        <br>
+                        {{ Form::checkbox('groups[]', $key) }}
+                        {{ Form::label('groups', $val) }}
+                    @endforeach
+                </div>
                 @endrole
 
             </div>
-
-
         </div>
 
         <hr>
@@ -84,7 +82,6 @@
             </div>
         </div>
 
-
         <hr>
 
         <div class="panel-group" id="accordion">
@@ -105,7 +102,6 @@
             </div>
         </div>
 
-
         <hr>
 
         <div class="panel-group" id="accordion">
@@ -125,8 +121,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <hr>
 
@@ -150,9 +144,30 @@
 
         <hr>
 
-        <div class="row">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse6">
+                            Classe di rischio
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse6" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        @include('users.edit_classe_rischio',  $datiRecuperati)
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <hr>
+
+        <div class="row">
             <div class="pull-right">
+
+
                 {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-success', 'type'=>'submit', 'type'=>'submit']) }}
 
                 {{ Form::close() }}
@@ -163,4 +178,5 @@
 
     </div>
 
-@stop
+    @stop
+

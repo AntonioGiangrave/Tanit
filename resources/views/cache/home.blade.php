@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row row-bottom-padded-md">
                 <div class="col-md-8 col-md-offset-2 text-center ts-intro">
-                    <h1>Kairos formazione</h1>
+                    <h1>Tanit formazione</h1>
                     <p class="fh5co-lead">La storia di TANIT è recente, quella delle persone che le compongono invece si erge su un passato di  esperienze consolidate  di 							FORMAZIONE   E   CONSULENZA </p>
                 </div>
             </div>

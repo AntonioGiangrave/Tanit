@@ -11,10 +11,7 @@
                 <a class="btn btn-warning btn-xs" href="/aule_sessioni/create"><i class="fa fa-plus-square fa-2x"></i> Nuova sessione</a>
             </div>
 
-
-
             <table class="table table-striped">
-
                 <thead>  <tr>
                     <th>Descrizione</th>
                     <th>dal</th>
@@ -23,8 +20,6 @@
                     <th>alle ore</th>
                     <th>aula</th>
                     <th>prenotazioni</th>
-
-
                     <th> </th>
                 </tr>
                 </thead>
@@ -39,8 +34,8 @@
                         <td>{{ $single->al}}</td>
                         <td>{{ $single->orario_dalle}}</td>
                         <td>{{ $single->orario_alle}}</td>
-                        <td> {{ $single->_aula->descrizione ." - ".$single->_aula->indirizzo }}</td>
-                        <td> {{ $single->_prenotazioni->count() }}</td>
+                        <td>{{ $single->_aula->descrizione ." - ".$single->_aula->indirizzo }}</td>
+                        <td>{{ $single->_posti_occupati()->count() }}</td>
 
                         <td>
                             @role(['admin' , 'superuser'])

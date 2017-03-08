@@ -29,7 +29,7 @@
                 </thead>
                 <tbody>
 
-                <?php $canedit = Auth::user()->hasAnyGroups('admin'); ?>
+
 
                 @foreach($corsi as $single)
 
@@ -43,10 +43,8 @@
                         <td>{{ $single->proprietario['ragione_sociale'] }} </td>
 
                         <td>
-                            @if($canedit)
                                 <a class="btn btn-warning btn-xs "   href="/corsi/{{$single->id}}/edit">modifica</a>
 
-                            @endif
                         </td>
                     </tr>
 

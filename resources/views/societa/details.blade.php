@@ -184,25 +184,10 @@
 <hr>
 <h4>Fondo Interprofessionale</h4>
 <div class="row">
-
-
     <div class="col-sm-4">
         <div class="form-group">
-            {{ Form::label('fondo_interprofessionale', 'Fondo interprofessionale:') }}
-            {{ Form::text('fondo_interprofessionale', null, ['class' => 'form-control']) }}
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="form-group">
-            {{ Form::label('fi_dipendenti', 'Dipendenti:') }}
-            {{ Form::text('fi_dipendenti', null, ['class' => 'form-control']) }}
-        </div>
-    </div>
-
-    <div class="col-sm-4">
-        <div class="form-group">
-            {{ Form::label('fi_dirigenti', 'Dirigenti:') }}
-            {{ Form::text('fi_dirigenti', null, ['class' => 'form-control']) }}
+            {{ Form::label('fondo_id', 'Codice ATECO:') }}
+            {{ Form::select('fondo_id',  $lista_fondi ,$datiRecuperati->fondo_id, ['class' => 'form-control']) }}
         </div>
     </div>
 </div>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - kairos_db@31.14.141.98" uuid="2cb0d1a0-2dcf-4035-b6f3-7abfe7aec62f">
+      <secret-storage>master_key</secret-storage>
+      <user-name>kairos_user</user-name>
+      <schema-pattern>kairos_db.*</schema-pattern>
+      <default-schemas>kairos_db.*</default-schemas>
+    </data-source>
+  </component>
+</project>

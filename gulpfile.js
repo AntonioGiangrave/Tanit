@@ -38,6 +38,7 @@ elixir(function(mix) {
         //DATE PICKER
         'resources/css/jquery-ui.css',
 
+
     ], 'httpdocs/assets/stylesheets/styles.css', './');
     mix.scripts([
         'bower_components/jquery/dist/jquery.js',
@@ -58,7 +59,6 @@ elixir(function(mix) {
 
         //DATE PICKER
         'resources/js/jquery-ui.js',
-
 
 
         // 'resources/js/bootstrap.js',

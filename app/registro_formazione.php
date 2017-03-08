@@ -18,6 +18,16 @@ class registro_formazione extends Model
         return $this->belongsTo('App\corsi' , 'corso_id');
     }
 
+    public function _sessioni(){
+        return $this->belongsTo('App\aule_sessioni' , 'sessione_id');
+    }
+
+    public function _fondo(){
+        return $this->belongsTo('App\fondi_professionali' , 'fondo_id');
+    }
+
+
+
     public static function insertIgnore($array){
         $a = new static();
         if($a->timestamps){
@@ -27,7 +37,6 @@ class registro_formazione extends Model
         }
         DB::insert('INSERT IGNORE INTO '.$a->table.' ('.implode(',',array_keys($array)).') values (?'.str_repeat(',?',count($array) - 1).')',array_values($array));
     }
-
 
     public function clean_formazione_user($id){
         $affectedRows = registro_formazione::whereNull('data_superamento')->where('user_id', '=', $id)->delete();
@@ -65,7 +74,7 @@ class registro_formazione extends Model
                 $registro_formazione = new registro_formazione();
                 $registro_formazione->user_id = $utente->id;
                 $registro_formazione->corso_id = $corso->id;
-                $registro_formazione->description= 'formazione_sicurezza_specifica';
+                $registro_formazione->description= 'formazione_sicurezza_specifica [rischio'.$utente->societa->ateco->classe_rischio.']';
                 $registro_formazione->insertIgnore($registro_formazione->toArray());
             }
         }
@@ -110,31 +119,23 @@ class registro_formazione extends Model
 
                 case 3://DIRIGENTE
                 case 4://PREPOSTO
-                case 5:// RLS
-                    $registro_formazione->description= 'Dirigente/Preposto/RLS';
-                    $registro_formazione->corso_id = $singolo_incarico->id_rischio_basso; //uno qualungue
-                    $registro_formazione->insertIgnore($registro_formazione->toArray());
-                    break;
-
+                case 5://RLS
                 case 6://ADDETTO PRONTO SOCCORSO
                 case 7://ADDETTO ANTINCENDIO
                 case 8://DATORE DI LAVORO / RSPP
-                    switch($utente->societa->ateco->classe_rischio){
-                        case  1 :
-                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_basso;
-                            break;
+                case 11://Coordinatore della sicurezza (CSP/CSE)
 
-                        case  2 :
-                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_medio;
-                            break;
+                    $classe[1] = $singolo_incarico->id_rischio_basso;
+                    $classe[2] = $singolo_incarico->id_rischio_medio;
+                    $classe[3] = $singolo_incarico->id_rischio_alto;
 
-                        case  3 :
-                            $registro_formazione->corso_id = $singolo_incarico->id_rischio_alto;
-                            break;
+                    $corsi = explode(",",$classe[$utente->user_profiles->classe_rischio]);
 
+                    foreach ($corsi as $corso) {
+                        $registro_formazione->description = $singolo_incarico->nome.' [rischio '.$utente->user_profiles->classe_rischio.']';
+                        $registro_formazione->corso_id = $corso;
+                        $registro_formazione->insertIgnore($registro_formazione->toArray());
                     }
-                    $registro_formazione->description= 'Primosoccorso/Antincendio/RSPP';
-                    $registro_formazione->insertIgnore($registro_formazione->toArray());
                     break;
 
                 case 9:

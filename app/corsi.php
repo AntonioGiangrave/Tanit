@@ -18,7 +18,6 @@ class corsi extends Model
         return $this->belongsTo('App\aule' , 'aula');
     }
 
-
     public function _fad()
     {
         return $this->belongsTo('App\fad' , 'fad');

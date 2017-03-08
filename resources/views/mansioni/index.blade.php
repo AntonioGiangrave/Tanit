@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
 
-                <?php $canedit = Auth::user()->hasAnyGroups('admin'); ?>
+
 
                 @foreach($mansioni as $single)
 
@@ -25,10 +25,8 @@
                         <td>{{ $single->nome}}</td>
                         <td>{{ $single->_settore['settore']}}</td>
                         <td>
-                            @if($canedit)
                                 <a class="btn btn-warning btn-xs "   href="/mansioni/{{$single->id}}/edit">modifica</a>
 
-                            @endif
                         </td>
                     </tr>
 

@@ -17,10 +17,24 @@ class aule_sessioni extends Model
     {
         return $this->belongsTo('App\corsi' , 'id_corso');
     }
-    
-    public function _prenotazioni()
-    {
-        return $this->belongsToMany('App\User' , 'aule_prenotazioni' , 'id_sessione' , 'id_utente' );
+
+//    public function _prenotazioni()
+//    {
+//        return $this->belongsToMany('App\User' , 'aule_prenotazioni' , 'id_sessione' , 'id_utente' );
+//    }
+
+//    public function _registro_formazione()
+//    {
+//        return $this->hasMany('App\registro_formazione' , 'sessione_id' );
+//    }
+
+
+    public function _posti_occupati(){
+
+        $occupati = \App\registro_formazione::where('sessione_id', $this->id)->whereNull('data_superamento')->get();
+        return $occupati;
+
     }
-    
+
+
 }
