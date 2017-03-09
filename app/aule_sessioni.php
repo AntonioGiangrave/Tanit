@@ -37,4 +37,14 @@ class aule_sessioni extends Model
     }
 
 
+    public function scheda_corso()
+    {
+        $path = public_path() . '/uploads/'.$this->id.'/SCHEDA_CORSO.pdf';
+        if(file_exists($path))
+            return true;
+        return false;
+    }
+
+
+
 }

@@ -87,7 +87,6 @@
 
                 {{ Form::hidden('id_sessione', 'id_sessione', array('id' => 'id_sessione')) }}
                 {{ Form::hidden('id_utenti', 'id_utenti', array('id' => 'id_utenti')) }}
-                {{ Form::hidden('id_corso', $corso->id , array('id' => 'id_corso')) }}
 
 
                 {{ Form::submit('Conferma e iscrivi', ['class' => 'btn btn-success']) }}

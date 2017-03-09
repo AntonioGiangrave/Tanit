@@ -27,10 +27,13 @@ Route::get('/', function() {
 
 //TEST
 Route::get('/test', function() {
-    $role=Role::where('name', 'admin')->first();
-    $role->givePermissionTo('edit-societa');
-    \Debugbar::info($role);
-//    return View::make('cache.test');
+
+    $data['sessioni']=\App\aule_sessioni::take(10)->get();
+
+    $pdf = PDF::loadView('aule.pdf.elenco_sessioni', $data);
+//    return $pdf->download('invoice.pdf');
+    return $pdf->stream();
+
 });
 //FINE TEST
 
@@ -62,13 +65,33 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('set_data_superamento', 'registro_formazioneController@update');
 
 
+
     Route::resource('fad', 'fadController');
     Route::resource('aule', 'auleController');
 
 
     Route::group(['middleware' => ['role:superuser' ]], function () {
-//
         Route::resource('aule_sessioni', 'aule_sessioniController');
+        
+        //pdf riepilog info sessione e registro.
+        Route::resource('aule_sessioni_pdf', 'aule_sessioniController@pdf_sessione');
+//        Route::resource('aule_sessioni_uploadpdf', 'aule_sessioniController@pdf_sessione');
+
+        Route::post('aule_sessioni_uploadpdf', function(){
+            $files = Input::file('pdf');
+            $id = Input::get('id');
+            $name = Input::get('name');
+            foreach($files as $file) {
+                $destinationPath = public_path() .'/uploads/'.$id.'/';
+//                $filename = $file->getClientOriginalName();
+                $filename = 'SCHEDA CORSO '.$name.'.pdf';
+                $file->move($destinationPath, $filename);
+            }
+            return Redirect::back();
+        });
+
+        
+        
     });
     
     Route::get('/set_ajax_session/',function (){

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-
+use PDF;
 class aule_sessioniController extends Controller
 {
     /**
@@ -92,6 +92,17 @@ class aule_sessioniController extends Controller
         
 
         return view('aule.aule_sessioni_edit', $data);
+    }
+
+
+
+    public function pdf_sessione($id)
+    {
+        $data['sessione'] = \App\aule_sessioni::with('_aula', '_corso'  )->find($id);
+
+        $pdf = PDF::loadView('aule.pdf.riepilogo', $data);
+
+        return $pdf->stream();
     }
 
     /**

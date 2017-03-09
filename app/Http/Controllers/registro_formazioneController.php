@@ -10,7 +10,7 @@ use DB;
 use Auth;
 use Session;
 use Redirect;
-
+use Mail;
 
 class registro_formazioneController extends Controller
 {
@@ -66,26 +66,37 @@ class registro_formazioneController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-        $utenti= explode(",",$request->input('id_utenti'));
-
-        $fondo = ($_REQUEST['fondo'] == 0) ? null : $_REQUEST['fondo'];
+        $utenti_ids = explode("," , $request->input('id_utenti'));
+        $utenti= \App\User::with('societa')->find($utenti_ids);
+        $fondo  = \App\fondiprofessionali::findOrfail($_REQUEST['fondo']);
+        $sessione = \App\aule_sessioni::find($_REQUEST['id_sessione']);
 
         foreach ($utenti as $utente){
-            
+            //Aggiorno il registro formazione
             DB::table('registro_formazione')
-                ->where('user_id', $utente)
-                ->where('corso_id' ,$_REQUEST['id_corso'])
-                ->update(['sessione_id' => $_REQUEST['id_sessione'], 'fondo_id' => $fondo]);
+                ->where('user_id', $utente->id)
+                ->where('corso_id' ,$sessione->id_corso)
+                ->update(['sessione_id' => $sessione->id, 'fondo_id' => $fondo->id]);
 
+            //Mando la mail a ogni utente
+            Mail::send('emails.conferma_iscrizione_utente', ['user' => $utente->nome, 'sessione' => $sessione], function ($m) use ($utente) {
+                $m->from('info@tanitsrl.it', 'TANIT');
+                $m->to($utente->email, $utente->name);
+                $m->subject('Iscrizione corso formazione');
+            });
         }
 
-//        \Debugbar::log($_REQUEST);
+        //Mando la mail di riepilogo al tutor.
+        Mail::send('emails.conferma_iscrizione_tutor', ['users' => $utenti, 'sessione' => $sessione, 'fondo' => $fondo], function ($m) use ($utente, $sessione) {
+            $m->from('info@tanitsrl.it', 'TANIT');
+            $m->to($utente->societa->email, $utente->societa->ragione_sociale);
+//            $m->to('info@tanit.it', 'Tantit superuser');
+            $m->subject('Nuovi iscritti a '. $sessione->_corso->titolo);
+        });
 
-        return Redirect::back();
-//        return view('registro_formazione.index' );
-
+        $request->session()->forget('sessioneaula');
+        
+        return Redirect::back()->with('ok_message', 'Nominativi aggiunti correttamente.');
     }
 
     /**

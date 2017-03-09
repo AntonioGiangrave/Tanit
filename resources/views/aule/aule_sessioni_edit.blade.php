@@ -1,6 +1,6 @@
 @extends('cache.index')
 
-@section('page_heading','Sessione del corso' .$datiRecuperati->_corso->titolo  )
+@section('page_heading','Sessione del corso ' .$datiRecuperati->_corso->titolo  )
 @section('body')
 
 
@@ -77,22 +77,43 @@
 
 
             <div class="pull-right">
-                {{ Form::submit('aggiorna', ['class' => 'btn btn-success']) }}
+                {{ Form::submit('Salva', ['class' => 'btn btn-success']) }}
                 {{ Form::close() }}
             </div>
 
             <div class="pull-right">
-                {{ Form::open([
-                                   'method' => 'DELETE',
-                                   'url' => ['aule_sessioni', $datiRecuperati['id']]
-                                   ]) }}
+                <a target="_blank" class="button btn btn-default" href="{{'/aule_sessioni_pdf/'. $datiRecuperati['id'].''}}">Scarica registro</a>
+                @if($datiRecuperati->scheda_corso())
+                    <a target="_blank" class="button btn btn-default" href="{{'/uploads/'. $datiRecuperati['id'].'/SCHEDA_CORSO.pdf'}}">Scarica scheda corso</a>
 
+                @endif
             </div>
-        </div></div>
+
+
+        </div>
+    </div>
+
 
 
     <hr>
-    <br>
+    <h4>Upload scheda corso</h4>
+    {{ Form::open(array('class' => 'form-inline' ,  'url'=>'/aule_sessioni_uploadpdf/','method'=>'POST', 'files'=>true)) }}
+
+    <div class="form-group">
+        <label for="exampleInputFile"> </label>
+        {{ Form::file('pdf[]', array('multiple'=>true)) }}
+        <p class="help-block">Selezionare file PDF max 2MB</p>
+    </div>
+
+    {{ Form::hidden('id', $datiRecuperati['id'], ['class' => 'form-control']) }}
+    {{ Form::hidden('name', $datiRecuperati->_corso->titolo, ['class' => 'form-control']) }}
+
+
+    {{ Form::submit('Carica file' , ['class' => 'btn btn-info']) }}
+    {{ Form::close() }}
+    <hr>
+
+
 
     <div class="row">
         <div class="panel-group" id="accordion">

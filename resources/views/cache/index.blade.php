@@ -45,7 +45,7 @@
 		<header id="fh5co-header" role="banner">
 			<div class="container">
 				<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
-				<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Kairos"></a></div>
+				<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Tanit"></a></div>
 				<nav id="fh5co-main-nav" role="navigation">
 					<ul>
 

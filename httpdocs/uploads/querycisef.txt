@@ -1,0 +1,19 @@
+SELECT
+c153f_gg_coupon.coupon,
+c153f_gg_coupon.corsi_abilitati,
+
+c153f_gg_coupon.data_abilitazione,
+c153f_gg_coupon.id_societa,
+c153f_comprofiler.firstname,
+c153f_comprofiler.lastname
+FROM
+c153f_gg_coupon
+INNER JOIN c153f_comprofiler ON c153f_comprofiler.id = c153f_gg_coupon.id_utente
+WHERE 
+
+(data_abilitazione > '2016' AND data_abilitazione < '2017')  OR
+(id_utente in (select id_utente from c153f_gg_track as t where t.data > '2016' and t.data < '2017'))
+
+
+Order by data_abilitazione
+#limit 100
