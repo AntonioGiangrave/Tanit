@@ -1,6 +1,5 @@
-
+<br>
 <div class="form-group filterlist">
-    {{ Form::label('_mansioni', 'Mansioni:') }}
     <div class="row">
         <div class="col-sm-4">
             {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Filtra']) }}
@@ -15,7 +14,6 @@
 
     </div>
     <hr>
-
-    {{ Form::select('_mansioni[]',$lista_mansioni, $datiRecuperati->_mansioni->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
+    {{ Form::select('_corsi_rspp[]',$lista_corsi, $datiRecuperati->_corsi_rspp->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
 
 </div>

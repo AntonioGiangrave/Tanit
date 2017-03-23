@@ -20,39 +20,75 @@ class usersController extends Controller {
     //
     public function index(Request $request) {
 
+        $societa_id=$request->input('societa_id');
 
         //Recupero gli utenti della societa
-        $data = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles')->orderBy('cognome');
+        $data = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles', 'roles' , '_mansioni')->orderBy('cognome');
 
-        if(Auth::user()->hasRole('azienda')) {
-            $societa_id=Auth::user()->societa_id;
+
+        if(Auth::user()->hasAnyRole(['azienda'])) {
+
+            //Recupero le societa nel caso fossi gestore multiplo
+            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
+                $query->where('user_id', Auth::user()->id);
+            })->get();
+
+            \Debugbar::info($societa);
+
+            if(!$societa_id)
+                $societa_id = $societa->first()->id;
+
+            //SOLO UTENTI DELLA SOCIETA RICHIESTA O DELLA PRIMA DELLA LISTA
             $data->where('societa_id', $societa_id);
+
+//            Visualizzo solo i dipendenti
+            $data = $data->whereHas('roles', function($query) {
+                $query->where('name', 'user');
+            });
         }
 
-        if(Auth::user()->hasAnyRole(['admin', 'gestoremultiplo', 'superuser'])) {
-            $societa_id=$request->input('societa_id');
-            if($societa = \App\societa::find($societa_id))
-                $data->where('societa_id', $societa->id);
-            else $data->where('societa_id', 1);
+        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
+            //Recupero le societa nel caso fossi gestore multiplo
+            $societa = \App\societa::orderBy('ragione_sociale')->get();
+
+            if(!$societa_id)
+                $societa_id = $societa->first()->id;
+
+            //SOLO UTENTI DELLA SOCIETA RICHIESTA O DELLA PRIMA DELLA LISTA
+            $data->where('societa_id', $societa_id);
+
         }
 
         $data= $data->get();
 
-        //Recupero le societa nel caso fossi gestore multiplo
-        $societa = \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id');
+        $societa = $societa->lists('ragione_sociale', 'id');
+
 
         return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $societa_id);
     }
 
+    public function user_sync(Request $request){
+
+        //verificare questo campo che gli passo, potrebbe essere sbagliato ma cozzava con la schermata users.index
+        $societa_id=$request->input('sync_societa_id');
+
+        $data['societa'] = \App\societa::find($societa_id);
+
+        $data['users'] = User::where('societa_id', $societa_id)->orderBy('cognome');
+        $data['users']= $data['users']->get();
+
+        $data['userslist'] = json_encode($data['users']->lists('id'));
+
+        return view('users.user_sync', $data);
+    }
+
+
     public function edit($id) {
-        $data['datiRecuperati'] = User::with('user_profiles' , '_albi_professionali' , '_incarichi_sicurezza' , '_mansioni')->find($id);
+        $data['datiRecuperati'] = User::with('user_profiles' , '_albi_professionali' , '_incarichi_sicurezza' , '_mansioni', '_tutor_societa')->find($id);
 
         $data['societa'] = Societa::lists('ragione_sociale', 'id');
 
-//        $data['usergroups'] = $usergroups->getTree();
         $data['roles'] = Role::lists('name' , 'id');
-
-        \Debugbar::info($data['roles']);
 
         /******************************************************************
         DA COMPLETARE !!!!!!
@@ -66,8 +102,11 @@ class usersController extends Controller {
         $data['lista_albi'] =   \App\albi_professionali::orderBy('nome')->lists('nome' , 'id');
         $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('ordinamento')->lists('nome' , 'id');
         $data['lista_mansioni'] =  \App\mansioni::orderBy('nome')->lists('nome' , 'id');
+        $data['lista_societa'] =  \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id');
 //        $data['lista_mansioni'] = \App\mansioni::select(DB::raw("CONCAT(nome,' ', classe_rischio) AS nome, id"))->orderBy('nome')->lists('nome', 'id');
 
+
+        \Debugbar::info($data['datiRecuperati']->_tutor_societa->toArray());
 
         return view('users.edit', $data);
     }
@@ -87,13 +126,6 @@ class usersController extends Controller {
         return view('users.formazione', $data);
 
     }
-
-//    public function classe_rischio($id){
-//
-//        $datiRecuperati = \App\User::find($id);
-//        return view('users.edit_classe_rischio', $datiRecuperati);
-//
-//    }
 
     public function update(Request $request, $id) {
         $this->validate($request, [
@@ -119,13 +151,15 @@ class usersController extends Controller {
 
         $user->push();
 
-//        $user->groups()->sync($request->get('groups'));
+        $user->groups()->sync($request->get('groups'));
 
         $user->_albi_professionali()->sync( (array) $request->get('_albi_professionali'));
 
         $user->_incarichi_sicurezza()->sync( (array) $request->get('_incarichi_sicurezza'));
 
         $user->_mansioni()->sync( (array) $request->get('_mansioni'));
+
+        $user->_tutor_societa()->sync( (array) $request->get('_tutor_societa'));
 
         $allinea = new registro_formazione();
         $allinea->sync_utente($id);

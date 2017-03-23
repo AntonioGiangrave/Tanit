@@ -49,36 +49,28 @@
 				<nav id="fh5co-main-nav" role="navigation">
 					<ul>
 
-						@role(['admin' , 'superuser', 'gestoremultiplo' , 'azienda'])
-						<li><a href="/users">Dipendenti</a></li>
+						@role(['admin' , 'azienda' ])
+						<li><a href="/users">Utenti</a></li>
 						@endrole
 
-						@role(['admin' , 'superuser', 'gestoremultiplo' ])
+						@role(['admin' , 'azienda'])
 						<li><a href="/societa">Aziende</a></li>
 						@endrole
 
-						@role(['azienda'])
-						<li><a href="/societa/{{ Auth::user()->societa_id }}/edit">Dettagli azienda</a></li>
-						@endrole
-
-						@role(['admin','superuser'])
-						<li><a href="/corsi">Corsi</a></li>
-						@endrole
-
-						@role(['admin', 'superuser', 'gestoremultiplo'])
+						@role(['admin',  'azienda'])
 						<li><a href="/registro_formazione">Prenotazione corsi</a></li>
 						@endrole
 
+						@role(['admin'])
+						<li><a href="/corsi">Corsi</a></li>
+						@endrole
 
 						@if(Auth::guest())
 							<li><a href="/login">Accedi</a></li>
-
 							<li><a href="/register">Registrati</a></li>
 						@endif
 
-
-
-						@role(['admin','superuser'])
+						@role(['admin','azienda'])
 
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -104,20 +96,6 @@
 							</ul>
 						</li>
 						@endrole
-
-								<!--
-            <li class="has-sub">
-                <div class="drop-down-menu">
-                    <a href="#">Strumenti</a>
-                    <div class="dropdown-menu-wrap">
-                        <ul>
-                            <li><a href="/societa">Aziende</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-
-            -->
 
 						<ul class="nav navbar-top-links navbar-right">
 							@if( Auth::check() )
@@ -151,18 +129,10 @@
 		<!-- Header -->
 
 
-
-
-
-
 		<div class="col-sm-12">
-
-			<h2 class="page-header">@yield('page_heading')</h2>
 			<div class="pull-right">@yield('action_button')</div>
-
-
+			<h3 class="page-header">@yield('page_heading')</h3>
 		</div>
-
 
 
 		<div class="row bodygg">

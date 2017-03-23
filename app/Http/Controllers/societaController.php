@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\societa;
+use Auth;
 
 class societaController extends Controller
 {
@@ -17,7 +18,18 @@ class societaController extends Controller
      */
     public function index()
     {
-        $data['societa'] = societa::with('ateco' )->orderBy('ragione_sociale');
+        $data['societa'] = societa::with('ateco' );
+
+        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
+
+        }
+        else{
+            $data['societa'] = $data['societa']->whereHas('_tutor', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+        }
+
+        $data['societa']->orderBy('ragione_sociale');
 
         $data['societa'] = $data['societa']->get();
 
@@ -71,7 +83,7 @@ class societaController extends Controller
 
         $data['datiRecuperati'] = \App\societa::with('ateco', '_settori' )->find($id);
 
-//        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione')->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
+        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione')->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
 
         $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
         $data['lista_settori'] = \App\settori::lists('settore' , 'id');

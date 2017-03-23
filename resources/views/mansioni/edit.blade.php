@@ -1,6 +1,6 @@
 @extends('cache.index')
 
-@section('page_heading','Mansione: ' .  $datiRecuperati['nome'])
+@section('page_heading','Attribuisci corsi alla mansione ' .  $datiRecuperati['nome'])
 @section('body')
 
     {{
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="pull-right">
-                    {{ Form::submit('Salva', ['class' => 'btn btn-success']) }}
+                    {{ Form::submit('Salva', ['class' => 'btn btn-tanit']) }}
                     {{ Form::close() }}
                 </div>
 
@@ -31,17 +31,17 @@
 
             <div class="col-sm-7">
                 <div class="form-group filterlist">
-                    {{ Form::label('_corsi', 'Corsi:') }}
+                    {{ Form::label('_corsi', 'Corsi da attribuire:') }}
                     <div class="row">
                         <div class="col-sm-4">
                             {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Filtra']) }}
                         </div>
                         <div class="col-sm-1"></div>
                         <div class="col-sm-3">
-                            <a class="btn btn-warning btn-xs" id="resetfilter" href="#">visualizza tutti</a>
+                            <a class="btn btn-tanit btn-xs" id="resetfilter" href="#">visualizza tutti</a>
                         </div>
                         <div class="col-sm-3">
-                            <a class="btn btn-warning btn-xs" id="soloselezionati" href="#">visualizza selezionati</a>
+                            <a class="btn btn-tanit btn-xs" id="soloselezionati" href="#">visualizza selezionati</a>
                         </div>
 
                     </div>
@@ -54,5 +54,12 @@
         </div>
     </div>
 
+
+@stop
+
+@section('action_button')
+        {{ Form::open(array('url' => '/mansioni', 'action'=>'index' , 'method' => 'get' )) }}
+        {{ Form::submit('Torna a mansioni', ['class' => 'btn btn-tanit btn-xs']) }}
+        {{Form::close()}}
 
 @stop

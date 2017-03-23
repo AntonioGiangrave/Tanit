@@ -26,7 +26,7 @@
                         <td>{{ $single->descrizione}}</td>
                         <td>
                             @role(['admin', 'superuser'])
-                                <a class="btn btn-warning btn-xs "   href="/ateco/{{$single->id}}/edit">modifica</a>
+                                <a class="btn btn-tanit btn-xs "   href="/ateco/{{$single->id}}/edit">modifica</a>
 
                             @endrole
                         </td>

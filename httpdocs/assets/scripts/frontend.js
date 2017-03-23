@@ -11890,7 +11890,7 @@ $(function() {
 
 	$( document ).ready(function() {
 		//filtri su liste
-		$("#resetfilter").click(function () {
+		$(".resetfilter").click(function () {
 			$("#txtSearch").val('');
 			var search = $('#txtSearch').val().toLowerCase();
 			$(".list-group-item").each(function () {
@@ -11904,7 +11904,7 @@ $(function() {
 		});
 
 		//filtri su liste
-		$("#soloselezionati").click(function () {
+		$(".soloselezionati").click(function () {
 			$("#txtSearch").val('');
 			var search = $('#txtSearch').val().toLowerCase();
 			$(".list-group-item").each(function () {
@@ -11929,6 +11929,8 @@ $(function() {
 				}
 			});
 		});
+		
+		
 
 
 

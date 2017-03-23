@@ -7,8 +7,21 @@
 @section('body')
 
 
-    {{Form::Open(['name'=> 'prenotazioni' , 'id'=> 'prenotazioni' , 'method' => 'post' , 'url' =>'registro_formazione']) }}
+    @if(is_null($corso->_fad))@else
+        <div class="row bg-info">
+            <br>
+            <div class="col-sm-1">
+                <i class="fa fa-exclamation-circle fa-4x " aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-11 ">
+                <h4>E' possibile seguire questo corso sul portale di formazione fad {{ $corso->_fad->descrizione}} andando all'indirizzo <a href="{{ $corso->_fad->indirizzo}}">{{ $corso->_fad->indirizzo}}</a></h4>
+            </div>
+        </div>
+        <hr>
+    @endif
 
+
+    {{Form::Open(['name'=> 'prenotazioni' , 'id'=> 'prenotazioni' , 'method' => 'post' , 'url' =>'registro_formazione']) }}
 
     <div class="row">
 
@@ -25,23 +38,26 @@
             <div class="col-sm-8">
                 <h4>Quale sessione ti interessa?</h4>
                 <div id="list_sessione" class="list-group">
-                    @foreach($sessioniAula as $sessione)
-                        <?php $posti_occupati= $sessione->_posti_occupati()->count(); ?>
+                    @if($sessioniAula->count() > 0 )
+                        @foreach($sessioniAula as $sessione)
+                            <?php $posti_occupati= $sessione->_posti_occupati()->count(); ?>
 
-                        @if($posti_occupati < $sessione->_aula->posti )
-                            <a href="#" data-value="{{$sessione->id}}"
-                               class="
-                               list-group-item
-                               @if((int)Session::get('sessioneaula.id_sessione')== $sessione->id) active @endif
-                                       " {{-- fineclass--}}
+                            @if($posti_occupati < $sessione->_aula->posti )
+                                <a href="#" data-value="{{$sessione->id}}"
+                                   class="list-group-item
+                                   @if((int)Session::get('sessioneaula.id_sessione')== $sessione->id) active @endif
+                                           " {{-- fineclass--}}
+                                   postiliberi="{{$sessione->_aula->posti - $posti_occupati}}"
+                                >
+                                    {{$sessione->descrizione}} - dal {{$sessione->dal}} ({{ $sessione->_aula->descrizione }})
+                                    <span class="badge">Posti occupati {{$posti_occupati}}/{{$sessione->_aula->posti}}</span>
+                                </a>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>Non ci sono sessioni attive per questo corso </p>
 
-                               postiliberi="{{$sessione->_aula->posti - $posti_occupati}}"
-                            >
-                                {{$sessione->descrizione}} - dal {{$sessione->dal}} ({{ $sessione->_aula->descrizione }})
-                                <span class="badge">{{$posti_occupati}}/{{$sessione->_aula->posti}}</span>
-                            </a>
-                        @endif
-                    @endforeach
+                    @endif
                 </div>
             </div>
         @endif
@@ -84,12 +100,11 @@
 
             </div>
             <div class="pull-right">
-
                 {{ Form::hidden('id_sessione', 'id_sessione', array('id' => 'id_sessione')) }}
                 {{ Form::hidden('id_utenti', 'id_utenti', array('id' => 'id_utenti')) }}
 
 
-                {{ Form::submit('Conferma e iscrivi', ['class' => 'btn btn-success']) }}
+                {{ Form::submit('Conferma e iscrivi', ['class' => 'btn btn-tanit']) }}
                 {{ Form::close() }}
             </div>
         @endif
@@ -111,7 +126,6 @@
                 var id_fondo=$('#list_fondo .active').attr('data-value');
                 var id_sessione=$('#list_sessione .active').attr('data-value');
 
-
                 var id_utenti= new Array();
                 $('.utenti_da_iscrivere').find('.active').each(function(i, items){
                     id_utenti.push($(items).attr('data-value'));
@@ -130,7 +144,7 @@
             });
 
 
-
+            //seleziono il fondo
             $('#list_fondo .list-group-item').on('click', function (e) {
                 $('#list_sessione').html('Caricamento sessioni in corso...');
                 $('.utenti_da_iscrivere').html('Selezionare prima una sessione');
@@ -149,26 +163,27 @@
                 });
             });
 
-
+            //seleziona piu utenti possibile
             $('#btn_seleziona_piuchepuoi').on('click', function (e) {
                 e.preventDefault();
+                $('.utenti_da_iscrivere .list-group-item').removeClass('active');
+                $('.utenti_da_iscrivere a').show();
+
                 var quanti  = $('#list_sessione').find('.active').attr('postiliberi');
                 for(i = 0; i < quanti; i++) {
-                    $(".utenti_da_iscrivere .list-group-item").eq(i).addClass("active");
+                    $(".utenti_da_iscrivere .list-group-item " ).eq(i).addClass("active");
                 }
 
                 $('#selezionati').html($('.utenti_da_iscrivere a.active').length + ' selezionati');
             });
 
+            //conteggio selezionati
+//            $('.utenti_da_iscrivere .list-group-item').click(function (){
+//                count = $('.utenti_da_iscrivere a.active').length;
+//                $('#selezionati').html(count + ' selezionati');
+//            });
 
-            $('.utenti_da_iscrivere .list-group-item').on('click', function (e) {
-
-                count =$('.utenti_da_iscrivere a.active').length - 1;
-                $('#selezionati').html(count + ' selezionati');
-            });
-
-
-
+            //azzera selezione
             $('#btn_seleziona_clear').on('click', function (e) {
                 e.preventDefault();
                 $('.utenti_da_iscrivere .list-group-item').removeClass('active');
@@ -178,15 +193,12 @@
 
             });
 
+            //filtra per societa
             $('.filtra_societa .list-group-item ').on('click', function (e) {
-
                 var Filter = $(this).attr('data-value');
                 $('.utenti_da_iscrivere a').show();
                 $('.utenti_da_iscrivere a:not([data-filter="' + Filter + '"])').hide();
-
             });
-
-
 
         });
     </script>

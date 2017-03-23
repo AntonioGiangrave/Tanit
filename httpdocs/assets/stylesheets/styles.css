@@ -9662,6 +9662,10 @@ canvas.round {
     display: inline !important;
 }
 
+.nav {
+    height: 30px;
+}
+
 .list-group-item
 {
     padding: 1px 10px !important;
@@ -9707,6 +9711,15 @@ canvas.round {
     width: 70px;
 }
 
+.btn-tanit{
+    background: #1072AF;
+    color: #fff;
+    border: 2px solid #1072AF;
+}
+
+.fa-width{
+    width: 70px;
+}
 /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -14610,13 +14623,15 @@ body {
 }
 
 a {
-  color: #FF5126;
+  /*color: #FF5126;*/
+  color: #0F71AE;
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
 }
 a:hover, a:active, a:focus {
-  color: #FF5126;
+  /*color: #FF5126;*/
+  color: #0F71AE;
   outline: none;
   text-decoration: none;
 }

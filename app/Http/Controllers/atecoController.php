@@ -60,8 +60,12 @@ class atecoController extends Controller
      */
     public function edit($id)
     {
-        $data['datiRecuperati'] = \App\ateco::with('_corsi')->find($id);
+        $data['datiRecuperati'] = \App\ateco::with('_corsi_sicurezza_specifica', '_corsi_rspp', '_corsi_aspp')->find($id);
         $data['lista_corsi'] = \App\corsi::where('tipo', 'S')->orderBy('titolo')->lists('titolo' , 'id');
+
+
+\Debugbar::info($data['datiRecuperati']->_corsi_aspp->lists('id')->toArray());
+
 
         return view('ateco.edit', $data);
     }
@@ -93,7 +97,9 @@ class atecoController extends Controller
 
         \Debugbar::info((array) $request->get('_corsi'));
 
-        $data->_corsi()->sync( (array) $request->get('_corsi'));
+        $data->_corsi_sicurezza_specifica()->sync( (array) $request->get('_corsi_sicurezza_specifica'));
+        $data->_corsi_rspp()->sync( (array) $request->get('_corsi_rspp'));
+        $data->_corsi_aspp()->sync( (array) $request->get('_corsi_aspp'));
 
 
         return redirect('ateco/')->with('ok_message', 'Dati aggiornati');

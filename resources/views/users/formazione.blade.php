@@ -1,7 +1,7 @@
 @extends('cache.index')
 
 @section('page_heading','Libretto formativo di
- <a href="/users/'.$datiRecuperati->societa_id . '/edit">' . $datiRecuperati->cognome .' '.$datiRecuperati->nome . '</a> [classe '.$datiRecuperati->user_profiles->classe_rischio.']'
+ <a href="/users/'.$datiRecuperati->id . '/edit">' . $datiRecuperati->cognome .' '.$datiRecuperati->nome . '</a> [classe '.$datiRecuperati->user_profiles->classe_rischio.']'
  )
 @section('body')
 

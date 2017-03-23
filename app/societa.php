@@ -9,14 +9,14 @@ class societa extends Model {
     //
     protected $table = 'cm_societa';
 
-    
-     public function dipendenti()
+
+    public function dipendenti()
     {
         return $this->hasMany('App\User');
     }
 
-    
-     public function user()
+
+    public function user()
     {
         return $this->hasMany('App\User');
     }
@@ -32,6 +32,11 @@ class societa extends Model {
         return $this->belongsTo('App\settori');
     }
 
-  
+    public function _tutor()
+    {
+        return $this->belongsToMany('\App\User', 'user_societa_map'  , 'societa_id', 'user_id' );
+    }
+
+
 
 }

@@ -44,6 +44,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('App\societa');
     }
 
+
+    public function _tutor_societa()
+    {
+        return $this->belongsToMany('\App\societa', 'user_societa_map'  );
+    }
+
+
     public function user_profiles() {
 
         return $this->belongsTo('App\user_profiles' , 'id' , 'id');

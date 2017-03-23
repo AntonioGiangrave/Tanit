@@ -35,7 +35,7 @@
                 </div>
                 <div id="collapse2" class="panel-collapse collapse  ">
                     <div class="panel-body">
-                        {{--@include('societa.utenti', $utentiSocieta)--}}
+                        @include('societa.utenti', $utentiSocieta)
                     </div>
                 </div>
             </div>

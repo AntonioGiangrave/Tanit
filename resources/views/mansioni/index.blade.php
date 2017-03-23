@@ -11,6 +11,7 @@
 
                 <thead>  <tr>
                     <th>Nome</th>
+                    <th>Numero corsi</th>
                     <th>Settore</th>
                     <th> </th>
                 </tr>
@@ -23,10 +24,10 @@
 
                     <tr>
                         <td>{{ $single->nome}}</td>
+                        <td>{{ $single->_corsi->count()}}</td>
                         <td>{{ $single->_settore['settore']}}</td>
                         <td>
-                                <a class="btn btn-warning btn-xs "   href="/mansioni/{{$single->id}}/edit">modifica</a>
-
+                                <a class="btn btn-tanit btn-xs "   href="/mansioni/{{$single->id}}/edit">modifica</a>
                         </td>
                     </tr>
 

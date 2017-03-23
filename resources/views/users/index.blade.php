@@ -1,35 +1,36 @@
 @extends('cache.index')
 
 @section('page_heading')
-    @role((['admin', 'gestoremultiplo' , 'superuser']))
-    {{ Form::open(array('url' => '/users', 'action'=>'index' , 'method' => 'get')) }}
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                {{ Form::label('societa_id', 'Azienda:') }}
-                {{ Form::select('societa_id', $societa, $societa_id,['class' => 'form-control']) }}
+    @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
+    @if($societa->count() > 0)
+        {{ Form::open(array('url' => '/users', 'action'=>'index' , 'method' => 'get', 'class' => 'form-inline')) }}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group ">
+                    {{ Form::label('societa_id', 'Seleziona azienda:') }}
+                    {{ Form::select('societa_id', $societa, $societa_id,['class' => 'form-control']) }}
+                </div>
             </div>
         </div>
-    </div>
-    {{Form::close()}}
-
+        {{Form::close()}}
+    @endif
     @endrole
 
 @stop
 
 @section('action_button')
-    @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
-    <a href="/sync_azienda/{{$societa_id}}"><i class="fa fa-refresh">Sincronizza formazione</i></a>
+    @role((['admin', 'superuser', 'azienda']))
+    @if($societa->count() > 0)
+        {{ Form::open(array('url' => '/sync_azienda', 'action'=>'index' , 'method' => 'post', 'class' => 'form-inline')) }}
+
+        {{ Form::hidden('sync_societa_id',  $societa_id , ['class' => 'form-control', 'hidden'=>'hidden', 'id'=>'societa_id', 'name'=>'societa_id']) }}
+        {{ Form::submit('SINCRONIZZA', ['class' => 'btn btn-tanit btn-xs']) }}
+        {{Form::close()}}
+    @endif
     @endrole
 @stop
 
-
 @section('body')
-
-
-
-
-
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-striped">
@@ -90,9 +91,14 @@
                         </td>
                         <td>
                             @role(['admin', 'superuser', 'gestoremultiplo', 'azienda' ])
-                            <a class="text-muted" href="users/{{$dip->id}}/edit" title="modfica"><i class="fa fa-pencil fa-2x"></i></a>
-                            <a class="text-muted" href="usersformazione/{{$dip->id}}" title="formazione"><i class="fa fa-mortar-board fa-2x"></i></a>
+                            <a class="text-muted" href="users/{{$dip->id}}/edit" title="Modfica"><i class="fa fa-pencil fa-2x"></i></a>
+                            <a class="text-muted" href="usersformazione/{{$dip->id}}" title="Visualizza la formazione"><i class="fa fa-mortar-board fa-2x"></i></a>
                             @endrole
+
+                            @if($dip->hasRole('azienda'))
+                                <a class="text-muted" href="#" title="Utente tutor/amministratore"><i class="fa fa-address-card fa-2x"></i></a>
+                            @endif
+
                         </td>
                     </tr>
 

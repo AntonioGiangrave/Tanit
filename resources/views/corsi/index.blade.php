@@ -1,16 +1,18 @@
 @extends('cache.index')
 
 @section('page_heading','Elenco Corsi')
+
+@section('action_button')
+    <div class="push-right">
+        <a class="btn btn-tanit btn-xs "   href="/corsi/create"><i class="fa fa-plus-square "></i> Nuovo corso</a>
+    </div>
+@stop
+
+
 @section('body')
 
     <div class="row">
         <div class="col-sm-12">
-
-
-            <div class="push-right">
-                <a class="btn btn-warning btn-xs "   href="/corsi/create"><i class="fa fa-plus-square fa-2x"></i> Nuovo corso</a>
-            </div>
-
 
 
             <table class="table table-striped">
@@ -22,14 +24,12 @@
                     <th>FAD</th>
                     <th>CFP</th>
                     <th>Validita</th>
-                    <th>Proprietario</th>
+
 
                     <th> </th>
                 </tr>
                 </thead>
                 <tbody>
-
-
 
                 @foreach($corsi as $single)
 
@@ -40,11 +40,8 @@
                         <td> @if( $single->fad ) <span title="{{ $single->_fad->descrizione ." - ".$single->_fad->indirizzo }}"><i class="fa fa-check"></i></span> @endif </td>
                         <td> @if( $single->cfp ) <i class="fa fa-check"></i> @endif </td>
                         <td>{{ $single->validita}}</td>
-                        <td>{{ $single->proprietario['ragione_sociale'] }} </td>
-
                         <td>
-                                <a class="btn btn-warning btn-xs "   href="/corsi/{{$single->id}}/edit">modifica</a>
-
+                            <a class="btn btn-tanit btn-xs "   href="/corsi/{{$single->id}}/edit">modifica</a>
                         </td>
                     </tr>
 

@@ -23,16 +23,21 @@ class registro_formazioneController extends Controller
     {
         $corsi = registro_formazione::whereNull('data_superamento')->whereNull('sessione_id')->with('_corsi._sessioni' )->groupBy('corso_id');
 
+        $societa_id=$request->input('societa_id');
 
         if(Auth::user()->hasRole('azienda')) {
-            $societa_id=Auth::user()->societa_id;
-            $corsi = $corsi->whereHas('_user', function($query) use($societa_id){
-                $query->where('societa_id', '=' , $societa_id);
+
+            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+
+
+            $corsi = $corsi->whereHas('_user', function($query) use($societa){
+                $query->whereIn('societa_id',  $societa->lists('id'));
             });
         }
 
-        if(Auth::user()->hasAnyRole(['admin', 'gestoremultiplo', 'superuser'])) {
-            $societa_id=$request->input('societa_id');
+        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
             if($societa = \App\societa::find($societa_id))
                 $corsi->whereHas('_user', function($query) use($societa_id){
                     $query->where('societa_id', $societa_id);
@@ -78,21 +83,21 @@ class registro_formazioneController extends Controller
                 ->where('corso_id' ,$sessione->id_corso)
                 ->update(['sessione_id' => $sessione->id, 'fondo_id' => $fondo->id]);
 
-            //Mando la mail a ogni utente
-            Mail::send('emails.conferma_iscrizione_utente', ['user' => $utente->nome, 'sessione' => $sessione], function ($m) use ($utente) {
-                $m->from('info@tanitsrl.it', 'TANIT');
-                $m->to($utente->email, $utente->name);
-                $m->subject('Iscrizione corso formazione');
-            });
+//            //Mando la mail a ogni utente
+//            Mail::send('emails.conferma_iscrizione_utente', ['user' => $utente->nome, 'sessione' => $sessione], function ($m) use ($utente) {
+//                $m->from('info@tanitsrl.it', 'TANIT');
+//                $m->to($utente->email, $utente->name);
+//                $m->subject('Iscrizione corso formazione');
+//            });
         }
 
         //Mando la mail di riepilogo al tutor.
-        Mail::send('emails.conferma_iscrizione_tutor', ['users' => $utenti, 'sessione' => $sessione, 'fondo' => $fondo], function ($m) use ($utente, $sessione) {
-            $m->from('info@tanitsrl.it', 'TANIT');
-            $m->to($utente->societa->email, $utente->societa->ragione_sociale);
-//            $m->to('info@tanit.it', 'Tantit superuser');
-            $m->subject('Nuovi iscritti a '. $sessione->_corso->titolo);
-        });
+//        Mail::send('emails.conferma_iscrizione_tutor', ['users' => $utenti, 'sessione' => $sessione, 'fondo' => $fondo], function ($m) use ($utente, $sessione) {
+//            $m->from('info@tanitsrl.it', 'TANIT');
+//            $m->to($utente->societa->email, $utente->societa->ragione_sociale);
+////            $m->to('info@tanit.it', 'Tantit superuser');
+//            $m->subject('Nuovi iscritti a '. $sessione->_corso->titolo);
+//        });
 
         $request->session()->forget('sessioneaula');
         
@@ -118,38 +123,33 @@ class registro_formazioneController extends Controller
      */
     public function edit($id)
     {
-
-//        $session_list =$data['sessioniAula']->pluck('id')->toArray();
         $all_user = \App\User::with('societa')
             ->whereHas('_registro_formazione', function($query) use($id){
                 $query->where('corso_id', $id)->whereNull('data_superamento')->whereNull('sessione_id');
             });
-//            ->whereNotIn('id' , function($query) use($id , $session_list){
-//                $query->select('id_utente');
-//                $query->from('aule_prenotazioni');
-//                $query->whereIn('id_sessione', $session_list );
-//            });
 
+        //Se sono azienda pesco solo le mie societa
+        if(Auth::user()->hasAnyRole(['admin'])) {
+
+        }
+        else{
+            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+            $all_user = $all_user->whereIn('societa_id', $societa->lists('id'));
+        }
 
         $data['utenti']= $all_user ->orderBy('societa_id')->get();
         $data['aziende']= $all_user ->select('societa_id')->distinct()->get();
-
-
 
         $data['sessioniAula'] = \App\aule_sessioni::where('id_corso', $id)->with('_aula');
         if(Session('sessioneaula.id_fondo'))
             $data['sessioniAula'] = $data['sessioniAula']->whereDate('dal', '>', \Carbon\Carbon::now()->addMonths(2));
         
-        
-        
         $data['sessioniAula']= $data['sessioniAula']->get();
 
-
-
         $data['fondiprofessionali'] = ['0' => 'Nessun Fondo']+ \App\fondiprofessionali::lists('name','id')->toArray();
-        $data['corso'] = \App\corsi::find($id);
-
-        \Debugbar::log(Session('sessioneaula'));
+        $data['corso'] = \App\corsi::with('_fad')->find($id);
 
         return view('registro_formazione.edit', $data);
     }

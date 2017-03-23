@@ -1,15 +1,10 @@
 @extends('cache.index')
 
-@section('page_heading','Elenco societa')
+@section('page_heading','Gestione societa')
 @section('body')
 
     <div class="row">
         <div class="col-sm-12">
-
-
-
-
-
 
             <table class="table table-striped">
 
@@ -24,8 +19,6 @@
                 </thead>
                 <tbody>
 
-
-
                 @foreach($societa as $single)
 
                     <tr>
@@ -38,13 +31,11 @@
                             @endif
                         </td>
 
-
-
                         <td align="center"><b>{{$single->user->count()}}</b></td>
 
                         <td>
                             @role(['admin' ,'superuser' , 'gestoremultiplo' ,'azienda'])
-                            <a class="btn btn-warning btn-xs "   href="/societa/{{$single->id}}/edit">modifica</a>
+                            <a class="btn btn-tanit btn-xs "   href="/societa/{{$single->id}}/edit">modifica</a>
                             @endrole
                         </td>
                     </tr>

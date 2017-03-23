@@ -45,21 +45,7 @@
 
             </div>
 
-            <div class="col-md-4">
 
-
-                @role(['admin'])
-                {{ Form::label('Autorizzazioni', 'Gruppi:') }}
-                <div class='form-group'>
-                    @foreach ($roles as $key => $val)
-                        <br>
-                        {{ Form::checkbox('groups[]', $key) }}
-                        {{ Form::label('groups', $val) }}
-                    @endforeach
-                </div>
-                @endrole
-
-            </div>
         </div>
 
         <hr>
@@ -69,8 +55,8 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse1">
-                            Dettagli profilo
+                           href="#collapse1"><i class="fa fa-user fa-2x fa-width" aria-hidden="true"></i>
+                            DETTAGLI PROFILO
                         </a>
                     </h4>
                 </div>
@@ -83,14 +69,34 @@
         </div>
 
         <hr>
-
+        @role(['admin'])
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse5">
-                            Mansioni
+                           href="#collapse7"><i class="fa fa-users fa-2x fa-width" aria-hidden="true"></i>
+                            GRUPPI
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse7" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        @include('users.edit_gruppi_tutor',  $datiRecuperati)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        @endrole
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#collapse5"><i class="fa fa-wrench fa-2x fa-width" aria-hidden="true"></i>
+                            MANSIONI
                         </a>
                     </h4>
                 </div>
@@ -109,8 +115,8 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse4">
-                            Incarichi di sicurezza
+                           href="#collapse4"><i class="fa fa-shield fa-2x fa-width" aria-hidden="true"></i>
+                            INCARICHI SICUREZZA
                         </a>
                     </h4>
                 </div>
@@ -129,8 +135,8 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse3">
-                            Albi Professionali
+                           href="#collapse3"><i class="fa fa-drivers-license fa-2x fa-width" aria-hidden="true"></i>
+                            ALBI PROFESSIONALI
                         </a>
                     </h4>
                 </div>
@@ -149,8 +155,8 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse6">
-                            Classe di rischio
+                           href="#collapse6"><i class="fa fa-thermometer-half fa-2x fa-width" aria-hidden="true"></i>
+                            CLASSE DI RISCHIO
                         </a>
                     </h4>
                 </div>
@@ -168,7 +174,7 @@
             <div class="pull-right">
 
 
-                {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-success', 'type'=>'submit', 'type'=>'submit']) }}
+                {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-tanit btn-xs', 'type'=>'submit', 'type'=>'submit']) }}
 
                 {{ Form::close() }}
 
@@ -178,5 +184,19 @@
 
     </div>
 
-    @stop
+@stop
+
+
+
+    {{--<script type="text/javascript">--}}
+        {{--$(document).ready(function() {--}}
+            {{--$(".panel-heading").click(function () {--}}
+                {{--console.log('ok');--}}
+
+            {{--});--}}
+        {{--});--}}
+
+
+    {{--</script>--}}
+
 

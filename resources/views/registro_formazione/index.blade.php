@@ -1,6 +1,6 @@
 @extends('cache.index')
 
-@section('page_heading','Utenti')
+@section('page_heading','Gestione personale da formare')
 @section('body')
 
 
@@ -28,6 +28,7 @@
                     <th>Corso</th>
                     <th class="text-center">Utenti</th>
                     <th class="text-center">Sessioni attive</th>
+                    <th class="text-center">Disponibilità fad</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -40,6 +41,7 @@
                         <td class="text-center">{{ $corso->total }}</td>
 
                         <td class="text-center">{{ $corso->_corsi->_sessioni()->count()}}</td>
+                        <td class="text-center" >@if(is_null($corso->_corsi->_fad))@else{{ $corso->_corsi->_fad->descrizione}} @endif </td>
                         <td><a title="Gestisci" href="/registro_formazione/{{$corso->_corsi->id}}/edit"><i class="fa fa-random "></i></a></td>
                     </tr>
 

@@ -166,6 +166,7 @@ class registro_formazione extends Model
 
         $this->formazione_incarichi_sicurezza($utente);
 
+        
     }
 
     public function sync_azienda($id)

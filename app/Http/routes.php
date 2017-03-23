@@ -19,6 +19,9 @@ Route::get('/', function() {
     return View::make('cache.home');
 });
 
+
+
+
 //Route::get('/home', function() {
 //    return View::make('cache.home');
 //});
@@ -52,6 +55,7 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::resource('users', 'usersController');
     Route::resource('usersformazione', 'usersController@formazione');
+    Route::resource('sync_azienda', 'usersController@user_sync');
 //    Route::get('user_classe_rischio/{id}', function($id){
 //        $data['datiRecuperati'] = \App\User::find($id);
 //        return View::make('users.edit_classe_rischio', $data);
@@ -111,12 +115,17 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
 
-    Route::get('sync_azienda/{id}',function ($id){
-        $registro_formazione = new \App\registro_formazione();
-        $registro_formazione->sync_azienda($id);
-        return Redirect::back()->with('ok_message','Formazione dipendenti aggiornata');
-    });
+//    Route::get('sync_azienda/{id}',function ($id){
+//        $registro_formazione = new \App\registro_formazione();
+//        $registro_formazione->sync_azienda($id);
+//        return Redirect::back()->with('ok_message','Formazione dipendenti aggiornata');
+//    });
 
+    Route::get('sync_utente/{id}', function($id){
+        $registro_formazione = new \App\registro_formazione();
+        $registro_formazione->sync_utente($id);
+        return 'true';
+    });
 
 
 

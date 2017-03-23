@@ -23,32 +23,55 @@
                 </div>
 
                 <div class="pull-right">
-                    {{ Form::submit('Salva', ['class' => 'btn btn-success']) }}
+                    {{ Form::submit('Salva', ['class' => 'btn btn-tanit']) }}
                     {{ Form::close() }}
                 </div>
 
             </div>
 
             <div class="col-sm-7">
-                <div class="form-group filterlist">
-                    {{ Form::label('_corsi', 'Corsi:') }}
-                    <div class="row">
-                        <div class="col-sm-4">
-                            {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Filtra']) }}
-                        </div>
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-3">
-                            <a class="btn btn-warning btn-xs" id="resetfilter" href="#">visualizza tutti</a>
-                        </div>
-                        <div class="col-sm-3">
-                            <a class="btn btn-warning btn-xs" id="soloselezionati" href="#">visualizza selezionati</a>
-                        </div>
 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#spec">Sic. Specifica ({{$datiRecuperati->_corsi_sicurezza_specifica->count()}})</a></li>
+                    <li><a data-toggle="tab" href="#rspp">RSPP ({{$datiRecuperati->_corsi_rspp->count()}})</a></li>
+                    <li><a data-toggle="tab" href="#aspp">ASPP ({{$datiRecuperati->_corsi_aspp->count()}})</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="spec" class="tab-pane fade in active">
+                        @include('ateco.corsi_sicurezza_specifica ',  $datiRecuperati)
                     </div>
-                    <hr>
-                    {{ Form::select('_corsi[]',$lista_corsi, $datiRecuperati->_corsi->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
 
+
+                    <div id="rspp" class="tab-pane fade">
+                        @include('ateco.corsi_rspp ',  $datiRecuperati)
+                    </div>
+
+
+                    <div id="aspp" class="tab-pane fade ">
+                        @include('ateco.corsi_aspp ',  $datiRecuperati)
+                    </div>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ class mansioniController extends Controller
      */
     public function index()
     {
-        $data['mansioni'] = \App\mansioni::with('_settore')->orderBy('nome')->get();
+        $data['mansioni'] = \App\mansioni::with('_settore', '_corsi')->orderBy('nome')->get();
 
         return view('mansioni.index', $data);
     }

@@ -45,18 +45,13 @@
 
         <div class="row">
 
-
             <div class="col-sm-2">
                 <div class="form-group">
                     {{ Form::label('cfp', 'CFP:') }}
                     {{ Form::checkbox('cfp', null, $datiRecuperati['cfp'], ['class' => 'form-control_']) }}
                 </div>
             </div>
-
         </div>
-
-
-
 
 
         <div class="row">
