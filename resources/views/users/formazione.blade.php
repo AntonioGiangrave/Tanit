@@ -83,7 +83,14 @@
                         <td @if( $corso->data_superamento )class="success" @endif></td>
                         <td align="center">@if( $corso->_corsi->tipo == 'S' ) <i class="fa fa- fa-shield  fa-2x"> </i> @endif</td>
                         <td>{{ strtoupper($corso->_corsi->titolo) }}   </td>
-                        <td align="center">{{ $corso->data_superamento }}</td>
+                        <td align="center">
+                            @if($corso->esonerato == 1)
+                                {{ $corso->description }}
+                            @else
+                                {{ $corso->data_superamento }}
+                            @endif
+
+                        </td>
                         <td>
                             <a class="" href="#{{$corso->corso_id}}" title="Dettaglio corso" onclick="showDetailCorso({{$corso->corso_id}})">
                                 <i class="fa fa-eye fa-2x"></i></a>
@@ -177,6 +184,7 @@
 
 
 @section('script')
+    @parent
     <script type="text/javascript">
 
         $(document).on("click", ".open_set_data_superamento", function () {

@@ -21,7 +21,7 @@
 
         <div class="form-group">
             {{ Form::label('codicefiscale', 'Codicefiscale:') }}
-            {{ Form::text('citta_nascita',  $datiRecuperati->user_profiles->codicefiscale, ['class' => 'form-control']) }}
+            {{ Form::text('codicefiscale',  $datiRecuperati->user_profiles->codicefiscale, ['class' => 'form-control']) }}
         </div>
     </div>
 </div>

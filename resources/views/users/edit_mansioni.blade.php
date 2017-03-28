@@ -1,6 +1,5 @@
-
+<br>
 <div class="form-group filterlist">
-    {{ Form::label('_mansioni', 'Mansioni:') }}
     <div class="row">
         <div class="col-sm-4">
             {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Filtra']) }}

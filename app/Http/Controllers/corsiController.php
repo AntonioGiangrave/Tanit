@@ -29,9 +29,13 @@ class corsiController extends Controller
     public function create()
     {
 
-        $albi_professionali = \App\albi_professionali::lists('nome', 'id')->all();
+//        $albi_professionali = \App\albi_professionali::lists('nome', 'id')->all();
 
-        return view('corsi.new')->with('albi_professionali',$albi_professionali);
+        $data['albi_professionali'] = \App\albi_professionali::lists('nome' , 'id');
+        $data['aule'] = \App\aule::lists('descrizione', 'id')->all();
+        $data['fad'] = \App\fad::lists('descrizione', 'id')->all();
+
+        return view('corsi.new', $data);
     }
 
     /**

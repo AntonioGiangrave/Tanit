@@ -9,6 +9,7 @@ class registro_formazione extends Model
 {
     protected $table="registro_formazione";
 
+    protected $fillable = ['user_id', 'corso_id', 'description', 'data_superamento'];
 
     public function _user(){
         return $this->belongsTo('App\User' , 'user_id');
@@ -25,8 +26,6 @@ class registro_formazione extends Model
     public function _fondo(){
         return $this->belongsTo('App\fondi_professionali' , 'fondo_id');
     }
-
-
 
     public static function insertIgnore($array){
         $a = new static();
@@ -49,7 +48,7 @@ class registro_formazione extends Model
                 $registro_formazione =  new registro_formazione();
                 $registro_formazione->user_id= $utente->id;
                 $registro_formazione->corso_id= $corso->id;
-                $registro_formazione->description= 'formazione_mansioni';
+                $registro_formazione->description= 'formazione_mansioni ('.$mansione->nome.')';
                 $registro_formazione->insertIgnore($registro_formazione->toArray());
             }
         }
@@ -150,6 +149,16 @@ class registro_formazione extends Model
         }
     }
 
+    public function esoneri($utente){
+
+        $esoneri = new \App\esoneri();
+        $esoneri->_get_esoneri($utente);
+
+        $esoneri_laurea = new \App\esoneri_laurea();
+        $esoneri_laurea->_get_esoneri_laurea($utente);
+
+    }
+
     public function sync_utente($id){
 
         $utente= User::find($id);
@@ -166,19 +175,15 @@ class registro_formazione extends Model
 
         $this->formazione_incarichi_sicurezza($utente);
 
-        
+        $this->esoneri($utente);
+
+
     }
 
     public function sync_azienda($id)
     {
         $societa = societa::with('user')->find($id);
         \Debugbar::info('SyncAzienda: '.$societa->ragione_sociale );
-
-//        if(!$societa->ateco_id) {
-//            \Debugbar::info('/societa/' . $societa->id . '/edit');
-//            return redirect('/societa/' . $societa->id . '/edit')->with('errore', 'Devi aggiornare l\'ateco della società ' . $societa->ragione_sociale . 'prima di procedere');
-//            \Debugbar::info('fine');
-//        }
 
         foreach ($societa->user as $utente) {
             $this->sync_utente($utente->id);

@@ -179,10 +179,6 @@ class registro_formazioneController extends Controller
         return 'true';
     }
     
-    
-    
-    
-
     /**
      * Remove the specified resource from storage.
      *

@@ -29,7 +29,7 @@
                         <td>
 
                             @role(['admin', 'superuser'])
-                                <a class="btn btn-warning btn-xs disabled  "   href="/ateco/{{$single->id}}/edit">modifica</a>
+                                <a class="btn btn-tanit btn-xs disabled  "   href="/ateco/{{$single->id}}/edit">modifica</a>
                             @endrole
                         </td>
                     </tr>

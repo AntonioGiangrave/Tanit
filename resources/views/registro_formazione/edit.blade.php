@@ -9,12 +9,12 @@
 
     @if(is_null($corso->_fad))@else
         <div class="row bg-info">
-            <br>
+
             <div class="col-sm-1">
                 <i class="fa fa-exclamation-circle fa-4x " aria-hidden="true"></i>
             </div>
             <div class="col-sm-11 ">
-                <h4>E' possibile seguire questo corso sul portale di formazione fad {{ $corso->_fad->descrizione}} andando all'indirizzo <a href="{{ $corso->_fad->indirizzo}}">{{ $corso->_fad->indirizzo}}</a></h4>
+                <h4><br>E' possibile seguire questo corso sul portale di formazione fad {{ $corso->_fad->descrizione}} andando all'indirizzo <a href="{{ $corso->_fad->indirizzo}}">{{ $corso->_fad->indirizzo}}</a></h4>
             </div>
         </div>
         <hr>

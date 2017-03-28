@@ -1,3 +1,4 @@
+<br>
 <?php
 $classe_utente= $datiRecuperati->_get_classe_rischio();
 $classe_societa= $datiRecuperati->societa->ateco->classe_rischio;
@@ -57,7 +58,10 @@ $classe_societa= $datiRecuperati->societa->ateco->classe_rischio;
 
 
 @section('script')
+    @parent
     <script type="text/javascript">
+
+        console.log('classserischio');
 
         $('#classe_bassa').on('click', function(e){
             $('#classe_utente').removeClass('col-md-offset-2 col-md-offset-4',100);
@@ -75,5 +79,4 @@ $classe_societa= $datiRecuperati->societa->ateco->classe_rischio;
         });
 
     </script>
-
 @stop

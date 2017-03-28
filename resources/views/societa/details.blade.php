@@ -150,11 +150,6 @@
 
 </div>
 
-
-
-
-
-
 <hr>
 <h4>Sede operativa</h4>
 <div class="row">
@@ -197,7 +192,7 @@
 
 
 <div class="pull-right">
-    {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-success', 'type'=>'submit', 'type'=>'submit']) }}
+    {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-tanit', 'type'=>'submit', 'type'=>'submit']) }}
 
     {{ Form::close() }}
 

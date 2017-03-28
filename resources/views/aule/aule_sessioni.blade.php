@@ -6,11 +6,11 @@
     <div class="row">
         <div class="col-sm-12">
 
+@section('action_button')
 
-            <div class="push-right">
-                <a class="btn btn-warning btn-xs" href="/aule_sessioni/create"><i class="fa fa-plus-square fa-2x"></i> Nuova sessione</a>
-            </div>
+                <a class="btn btn-tanit btn-xs" href="/aule_sessioni/create"><i class="fa fa-plus-square"></i> Nuova sessione</a>
 
+@stop
             <table class="table table-striped">
                 <thead>  <tr>
                     <th>Descrizione</th>
@@ -39,7 +39,7 @@
 
                         <td>
                             @role(['admin' , 'superuser'])
-                            <a class="btn btn-warning btn-xs "   href="/aule_sessioni/{{$single->id}}/edit">modifica</a>
+                            <a class="btn btn-tanit btn-xs "   href="/aule_sessioni/{{$single->id}}/edit">modifica</a>
                             @endrole
                         </td>
                     </tr>

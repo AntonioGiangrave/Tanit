@@ -77,15 +77,16 @@
 
 
             <div class="pull-right">
-                {{ Form::submit('Salva', ['class' => 'btn btn-success']) }}
+                {{ Form::submit('Salva', ['class' => 'btn btn btn-tanit btn-xs']) }}
                 {{ Form::close() }}
             </div>
 
             <div class="pull-right">
-                <a target="_blank" class="button btn btn-default" href="{{'/aule_sessioni_pdf/'. $datiRecuperati['id'].''}}">Scarica registro</a>
-                @if($datiRecuperati->scheda_corso())
-                    <a target="_blank" class="button btn btn-default" href="{{'/uploads/'. $datiRecuperati['id'].'/SCHEDA_CORSO.pdf'}}">Scarica scheda corso</a>
 
+                <a target="_blank" class="button btn btn-tanit btn-xs" href="{{'/aule_sessioni_pdf/'. $datiRecuperati['id'].''}}">Scarica registro</a>
+
+                @if($datiRecuperati->scheda_corso())
+                    <a target="_blank" class="button btn btn-tanit btn-xs" href="{{'/uploads/'. $datiRecuperati['id'].'/SCHEDA_CORSO.pdf'}}">Scarica scheda corso</a>
                 @endif
             </div>
 
@@ -96,7 +97,7 @@
 
 
     <hr>
-    <h4>Upload scheda corso</h4>
+    <h4>Upload scheda corso/slides</h4>
     {{ Form::open(array('class' => 'form-inline' ,  'url'=>'/aule_sessioni_uploadpdf/','method'=>'POST', 'files'=>true)) }}
 
     <div class="form-group">
@@ -109,7 +110,7 @@
     {{ Form::hidden('name', $datiRecuperati->_corso->titolo, ['class' => 'form-control']) }}
 
 
-    {{ Form::submit('Carica file' , ['class' => 'btn btn-info']) }}
+    {{ Form::submit('Carica file' , ['class' => 'btn btn btn-tanit btn-xs']) }}
     {{ Form::close() }}
     <hr>
 

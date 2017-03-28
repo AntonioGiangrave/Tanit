@@ -1,6 +1,16 @@
 @extends('cache.index')
 
-@section('page_heading', $datiRecuperati['nome'] . " " . $datiRecuperati['cognome'])
+@section('page_heading')
+    {{$datiRecuperati['nome']}} {{$datiRecuperati['cognome']}}
+    <span class="small">
+        [gruppi: {{ implode(", ", $datiRecuperati->groups->lists('name')->all()) }}]
+
+        @if($datiRecuperati->_tutor_societa->count() > 0)
+        [tutor per: {{ implode(", ", $datiRecuperati->_tutor_societa->lists('ragione_sociale')->all()) }}]
+        @endif
+</span>
+
+@stop
 @section('body')
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -50,153 +60,62 @@
 
         <hr>
 
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse1"><i class="fa fa-user fa-2x fa-width" aria-hidden="true"></i>
-                            DETTAGLI PROFILO
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse1" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_detail',  $datiRecuperati)
-                    </div>
-                </div>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#t1"><i class="fa fa-user" aria-hidden="true"></i> Dettaglio profilo</a></li>
+
+            @role('admin')
+            <li><a data-toggle="tab" href="#t2"><i class="fa fa-users" aria-hidden="true"></i> Gruppi</a></li>
+            @endrole
+            <li><a data-toggle="tab" href="#t3"><i class="fa fa-wrench" aria-hidden="true"></i> Mansioni</a></li>
+            <li><a data-toggle="tab" href="#t4"><i class="fa fa-shield" aria-hidden="true"></i> Incarichi sicurezza</a></li>
+            <li><a data-toggle="tab" href="#t5"><i class="fa fa-thermometer-half" aria-hidden="true"></i> Classe di rischio</a></li>
+            <li><a data-toggle="tab" href="#t6"><i class="fa fa-sign-out" aria-hidden="true"></i> Esoneri per laurea</a></li>
+            <li><a data-toggle="tab" href="#t7"><i class="fa fa-drivers-license" aria-hidden="true"></i> Albi professionali</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="t1" class="tab-pane fade in active">
+                @include('users.edit_detail',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
-        @role(['admin'])
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse7"><i class="fa fa-users fa-2x fa-width" aria-hidden="true"></i>
-                            GRUPPI
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse7" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_gruppi_tutor',  $datiRecuperati)
-                    </div>
-                </div>
+            <div id="t2" class="tab-pane fade">
+                @include('users.edit_gruppi_tutor',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
-        @endrole
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse5"><i class="fa fa-wrench fa-2x fa-width" aria-hidden="true"></i>
-                            MANSIONI
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse5" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_mansioni',  $datiRecuperati)
-                    </div>
-                </div>
+            <div id="t3" class="tab-pane fade ">
+                @include('users.edit_mansioni',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
-
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse4"><i class="fa fa-shield fa-2x fa-width" aria-hidden="true"></i>
-                            INCARICHI SICUREZZA
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse4" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_incarichi_sicurezza',  $datiRecuperati)
-                    </div>
-                </div>
+            <div id="t4" class="tab-pane fade ">
+                @include('users.edit_incarichi_sicurezza',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
-
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse3"><i class="fa fa-drivers-license fa-2x fa-width" aria-hidden="true"></i>
-                            ALBI PROFESSIONALI
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_albi',  $datiRecuperati)
-                    </div>
-                </div>
+            <div id="t5" class="tab-pane fade ">
+                @include('users.edit_classe_rischio',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
-
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapse6"><i class="fa fa-thermometer-half fa-2x fa-width" aria-hidden="true"></i>
-                            CLASSE DI RISCHIO
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse6" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        @include('users.edit_classe_rischio',  $datiRecuperati)
-                    </div>
-                </div>
+            <div id="t6" class="tab-pane fade ">
+                @include('users.edit_esoneri_laurea',  $datiRecuperati)
             </div>
-        </div>
 
-        <hr>
+            <div id="t7" class="tab-pane fade ">
+                @include('users.edit_albi',  $datiRecuperati)
+            </div>
+
+        </div>
 
         <div class="row">
             <div class="pull-right">
 
-
                 {{ Form::button('<i class="fa fa-save"></i> Aggiorna', ['class' => 'btn btn-tanit btn-xs', 'type'=>'submit', 'type'=>'submit']) }}
-
                 {{ Form::close() }}
 
             </div>
-
         </div>
-
     </div>
 
 @stop
 
-
-
-    {{--<script type="text/javascript">--}}
-        {{--$(document).ready(function() {--}}
-            {{--$(".panel-heading").click(function () {--}}
-                {{--console.log('ok');--}}
-
-            {{--});--}}
-        {{--});--}}
-
-
-    {{--</script>--}}
 
 

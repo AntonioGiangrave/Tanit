@@ -70,7 +70,7 @@
 							<li><a href="/register">Registrati</a></li>
 						@endif
 
-						@role(['admin','azienda'])
+						@role(['admin'])
 
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -78,19 +78,19 @@
 							</a>
 							<ul class="dropdown-menu dropdown-user">
 
-								<li><a href="/mansioni">Mansioni</a></li>
+								<li><a class="li_width" href="/mansioni">Mansioni</a></li>
 								<br>
 
-								<li><a href="/ateco">Ateco</a></li>
+								<li><a class="li_width"  href="/ateco">Ateco</a></li>
 								<br>
 
-								<li><a href="/aule">Aule</a></li>
+								<li><a class="li_width"  href="/aule">Aule</a></li>
 								<br>
 
-								<li><a href="/fad">Fad</a></li>
+								<li><a class="li_width"  href="/fad">Fad</a></li>
 								<br>
 
-								<li><a href="/aule_sessioni">Sessioni aula / prenotazioni </a></li>
+								<li><a class="li_width"  href="/aule_sessioni">Sessioni aula / prenotazioni </a></li>
 								<br>
 
 							</ul>
@@ -106,12 +106,36 @@
 
 
 
+
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="users/{{ Auth::user()->id }}/edit"><i class="fa fa-user fa-fw"></i> User Profile</a>
+										<li ><a class="li_width" href="users/{{ Auth::user()->id }}/edit"><i class="fa fa-user fa-fw"></i> Profilo utente</a>
 										</li>
 
-										<li class="divider"></li>
-										<li><a href="{{ url ('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout </a></li>
+										<li class="li_width"><a class="li_width" href="{{ url ('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout </a></li>
+										<li role="separator" class="divider"></li>
+
+										<b> GRUPPI  </b>
+										@foreach(Auth::user()->groups as $gruppo )
+											<li class="li_width"><a href="#"><i class="fa fa-users fa-fw"></i> {{$gruppo->name}} </a>  </li>
+										@endforeach
+
+
+
+
+										@if(Auth::user()->_tutor_societa->count() > 0)
+											<li role="separator" class="divider"></li>
+											<b> SOCIETA GESTITE </b>
+											@foreach(Auth::user()->_tutor_societa as $societa )
+												<li class="li_width">
+													<a class="li_width" href="societa/{{ $societa->id }}/edit"><i class="fa fa-user fa-fw"></i> {{$societa->ragione_sociale}}</a>
+												</li>
+											@endforeach
+										@endif
+
+
+
+
+
 									</ul>
 
 									<!-- /.dropdown-user -->
@@ -174,9 +198,9 @@
 							<h3>TANIT</h3>
 							<p>Via Carlo Innocenzo Frugoni 15/5 - 16121 GENOVA
 								Telefono- Fax:  010. 8683343
-								Email: segreteria@kairosformazione.it
-								PEC:consorziokairosge@pec.it
-								Website: www.kairosformazione.it</p>
+								Email: segreteria@tanit.it
+								PEC:tanit@pec.it
+								Website: www.tanitsrl.it</p>
 						</div>
 					</div>
 					<div class="col-md-3 col-md-push-1 col-sm-12 col-sm-push-0">
@@ -209,16 +233,13 @@
 						<p class="pull-left">Accedi come:</p>
 					</div>
 					<div class="col-md-2">
-						<a href="/loginuser">Utente</a>
+						<a href="/loginuser">Dipendenti</a>
 					</div>
 					<div class="col-md-2">
 						<a href="/loginazienda">Azienda</a>
 					</div>
 					<div class="col-md-2">
-						<a href="/logingestoremultiplo">Gestore Multiplo</a>
-					</div>
-					<div class="col-md-2">
-						<a href="/loginsuperuser">SuperUser</a>
+						<a href="/logingestoremultiplo">Azienda [Gestore Multiplo]</a>
 					</div>
 					<div class="col-md-2">
 						<a href="/loginadmin">Admin</a>
@@ -240,11 +261,10 @@
 
 
 			</div>
+
+
 	</div>
-
-
-</div>
-</footer>
+	</footer>
 </div>
 </div>
 

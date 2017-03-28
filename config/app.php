@@ -222,6 +222,7 @@ return [
         'Helper' => App\Helpers\Helper::class,
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Str'   => Illuminate\Support\Str::class,
         
     ],
 

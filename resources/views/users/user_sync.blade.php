@@ -8,7 +8,7 @@
 @section('action_button')
 
     @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
-    {{ Form::submit('INIZIA', ['class' => 'btn btn-warning btn-xs' , 'id'=>'inizia']) }}
+    {{ Form::submit('INIZIA', ['class' => 'btn btn-tanit btn-xs' , 'id'=>'inizia']) }}
     @endrole
 @stop
 
@@ -23,7 +23,6 @@
                         aria-valuemin="0"
                         aria-valuemax="100"
                         style="width: 0%;">
-
                 </div>
             </div>
         </div>

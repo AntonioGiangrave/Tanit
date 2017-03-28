@@ -13,6 +13,8 @@ use Spatie\Permission\Models\Role;
 
 use Auth;
 use DB;
+use Input;
+use PDF;
 
 
 class usersController extends Controller {
@@ -32,8 +34,6 @@ class usersController extends Controller {
             $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
                 $query->where('user_id', Auth::user()->id);
             })->get();
-
-            \Debugbar::info($societa);
 
             if(!$societa_id)
                 $societa_id = $societa->first()->id;
@@ -82,7 +82,6 @@ class usersController extends Controller {
         return view('users.user_sync', $data);
     }
 
-
     public function edit($id) {
         $data['datiRecuperati'] = User::with('user_profiles' , '_albi_professionali' , '_incarichi_sicurezza' , '_mansioni', '_tutor_societa')->find($id);
 
@@ -103,10 +102,9 @@ class usersController extends Controller {
         $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('ordinamento')->lists('nome' , 'id');
         $data['lista_mansioni'] =  \App\mansioni::orderBy('nome')->lists('nome' , 'id');
         $data['lista_societa'] =  \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id');
+        $data['esoneri_laurea'] = \App\esoneri_laurea::orderBy('classe_laurea')->lists('classe_laurea', 'id');
+
 //        $data['lista_mansioni'] = \App\mansioni::select(DB::raw("CONCAT(nome,' ', classe_rischio) AS nome, id"))->orderBy('nome')->lists('nome', 'id');
-
-
-        \Debugbar::info($data['datiRecuperati']->_tutor_societa->toArray());
 
         return view('users.edit', $data);
     }
@@ -144,12 +142,24 @@ class usersController extends Controller {
         $user->cognome = $request->input('cognome');
         $user->email = $request->input('email');
         $user->bloccato= $request->input('bloccato');
-        $user->referente_id= $request->input('referente_id');
+//        $user->referente_id= $request->input('referente_id');
         $user->societa_id= $request->input('societa_id');
 
-        $user->user_profiles->classe_rischio = $request->input('classe_rischio');
-
         $user->push();
+
+        $save = $user->user_profiles()->update(array(
+            'citta_nascita' => $request->input('citta_nascita'),
+            'data_nascita' => $request->input('data_nascita'),
+            'classe_rischio' => $request->input('classe_rischio'),
+            'sesso' => $request->input('sesso'),
+            'codicefiscale' => $request->input('codicefiscale'),
+            'nazione_residenza' => $request->input('nazione_residenza'),
+            'citta_residenza' => $request->input('citta_residenza'),
+            'cap_residenza' => $request->input('cap_residenza'),
+            'telefono' => $request->input('telefono'),
+            'titolo_studio' => $request->input('titolo_studio'),
+            'status_id' => $request->input('status_id'),
+        ));
 
         $user->groups()->sync($request->get('groups'));
 
@@ -161,10 +171,93 @@ class usersController extends Controller {
 
         $user->_tutor_societa()->sync( (array) $request->get('_tutor_societa'));
 
+        if($request->get('_esoneri_laurea'))
+            $user->_esoneri_laurea()->sync( (array) $request->get('_esoneri_laurea'));
+
         $allinea = new registro_formazione();
         $allinea->sync_utente($id);
 
         return redirect('/users/'.$user->id.'/edit')->with('ok_message', 'Il profilo è stato aggiornato');
     }
+
+    public function create(){
+
+
+//        $albi_professionali = \App\albi_professionali::lists('nome', 'id')->all();
+
+//        $data['albi_professionali'] = \App\albi_professionali::lists('nome' , 'id');
+//        $data['aule'] = \App\aule::lists('descrizione', 'id')->all();
+//        $data['fad'] = \App\fad::lists('descrizione', 'id')->all();
+
+        $data['societa'] = \App\societa::lists('ragione_sociale', 'id')->all();
+
+
+
+
+
+        return view('users.new', $data);
+
+
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'nome' => 'required',
+            'cognome' => 'required',
+            'email' => 'required|email',
+        ], [
+            'nome.required' => 'Il nomeè obbligatorio',
+            'cognome.required' => 'Il cognome è obbligatorio',
+            'email.required' => 'L\'email è  obbligatoria'
+        ]);
+
+        $data = new \App\User;
+        $data->nome= $request->input('nome');
+        $data->cognome= $request->input('cognome');
+        $data->email = $request->input('email')?: null;
+        $data->societa_id= $request->input('societa_id') ?: null;
+        $data->save();
+
+
+
+        $user_profiles= new \App\user_profiles();
+        $user_profiles->user_id= $data->id;
+        $user_profiles->id= $data->id;
+        $user_profiles->save();
+
+
+        $data->roles()->attach(['role_id' => 1]);
+
+
+//        $data->_albi_professionali()->sync();
+
+
+
+        return redirect('users/'.$data->id.'/edit')->with('ok_message', 'Dati inseriti, ora puoi personalizzare il profilo');
+    }
+
+    public function pdf_libretto_formativo_utente($id)
+    {
+
+
+        $utente =  User::with('_registro_formazione')->find($id);
+
+
+        if(Auth::user()->hasAnyRole(['admin'])) {
+
+        }
+        else{
+            $societa_che_controllo = Auth::user()->_tutor_societa->lists('id')->all();
+            if(!in_array($utente->societa_id, $societa_che_controllo))
+                return view('errors.403');
+        }
+
+        
+        $data['utente'] = $utente;
+        $pdf = PDF::loadView('users.pdf.libretto_formativo_utente', $data);
+        return $pdf->stream();
+    }
+
 
 }

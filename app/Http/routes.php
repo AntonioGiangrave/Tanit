@@ -49,13 +49,15 @@ Route::group(array('middleware' => 'auth'), function() {
 
 
     Route::get('/home', function() {
-        return View::make('cache.home_loggato');
+        return View::make('cache.home');
     });
 
 
     Route::resource('users', 'usersController');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');
+    Route::resource('pdf_user_libretto_formativo', 'usersController@pdf_libretto_formativo_utente');
+
 //    Route::get('user_classe_rischio/{id}', function($id){
 //        $data['datiRecuperati'] = \App\User::find($id);
 //        return View::make('users.edit_classe_rischio', $data);
@@ -74,7 +76,7 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('aule', 'auleController');
 
 
-    Route::group(['middleware' => ['role:superuser' ]], function () {
+    Route::group(['middleware' => ['role:admin' ]], function () {
         Route::resource('aule_sessioni', 'aule_sessioniController');
         
         //pdf riepilog info sessione e registro.
@@ -115,17 +117,29 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
 
+//    L'HO DISATTIVATO PERCHE' E' TROPPO PESANTE DA RICHIAMARE TUTTA LA SOCIETA' ASSIEME, VA IN TIMEOUT. HO AGGIRATO FACENDO LA CHIAMAATA UN UTENTE ALLA VOLTA CON LA CHIAMATA SOTTO
 //    Route::get('sync_azienda/{id}',function ($id){
 //        $registro_formazione = new \App\registro_formazione();
 //        $registro_formazione->sync_azienda($id);
 //        return Redirect::back()->with('ok_message','Formazione dipendenti aggiornata');
 //    });
 
+
     Route::get('sync_utente/{id}', function($id){
         $registro_formazione = new \App\registro_formazione();
         $registro_formazione->sync_utente($id);
         return 'true';
     });
+
+
+    Route::get('/get_esoneri_laurea/{id}', function($id){
+        $esoneri_laurea = \App\esoneri_laurea::where('id_riferimento', $id)->orderBy('classe_laurea')->lists('classe_laurea', 'id');
+//            \Debugbar::info($esoneri_laurea->toArray());
+
+
+        return json_encode($esoneri_laurea);
+    });
+
 
 
 
@@ -171,34 +185,28 @@ Route::post('register', 'Auth\AuthController@postRegister');
 Route::get('/loginuser', function() {
     $user= \App\User::find(4);
     Auth::login($user);
-    return View::make('cache.home_loggato');
+    return View::make('cache.home');
 });
 
 
 Route::get('/loginadmin', function() {
     $user= \App\User::find(1);
     Auth::login($user);
-    return View::make('cache.home_loggato');
+    return View::make('cache.home');
 });
 
 
 Route::get('/loginazienda', function() {
     $user= \App\User::find(5);
     Auth::login($user);
-    return View::make('cache.home_loggato');
+    return View::make('cache.home');
 });
 
 
 Route::get('/logingestoremultiplo', function() {
     $user= \App\User::find(3);
     Auth::login($user);
-    return View::make('cache.home_loggato');
-});
-
-Route::get('/loginsuperuser', function() {
-    $user= \App\User::find(2);
-    Auth::login($user);
-    return View::make('cache.home_loggato');
+    return View::make('cache.home');
 });
 
 

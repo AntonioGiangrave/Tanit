@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Spatie\Permission\Traits\HasRoles;
 
 
+
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
     use Authenticatable,
@@ -53,7 +54,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function user_profiles() {
 
-        return $this->belongsTo('App\user_profiles' , 'id' , 'id');
+        return $this->hasOne('App\user_profiles' , 'id' , 'id');
     }
 
     public function groups()
@@ -72,11 +73,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany('\App\aule_prenotazioni' , 'aule_prenotazioni', 'id_utente' );
     }
 
-
-
     public function _albi_professionali()
     {
         return $this->belongsToMany('App\albi_professionali' , 'albi_professionali_user_map' ,  'user_id', 'albo_id' );
+    }
+
+    public function _esoneri_laurea()
+    {
+        return $this->belongsToMany('App\esoneri_laurea', 'esoneri_laurea_user_map', 'user_id', 'esonero_laurea_id'  );
     }
 
     public function _incarichi_sicurezza()
@@ -102,8 +106,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function _avanzamento_formazione()
     {
-        return $this->_registro_formazione()->whereNotNull('data_superamento');
+        return $this->hasMany('App\registro_formazione')->whereNotNull('data_superamento');
     }
+//    public function _avanzamento_formazione_count()
+//    {
+//        return $this->_registro_formazione()->whereNotNull('data_superamento');
+//    }
+    
+    
+    
+    
+    
 
     public function _get_tot_avanzamento_formazione_ruolo()
     {
@@ -121,15 +134,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $tot;
     }
 
+    public function _get_percentuale_formazione($percent = true)
+    {
+        $ret = 0;
+//        Faccio questo panigirico sennò mi da errore di divisione per zero
+        
+        if($this->_registro_formazione()->count() > 0)
+            $ret = $this->_avanzamento_formazione()->count() / $this->_registro_formazione()->count()*100; 
+        else
+            $ret = 0;
+        
+        
+        $ret= (int)$ret;
+        return ($percent) ? $ret."%" : $ret; 
+    }
 
     public function _get_classe_rischio(){
         if(!$this->user_profiles->classe_rischio) {
-            \Debugbar::log('questo non ha la classe rischio');
             $this->user_profiles->classe_rischio = $this->_set_classe_rischio();
             $this->save();
         }
-      
-        
+
         return  $this->user_profiles->classe_rischio;
     }
 

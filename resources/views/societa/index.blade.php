@@ -22,7 +22,7 @@
                 @foreach($societa as $single)
 
                     <tr>
-                        <td>{{ $single->ragione_sociale }}</td>
+                        <td>{{ Str::upper($single->ragione_sociale) }}</td>
                         <td>{{ $single->piva }}</td>
                         <td>{{ $single->email }}</td>
                         <td>

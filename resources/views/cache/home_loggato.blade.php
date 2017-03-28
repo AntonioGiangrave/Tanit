@@ -24,13 +24,14 @@
 
 
     @role('azienda')
-    <a href="/societa/{{ Auth::user()->societa->id }}/edit">
+
+    <a href="/societa/">
         <div class="boxhome"><i class="fa fa-building-o  fa-5x"></i>
             <h4>Gestisci il profilo della tua azienda</h4>
         </div>
     </a>
 
-    <a href="/societa/{{ Auth::user()->societa->id }}/edit">
+    <a href="/users/">
         <div class="boxhome"><i class="fa fa-users fa-5x"></i>
             <h4>Monitora la formazione dei dipendenti</h4>
         </div>
@@ -40,7 +41,7 @@
 
     <div class="clearfix"></div>
 
-    @role(['gestoremultiplo', 'superuser', 'admin'])
+    @role(['admin'])
     <a href="/societa/">
         <div class="boxhome"><i class="fa fa-building-o  fa-5x"></i>
             <h4>Gestisci un'azienda</h4>

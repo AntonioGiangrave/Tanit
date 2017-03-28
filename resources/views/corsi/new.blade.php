@@ -5,7 +5,6 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-
         {{ Form::open(['url' =>'corsi/'])}}
 
         <div class="row">
@@ -33,23 +32,9 @@
             </div>
         </div>
 
-
         <h4>Modalità di erogazione</h4>
 
         <div class="row">
-            <div class="col-sm-2">
-                <div class="form-group">
-                    {{ Form::label('aula', 'Aula:') }}
-                    {{ Form::checkbox('aula', 1, null ,  ['class' => 'form-control_']) }}
-                </div>
-            </div>
-
-            <div class="col-sm-2">
-                <div class="form-group">
-                    {{ Form::label('fad', 'Fad:') }}
-                    {{ Form::checkbox('fad', 1, null , ['class' => 'form-control_']) }}
-                </div>
-            </div>
 
             <div class="col-sm-2">
                 <div class="form-group">
@@ -60,15 +45,11 @@
 
         </div>
 
-
-
-
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
-                    {{ Form::label('info_aula', 'Inormazioni aula:') }}
-                    {{ Form::text('info_aula', null, ['class' => 'form-control']) }}
+                    {{ Form::label('aula', 'Aula:') }}
+                    {{ Form::select('aula', [''=>'Corso non disponibile in aula'] + $aule , null, ['class' => 'form-control']) }}
                 </div>
             </div>
         </div>
@@ -76,15 +57,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
-                    {{ Form::label('info_fad', 'Inormazioni fad:') }}
-                    {{ Form::text('info_fad', null, ['class' => 'form-control']) }}
+                    {{ Form::label('aula', 'Fad:') }}
+                    {{ Form::select('fad', [''=>'Corso non disponibile in fad'] + $fad ,  null, ['class' => 'form-control']) }}
                 </div>
             </div>
         </div>
-
-
-
-
 
         <div class="row">
             <div class="col-sm-12">
@@ -94,9 +71,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <hr>
         <h4>Competenza Albi</h4>
@@ -116,17 +90,14 @@
 
 
         <div class="pull-right" id="q">
-            {{ Form::submit('inserisci', ['class' => 'btn btn-success']) }}
+            {{ Form::submit('inserisci', ['class' => 'btn btn-tanit']) }}
 
             {{ Form::close() }}
 
 
         </div>
 
-
-
     </div>
-
 
 
 @stop

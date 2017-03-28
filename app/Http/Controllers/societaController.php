@@ -20,7 +20,7 @@ class societaController extends Controller
     {
         $data['societa'] = societa::with('ateco' );
 
-        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
+        if(Auth::user()->hasAnyRole(['admin'])) {
 
         }
         else{
@@ -83,7 +83,7 @@ class societaController extends Controller
 
         $data['datiRecuperati'] = \App\societa::with('ateco', '_settori' )->find($id);
 
-        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione')->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
+        $data['utentiSocieta'] = \App\User::with('_registro_formazione' , '_avanzamento_formazione' )->where('societa_id',$id)->orderBy('cognome' , 'asc')->get();
 
         $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
         $data['lista_settori'] = \App\settori::lists('settore' , 'id');
