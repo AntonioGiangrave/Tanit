@@ -28,9 +28,9 @@
                         <td>{{ $single->posti}}</td>
                         <td>
 
-                            @role(['admin', 'superuser'])
-                                <a class="btn btn-tanit btn-xs disabled  "   href="/ateco/{{$single->id}}/edit">modifica</a>
-                            @endrole
+                            {{--@role(['admin'])--}}
+                                {{--<a class="btn btn-tanit btn-xs disabled  "   href="/ateco/{{$single->id}}/edit">modifica </a>--}}
+                            {{--@endrole--}}
                         </td>
                     </tr>
 

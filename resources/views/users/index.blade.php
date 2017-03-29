@@ -1,7 +1,7 @@
 @extends('cache.index')
 
 @section('page_heading')
-    @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
+    @role((['admin', 'azienda']))
     @if($societa->count() > 0)
         {{ Form::open(array('url' => '/users', 'action'=>'index' , 'method' => 'get', 'class' => 'form-inline')) }}
         <div class="row">

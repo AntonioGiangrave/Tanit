@@ -99,8 +99,11 @@ class registro_formazioneController extends Controller
 //            $m->subject('Nuovi iscritti a '. $sessione->_corso->titolo);
 //        });
 
-        $request->session()->forget('sessioneaula');
-        
+        $request->session()->forget('sessioneaula_step');
+        $request->session()->forget('sessioneaula_id_fondo');
+        $request->session()->forget('sessioneaula_id_sessione');
+
+
         return Redirect::back()->with('ok_message', 'Nominativi aggiunti correttamente.');
     }
 
@@ -143,7 +146,7 @@ class registro_formazioneController extends Controller
         $data['aziende']= $all_user ->select('societa_id')->distinct()->get();
 
         $data['sessioniAula'] = \App\aule_sessioni::where('id_corso', $id)->with('_aula');
-        if(Session('sessioneaula.id_fondo'))
+        if(Session('sessioneaula_id_fondo'))
             $data['sessioniAula'] = $data['sessioniAula']->whereDate('dal', '>', \Carbon\Carbon::now()->addMonths(2));
         
         $data['sessioniAula']= $data['sessioniAula']->get();

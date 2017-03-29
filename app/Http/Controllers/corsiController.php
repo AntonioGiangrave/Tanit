@@ -16,7 +16,7 @@ class corsiController extends Controller
      */
     public function index()
     {
-        $data['corsi'] = \App\corsi::orderBy('titolo')->with('_proprietario', '_aula')->get();
+        $data['corsi'] = \App\corsi::orderBy('titolo')->with('_proprietario', '_aula', '_fad')->get();
 
         return view('corsi.index', $data);
     }
@@ -119,8 +119,7 @@ class corsiController extends Controller
         $data->cfp= $request->input('info_cfp');
         $data->validita= $request->input('validita');
         $data->programma= $request->input('programma');
-
-
+        $data->tipo= $request->input('tipo');
 
         $data->save();
 

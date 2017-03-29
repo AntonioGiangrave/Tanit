@@ -32,9 +32,9 @@
             <div class="col-sm-7">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#spec">Sic. Specifica ({{$datiRecuperati->_corsi_sicurezza_specifica->count()}})</a></li>
-                    <li><a data-toggle="tab" href="#rspp">RSPP ({{$datiRecuperati->_corsi_rspp->count()}})</a></li>
-                    <li><a data-toggle="tab" href="#aspp">ASPP ({{$datiRecuperati->_corsi_aspp->count()}})</a></li>
+                    <li class="active"><a data-toggle="tab" href="#spec"><b>Sic. Specifica ({{$datiRecuperati->_corsi_sicurezza_specifica->count()}})</b></a></li>
+                    <li><a data-toggle="tab" href="#rspp"><b>RSPP ({{$datiRecuperati->_corsi_rspp->count()}})</b></a></li>
+                    <li><a data-toggle="tab" href="#aspp"><b>ASPP ({{$datiRecuperati->_corsi_aspp->count()}})</b></a></li>
                 </ul>
 
                 <div class="tab-content">

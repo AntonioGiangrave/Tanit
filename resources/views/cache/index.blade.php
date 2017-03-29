@@ -90,7 +90,7 @@
 								<li><a class="li_width"  href="/fad">Fad</a></li>
 								<br>
 
-								<li><a class="li_width"  href="/aule_sessioni">Sessioni aula / prenotazioni </a></li>
+								<li><a class="li_width"  href="/aule_sessioni">Sessioni aula</a></li>
 								<br>
 
 							</ul>

@@ -32,10 +32,17 @@
                 </div>
             </div>
 
-            <div class="col-sm-11">
+            <div class="col-sm-6">
                 <div class="form-group">
                     {{ Form::label('validita', 'Validità:') }}
                     {{ Form::text('validita', null, ['class' => 'form-control']) }}
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="form-group">
+                    {{ Form::label('tipo', 'Tipo:') }}
+                    {{ Form::select('tipo', array('S' => 'Corso sicurezza' , 'R' => 'Corso ruolo'),  $datiRecuperati['tipo'], ['placeholder'=> 'Seleziona la tipologia...', 'class' => 'form-control']) }}
                 </div>
             </div>
         </div>
@@ -98,20 +105,20 @@
         </div>
 
         <div class="pull-right">
-            {{ Form::submit('aggiorna', ['class' => 'btn btn-success']) }}
+            {{ Form::submit('aggiorna', ['class' => 'btn btn-tanit']) }}
 
             {{ Form::close() }}
 
         </div>
 
-        <div class="pull-right">
-            {{ Form::open([
-                               'method' => 'DELETE',
-                               'url' => ['corsi', $datiRecuperati['id']]
-                               ]) }}
-            {{ Form::submit('Cancella', ['class' => 'btn btn-danger btn-sm']) }}
-            {{ Form::close() }}
-        </div>
+        {{--<div class="pull-right">--}}
+            {{--{{ Form::open([--}}
+                               {{--'method' => 'DELETE',--}}
+                               {{--'url' => ['corsi', $datiRecuperati['id']]--}}
+                               {{--]) }}--}}
+            {{--{{ Form::submit('Cancella', ['class' => 'btn btn-danger ']) }}--}}
+            {{--{{ Form::close() }}--}}
+        {{--</div>--}}
     </div>
 
 @stop

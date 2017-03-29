@@ -28,13 +28,13 @@
         <div class="col-sm-4">
             <h4>Vuoi usufruire di un fondo?</h4>
             <div id="list_fondo" class="list-group">
-                {{ Form::select('fondo', $fondiprofessionali, Session::get('sessioneaula.id_fondo'),  ['class' => 'form-control, list-group', 'id' => 'fondo']) }}
+                {{ Form::select('fondo', $fondiprofessionali, Session::get('sessioneaula_id_fondo'),  ['class' => 'form-control, list-group', 'id' => 'fondo']) }}
             </div>
         </div>
 
 
 
-        @if((int)Session::get('sessioneaula.step')> 0 )
+        @if((int)Session::get('sessioneaula_step')> 0 )
             <div class="col-sm-8">
                 <h4>Quale sessione ti interessa?</h4>
                 <div id="list_sessione" class="list-group">
@@ -63,16 +63,18 @@
         @endif
     </div>
     <div class="row">
-        @if((int)Session::get('sessioneaula.step')> 1 )
+        @if((int)Session::get('sessioneaula_step')> 1 )
             <div class="col-sm-6">
-                <h4>Quali utenti vuoi iscrivere? <span  class="badge pull-right" id="selezionati">Nessun utente selezionato</span></h4>
+                <h4>Quali utenti vuoi iscrivere?
+                    {{--<span  class="badge pull-right" id="selezionati">Nessun utente selezionato</span>--}}
+                </h4>
                 <ul class="list-group utenti_da_iscrivere" data-toggle="items">
                     @foreach($utenti as $utente)
                         <a href="#"
                            data-value="{{$utente->id}}"
                            data-filter="{{$utente->societa->id}}"
                            class="list-group-item" >
-                            {{$utente->nome}} {{$utente->cognome}}
+                            {{ Str::upper($utente->nome)}} {{Str::upper($utente->cognome) }}
                             <span class="badge">{{$utente->societa->ragione_sociale}}</span>
                         </a>
                     @endforeach
@@ -148,9 +150,7 @@
             $('#list_fondo .list-group-item').on('click', function (e) {
                 $('#list_sessione').html('Caricamento sessioni in corso...');
                 $('.utenti_da_iscrivere').html('Selezionare prima una sessione');
-                var data_session ={'sessioneaula.step':'1','sessioneaula.id_fondo':$(this).attr('data-value'), 'sessioneaula.id_sessione': '0'};
-                console.log(data_session);
-                $.get("/set_ajax_session", {data_session: data_session }, function () {
+                $.get("/set_ajax_session", {'sessioneaula_step':'1','sessioneaula_id_fondo':$(this).attr('data-value'), 'sessioneaula_id_sessione': '0'}, function () {
                     location.reload();
                 });
             });
@@ -158,8 +158,7 @@
             //imposto la seessione selezionata
             $('#list_sessione .list-group-item').on('click', function (e) {
                 $('.utenti_da_iscrivere').html('Caricamento utenti in corso...');
-                var data_session ={'sessioneaula.step':'2', 'sessioneaula.id_sessione': $(this).attr('data-value')};
-                $.get("/set_ajax_session/", {data_session: data_session }, function () {
+                $.get("/set_ajax_session/", {'sessioneaula_step':'2', 'sessioneaula_id_sessione': $(this).attr('data-value') }, function () {
                     location.reload();
                 });
             });

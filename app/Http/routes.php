@@ -74,9 +74,9 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('aule', 'auleController');
 
 
-    Route::group(['middleware' => ['role:superuser' ]], function () {
+    Route::group(['middleware' => ['role:admin' ]], function () {
         Route::resource('aule_sessioni', 'aule_sessioniController');
-        
+
         //pdf riepilog info sessione e registro.
         Route::resource('aule_sessioni_pdf', 'aule_sessioniController@pdf_sessione');
 //        Route::resource('aule_sessioni_uploadpdf', 'aule_sessioniController@pdf_sessione');
@@ -94,20 +94,15 @@ Route::group(array('middleware' => 'auth'), function() {
             return Redirect::back();
         });
 
-        
-        
+
+
     });
-    
+
     Route::get('/set_ajax_session  ',function (){
         $var = Input::all();
-
-//        \Debugbar::log(Session::all());
-        \Debugbar::log($var);
-
-        foreach ($var['data_session'] as $key => $val) {
-            Session::put($key, $val);
-        }
-
+        Session::put('sessioneaula_step', $var['sessioneaula_step']);
+        Session::put('sessioneaula_id_fondo', $var['sessioneaula_id_fondo']);
+        Session::put('sessioneaula_id_sessione', $var['sessioneaula_id_sessione']);
         return 'true';
     });
 

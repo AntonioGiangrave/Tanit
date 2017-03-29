@@ -22,6 +22,7 @@
                     <th>Durata</th>
                     <th>Aula</th>
                     <th>FAD</th>
+                    <th>Tipo</th>
                     <th>CFP</th>
                     <th>Validita</th>
 
@@ -38,6 +39,7 @@
                         <td>{{ $single->durata }}</td>
                         <td> @if( $single->aula ) <span title="{{ $single->_aula->descrizione ." - ".$single->_aula->indirizzo }}"><i class="fa fa-check"></i></span> @endif </td>
                         <td> @if( $single->fad ) <span title="{{ $single->_fad->descrizione ." - ".$single->_fad->indirizzo }}"><i class="fa fa-check"></i></span> @endif </td>
+                        <td> <span  class="badge" >{{$single->tipo}}</span> </td>
                         <td> @if( $single->cfp ) <i class="fa fa-check"></i> @endif </td>
                         <td>{{ $single->validita}}</td>
                         <td>

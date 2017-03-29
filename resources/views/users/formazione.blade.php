@@ -116,7 +116,8 @@
                             <span  class="">
                                 <dl class="dl-horizontal">
                                     <dt>Programma</dt>
-                                    <dd>{{ Helper::view_dd_if($corso->_corsi->programma) }} </dd>
+
+                                    <dd>{!!  $corso->_corsi->programma !!} </dd>
 
                                     <dt>Durata</dt>
                                     <dd>{{ Helper::view_dd_if($corso->_corsi->durata) }} ore </dd>
