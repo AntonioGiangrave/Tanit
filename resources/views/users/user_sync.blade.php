@@ -8,13 +8,13 @@
 @section('action_button')
 
     @role((['admin', 'gestoremultiplo' , 'superuser', 'azienda']))
-    {{ Form::submit('INIZIA', ['class' => 'btn btn-tanit btn-xs' , 'id'=>'inizia']) }}
+    {{ Form::submit('AVVIA ALLINEAMENTO FORMAZIONE', ['class' => 'btn btn-tanit btn-xs' , 'id'=>'inizia']) }}
     @endrole
 @stop
 
 @section('body')
     <div class="row">
-        <div class="col-sm-12">
+        <div id="progress" class="col-sm-12 ">
             <div class="progress progress-tall">
                 <div
                         class="progress-bar progress-bar-success progress-bar-striped"
@@ -27,6 +27,7 @@
             </div>
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-striped">

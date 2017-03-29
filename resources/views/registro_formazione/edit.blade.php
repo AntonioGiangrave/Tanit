@@ -149,7 +149,8 @@
                 $('#list_sessione').html('Caricamento sessioni in corso...');
                 $('.utenti_da_iscrivere').html('Selezionare prima una sessione');
                 var data_session ={'sessioneaula.step':'1','sessioneaula.id_fondo':$(this).attr('data-value'), 'sessioneaula.id_sessione': '0'};
-                $.get("/set_ajax_session/", {data_session: data_session }, function () {
+                console.log(data_session);
+                $.get("/set_ajax_session", {data_session: data_session }, function () {
                     location.reload();
                 });
             });

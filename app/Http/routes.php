@@ -49,15 +49,13 @@ Route::group(array('middleware' => 'auth'), function() {
 
 
     Route::get('/home', function() {
-        return View::make('cache.home');
+        return View::make('cache.home_loggato');
     });
 
 
     Route::resource('users', 'usersController');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');
-    Route::resource('pdf_user_libretto_formativo', 'usersController@pdf_libretto_formativo_utente');
-
 //    Route::get('user_classe_rischio/{id}', function($id){
 //        $data['datiRecuperati'] = \App\User::find($id);
 //        return View::make('users.edit_classe_rischio', $data);
@@ -76,7 +74,7 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('aule', 'auleController');
 
 
-    Route::group(['middleware' => ['role:admin' ]], function () {
+    Route::group(['middleware' => ['role:superuser' ]], function () {
         Route::resource('aule_sessioni', 'aule_sessioniController');
         
         //pdf riepilog info sessione e registro.
@@ -100,7 +98,7 @@ Route::group(array('middleware' => 'auth'), function() {
         
     });
     
-    Route::get('/set_ajax_session/',function (){
+    Route::get('/set_ajax_session  ',function (){
         $var = Input::all();
 
 //        \Debugbar::log(Session::all());
@@ -185,28 +183,28 @@ Route::post('register', 'Auth\AuthController@postRegister');
 Route::get('/loginuser', function() {
     $user= \App\User::find(4);
     Auth::login($user);
-    return View::make('cache.home');
+    return View::make('cache.home_loggato');
 });
 
 
 Route::get('/loginadmin', function() {
     $user= \App\User::find(1);
     Auth::login($user);
-    return View::make('cache.home');
+    return View::make('cache.home_loggato');
 });
 
 
 Route::get('/loginazienda', function() {
     $user= \App\User::find(5);
     Auth::login($user);
-    return View::make('cache.home');
+    return View::make('cache.home_loggato');
 });
 
 
 Route::get('/logingestoremultiplo', function() {
     $user= \App\User::find(3);
     Auth::login($user);
-    return View::make('cache.home');
+    return View::make('cache.home_loggato');
 });
 
 

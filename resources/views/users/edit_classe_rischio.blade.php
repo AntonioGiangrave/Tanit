@@ -61,8 +61,6 @@ $classe_societa= $datiRecuperati->societa->ateco->classe_rischio;
     @parent
     <script type="text/javascript">
 
-        console.log('classserischio');
-
         $('#classe_bassa').on('click', function(e){
             $('#classe_utente').removeClass('col-md-offset-2 col-md-offset-4',100);
             $('#classe_rischio').val(1);
