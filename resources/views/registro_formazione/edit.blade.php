@@ -6,21 +6,6 @@
 
 @section('body')
 
-
-    @if(is_null($corso->_fad))@else
-        <div class="row bg-info">
-
-            <div class="col-sm-1">
-                <i class="fa fa-exclamation-circle fa-4x " aria-hidden="true"></i>
-            </div>
-            <div class="col-sm-11 ">
-                <h4><br>E' possibile seguire questo corso sul portale di formazione fad {{ $corso->_fad->descrizione}} andando all'indirizzo <a href="{{ $corso->_fad->indirizzo}}">{{ $corso->_fad->indirizzo}}</a></h4>
-            </div>
-        </div>
-        <hr>
-    @endif
-
-
     {{Form::Open(['name'=> 'prenotazioni' , 'id'=> 'prenotazioni' , 'method' => 'post' , 'url' =>'registro_formazione']) }}
 
     <div class="row">
@@ -32,20 +17,18 @@
             </div>
         </div>
 
-
-
         @if((int)Session::get('sessioneaula_step')> 0 )
             <div class="col-sm-8">
                 <h4>Quale sessione ti interessa?</h4>
                 <div id="list_sessione" class="list-group">
-                    @if($sessioniAula->count() > 0 )
+                    @if($sessioniAula->count() > 0 || !is_null($corso->_fad))
                         @foreach($sessioniAula as $sessione)
                             <?php $posti_occupati= $sessione->_posti_occupati()->count(); ?>
 
                             @if($posti_occupati < $sessione->_aula->posti )
                                 <a href="#" data-value="{{$sessione->id}}"
                                    class="list-group-item
-                                   @if((int)Session::get('sessioneaula.id_sessione')== $sessione->id) active @endif
+                                   @if((int)Session::get('sessioneaula_id_sessione')== $sessione->id) active @endif
                                            " {{-- fineclass--}}
                                    postiliberi="{{$sessione->_aula->posti - $posti_occupati}}"
                                 >
@@ -54,6 +37,16 @@
                                 </a>
                             @endif
                         @endforeach
+
+                        @if(!is_null($corso->_fad))
+                            <a href="#" data-value="{{ $corso->_fad->session_id }}"
+                               class="list-group-item
+                                @if((int)Session::get('sessioneaula_id_sessione')== $corso->_fad->session_id) active @endif
+                                ">
+                                {{ $corso->_fad->descrizione}} ({{ $corso->_fad->indirizzo}})
+                                <span class="badge">FAD</span>
+                            </a>
+                        @endif
                     @else
                         <p>Non ci sono sessioni attive per questo corso </p>
 
@@ -113,9 +106,6 @@
 
     </div>
 
-
-
-
 @stop
 
 @section('script')
@@ -144,7 +134,6 @@
 
                 return true;
             });
-
 
             //seleziono il fondo
             $('#list_fondo .list-group-item').on('click', function (e) {

@@ -205,7 +205,7 @@
 					</div>
 					<div class="col-md-3 col-md-push-1 col-sm-12 col-sm-push-0">
 						<div class="fh5co-footer-widget">
-							<h3>Links</h3>
+							<h3>LINKS</h3>
 							<ul class="fh5co-footer-link">
 								<li><a href="#">Home</a></li>
 								<li><a href="#">-</a></li>
@@ -215,7 +215,7 @@
 					<div class="col-md-3 col-md-push-2 col-sm-12 col-sm-push-0">
 
 						<div class="fh5co-footer-widget">
-							<h3>Follow us</h3>
+							<h3>FOLLOW US</h3>
 							<ul class="fh5co-social">
 								<li class="facebook"><a href="#"><i class="icon-facebook2"></i></a></li>
 								<li class="twitter"><a href="#"><i class="icon-twitter"></i></a></li>

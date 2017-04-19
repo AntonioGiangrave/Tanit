@@ -71,6 +71,9 @@ class registro_formazioneController extends Controller
      */
     public function store(Request $request)
     {
+        \Debugbar::info(Session()->all());
+        \Debugbar::info($_REQUEST);
+
         $utenti_ids = explode("," , $request->input('id_utenti'));
         $utenti= \App\User::with('societa')->find($utenti_ids);
         $fondo  = \App\fondiprofessionali::findOrfail($_REQUEST['fondo']);
@@ -126,6 +129,9 @@ class registro_formazioneController extends Controller
      */
     public function edit($id)
     {
+
+        \Debugbar::info(Session()->all());
+
         $all_user = \App\User::with('societa')
             ->whereHas('_registro_formazione', function($query) use($id){
                 $query->where('corso_id', $id)->whereNull('data_superamento')->whereNull('sessione_id');

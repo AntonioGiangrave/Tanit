@@ -23,7 +23,7 @@ $image_path = '/images/logo.png';
     <td> </td>
     <td>Cognome</td>
     <td>Nome</td>
-        <td>Email</td>
+        <td>Azienda</td>
     </tr>
     <tbody>
     @foreach($sessione->_posti_occupati() as $iscritti)

@@ -49,6 +49,7 @@ class registro_formazione extends Model
                 $registro_formazione->user_id= $utente->id;
                 $registro_formazione->corso_id= $corso->id;
                 $registro_formazione->description= 'formazione_mansioni ('.$mansione->nome.')';
+                $registro_formazione->eqf= 1;
                 $registro_formazione->insertIgnore($registro_formazione->toArray());
             }
         }

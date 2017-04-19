@@ -19,26 +19,16 @@
 @stop
 
 @section('action_button')
-    @role((['admin', 'superuser', 'azienda']))
-
-
-
-
+    @role((['admin', 'azienda']))
     @if($societa->count() > 0)
         {{ Form::open(array('url' => '/sync_azienda', 'action'=>'index' , 'method' => 'post', 'class' => 'form-inline')) }}
         {{ Form::hidden('sync_societa_id',  $societa_id , ['class' => 'form-control', 'hidden'=>'hidden', 'id'=>'sync_societa_id', 'name'=>'sync_societa_id']) }}
         {{ Form::submit('SINCRONIZZA', ['class' => 'btn btn-tanit btn-xs']) }}
 
-
         <a href="/users/create" class="btn btn-tanit btn-xs">NUOVO UTENTE</a>
-
 
         {{Form::close()}}
     @endif
-
-
-
-
     @endrole
 @stop
 
@@ -67,7 +57,6 @@
                     $_percentuale_formazione = ($_registro_formazione) ? ($_avanzamento_formazione / $_registro_formazione)*100 : 0;
                     $_percentuale_formazione = (int)$_percentuale_formazione."%" ;
                     ?>
-
 
                     <tr>
 

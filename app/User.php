@@ -93,12 +93,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany('App\mansioni' , 'mansioni_user_map' ,  'user_id', 'mansione_id' );
     }
 
-//    public function _prenotazioni()
-//    {
-//        return $this->belongsToMany('App\aule_sessioni' , 'aule_prenotazioni' ,  'id_utente' );
-//    }
-
-
     public function _registro_formazione()
     {
         return $this->hasMany('App\registro_formazione');
@@ -108,15 +102,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\registro_formazione')->whereNotNull('data_superamento');
     }
-//    public function _avanzamento_formazione_count()
-//    {
-//        return $this->_registro_formazione()->whereNotNull('data_superamento');
-//    }
-    
-    
-    
-    
-    
+
+    public function _raggiungimento_eqf()
+    {
+        $query = $this->_registro_formazione()->where('eqf', 1);
+
+        $tot =  $query->count();
+        $done = $query->whereNotNull('data_superamento')->count();
+
+        if($tot>0 && $done == $tot)
+            return true;
+        else
+            return false;
+
+
+
+    }
 
     public function _get_tot_avanzamento_formazione_ruolo()
     {

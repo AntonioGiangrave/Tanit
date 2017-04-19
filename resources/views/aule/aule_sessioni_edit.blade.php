@@ -83,7 +83,7 @@
 
             <div class="pull-right">
 
-                <a target="_blank" class="button btn btn-tanit btn-xs" href="{{'/aule_sessioni_pdf/'. $datiRecuperati['id'].''}}">Scarica registro</a>
+                <a target="_blank" class="button btn btn-tanit btn-xs" href="{{'/aule_sessioni_pdf/'. $datiRecuperati['id'].''}}">Scarica riepilogo</a>
 
                 @if($datiRecuperati->scheda_corso())
                     <a target="_blank" class="button btn btn-tanit btn-xs" href="{{'/uploads/'. $datiRecuperati['id'].'/SCHEDA_CORSO.pdf'}}">Scarica scheda corso</a>
@@ -137,8 +137,8 @@
                                     <td>{{ $rf->_user->societa->ragione_sociale}} </td>
                                     <td>{{ $rf->_user->societa->ateco->descrizione}} </td>
                                     <td>
-                                        <a class="btn btn-warning btn-xs" href="/users/{{$rf->_user->id}}/edit" title="modfica"><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-warning btn-xs" href="/usersformazione/{{$rf->_user->id}}/edit"><i class="fa fa-mortar-board "></i></a>
+                                        <a class="btn btn-tanit btn-xs" href="/users/{{$rf->_user->id}}/edit" title="modfica"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-tanit btn-xs" href="/usersformazione/{{$rf->_user->id}}/edit"><i class="fa fa-mortar-board "></i></a>
                                     </td>
                                 </tr>
                             @endforeach

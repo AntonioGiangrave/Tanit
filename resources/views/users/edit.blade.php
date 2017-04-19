@@ -2,13 +2,17 @@
 
 @section('page_heading')
     {{$datiRecuperati['nome']}} {{$datiRecuperati['cognome']}}
+
+    @role('admin')
     <span class="small">
         [gruppi: {{ implode(", ", $datiRecuperati->groups->lists('name')->all()) }}]
 
         @if($datiRecuperati->_tutor_societa->count() > 0)
-        [tutor per: {{ implode(", ", $datiRecuperati->_tutor_societa->lists('ragione_sociale')->all()) }}]
+            [tutor per: {{ implode(", ", $datiRecuperati->_tutor_societa->lists('ragione_sociale')->all()) }}]
         @endif
-</span>
+    </span>
+    @endrole
+
 
 @stop
 @section('body')
@@ -27,34 +31,40 @@
                     {{ Form::label('nome', 'Il tuo nome:') }}
                     {{ Form::text('nome', null, ['class' => 'form-control']) }}
                 </div>
-
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                     {{ Form::label('cognome', 'Il tuo cognome:') }}
                     {{ Form::text('cognome', null, ['class' => 'form-control']) }}
                 </div>
-
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                     {{ Form::label('email', 'La tua email:') }}
 
                     {{ Form::text('email', null, ['class' => 'form-control']) }}
                 </div>
-
             </div>
 
+        </div>
+        <div class="row">
             <div class="col-md-4">
 
                 <div class="form-group">
-                    {{ Form::label('societa_id', 'Società di appartenenza:') }}
-                    {{ Form::select('societa_id', $societa, null, ['class' => 'form-control']) }}
-                </div>
+                    @if(Auth::user()->hasAnyRole(['admin']))
 
-                <div class="form-group">
-                    {{ Form::label('bloccato', 'Bloccato:') }}
-                    {{ Form::select('bloccato', array(0 => 'No' , 1=> 'Si'),null ,['class' => 'form-control' ]) }}
+                        {{ Form::label('societa_id', 'Società di appartenenza:') }}
+                        {{ Form::select('societa_id', $societa, null, ['class' => 'form-control' ]) }}
+
+                    @else
+
+                        {{ Form::select('societa_id', $societa, null, ['class' => 'form-control hide' ]) }}
+
+                    @endif
+
                 </div>
 
             </div>
-
 
         </div>
 

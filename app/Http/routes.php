@@ -56,6 +56,7 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('users', 'usersController');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');
+    Route::resource('pdf_user_libretto_formativo', 'usersController@pdf_libretto_formativo_utente');
 //    Route::get('user_classe_rischio/{id}', function($id){
 //        $data['datiRecuperati'] = \App\User::find($id);
 //        return View::make('users.edit_classe_rischio', $data);
@@ -100,9 +101,16 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::get('/set_ajax_session  ',function (){
         $var = Input::all();
-        Session::put('sessioneaula_step', $var['sessioneaula_step']);
-        Session::put('sessioneaula_id_fondo', $var['sessioneaula_id_fondo']);
-        Session::put('sessioneaula_id_sessione', $var['sessioneaula_id_sessione']);
+
+        if (array_key_exists('sessioneaula_step', $var))
+            Session::put('sessioneaula_step', $var['sessioneaula_step']);
+
+        if (array_key_exists('sessioneaula_id_fondo', $var))
+            Session::put('sessioneaula_id_fondo', $var['sessioneaula_id_fondo']);
+
+        if (array_key_exists('sessioneaula_id_sessione', $var))
+            Session::put('sessioneaula_id_sessione', $var['sessioneaula_id_sessione']);
+
         return 'true';
     });
 

@@ -37,7 +37,7 @@
     <hr>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <h4>Le tue mansioni sono:</h4>
             <ul>
                 @foreach($datiRecuperati->_mansioni as $mansione)
@@ -46,7 +46,7 @@
             </ul>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <h4>I tuoi incarichi sicurezza sono: </h4>
             <ul>
                 @foreach($datiRecuperati->_incarichi_sicurezza as $incarico)
@@ -55,6 +55,14 @@
             </ul>
 
         </div>
+        @if($datiRecuperati->_raggiungimento_eqf())
+            <div class="col-sm-4">
+                <div class="text-center">
+                    <h4>Hai ottenuto la certificazione EQF livello {{ $datiRecuperati->_mansioni()->first()->eqf }}</h4>
+                    <i class="fa fa-trophy fa-5x " aria-hidden="true"></i>
+                </div>
+            </div>
+        @endif
 
     </div>
 
@@ -177,6 +185,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
                     <button type="button" id="cancella_data_superamento" name="cancella_data_superamento" class="btn btn-primary">Cancella data</button>
                     <button type="button" id="salva_data_superamento" name="salva_data_superamento" class="btn btn-primary">Salva</button>
+
                 </div>
             </div>
         </div>
