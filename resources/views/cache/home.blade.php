@@ -7,22 +7,26 @@
     @if(Auth::guest())
         {{--VISTA GUEST --}}
 
+
+
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> Ahi, ci sono dei problemi col tuo login.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <h1 class="text-center">BENVENUTO IN TANIT </h1>
         <hr>
 
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-6">
+                <h2>ACCEDI</h2>
 
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> Ahi, ci sono dei problemi col tuo login.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form class="form-horizontal" role="form" method="POST" action="/login">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -65,10 +69,20 @@
                     </div>
                 </form>
             </div>
+            <div class="col-md-6 text-center">
+                <h2>PROVA LA DEMO</h2>
+                <a href="/new_societa_demo">
+                    <img width="200px" src="images/demo.png"/>
+                </a>
+
+                <br><br>
+            </div>
         </div>
 
     @else
         {{--VISTA DA LOGGATO--}}
+
+
 
 
         @role('user')
@@ -78,7 +92,7 @@
                 <h4>  Gestisci il tuo profilo</h4>
             </div>
         </a>
-        <a href="/userformazione/{{ Auth::user()->id }}">
+        <a href="/usersformazione/{{ Auth::user()->id }}">
             <div class="boxhome"><i class="fa fa-mortar-board fa-5x"></i>
                 <h4> Monitora la tua formazione </h4>
             </div>
@@ -126,3 +140,33 @@
 
 
 @stop
+
+
+
+@section('script')
+    <script type="text/javascript">
+        $( ".help" ).hide("slow", function() {
+            $( ".help" ).slideToggle("slow");
+        })
+
+    </script>
+@stop
+
+
+@if(Auth::guest())
+
+@section('help')
+    Sei nella pagina iniziale, da qui puoi accedere o fare una registrazione per una demo.
+    <br>
+    <strong>In questo box potrai trovare una guida su ogni pagina che stai visionando, clicca sul salvagente per nascondere/visualizzare questo spazio.</strong>
+@stop
+
+@else
+
+@section('help')
+    Sei nella pagina iniziale, da qui puoi accedere ad alcune delle principali funzionalità cliccando direttamente sulle icone.
+    Altrimenti puoi accedere a tutte le funzionalità cliccando sul menù in alto.<br>
+    <strong>In questo box potrai trovare una guida su ogni pagina che stai visionando, clicca sul salvagente per nascondere/visualizzare questo spazio.</strong>
+@endsection
+
+@endif

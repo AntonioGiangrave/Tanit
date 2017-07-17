@@ -3,6 +3,16 @@
 @section('page_heading','Libretto formativo di
  <a href="/users/'.$datiRecuperati->id . '/edit">' . $datiRecuperati->cognome .' '.$datiRecuperati->nome . '</a> [classe '.$datiRecuperati->user_profiles->classe_rischio.']'
  )
+
+
+
+@section('action_button')
+    <a class="btn btn-tanit" href="/users/{{$datiRecuperati['id']}}/edit">Torna a scheda utente</a>
+    @role(['admin', 'azienda'])
+    <a class="btn btn-tanit" href="/users?societa_id={{$datiRecuperati['societa_id']}}"> Monitora la formazione dei dipendenti </a>
+    @endrole
+@stop
+
 @section('body')
 
 
@@ -13,7 +23,13 @@
         <div class="col-sm-6">
 
 
-            <h4>Sei al {{ round($avanzamentoFormazione/$totaleFormazione*100) . '%' }} della tua formazione</h4>
+            @if($totaleFormazione == 0)
+                {{$percentualeavanzamento = "0%"}}
+            @else
+                {{$percentualeavanzamento = round($avanzamentoFormazione/$totaleFormazione*100) . '%'}}
+            @endif
+
+            <h4>Sei al {{ $percentualeavanzamento }} della tua formazione</h4>
         <span>
             Hai ancora {{$totaleFormazione - $avanzamentoFormazione}} corsi da completare,
             indica per quali hai già conseguito un attestato e procedi a iscriverti agli altri.
@@ -21,16 +37,22 @@
 
         </div>
         <div class="col-sm-6">
-
+            <b>Formazione di ruolo</b>
             <div class="progress progress-tall ">
-                <div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ round($avanzamentoRuolo/$totaleFormazione*100) . '%' }}">
+                <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: {{ $percentualeavanzamento }}">
                     <span class="sr-only">35% Complete (success)</span>
-                </div>
-                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: {{ round($avanzamentoSicurezza/$totaleFormazione*100) . '%' }}">
-                    <span class="sr-only">20% Complete (warning)</span>
                 </div>
 
             </div>
+
+            <b>Formazione di sicurezza</b>
+            <div class="progress progress-tall ">
+                <div class="progress-bar progress-bar-warning progress-bar-striped active" style="width: {{ $percentualeavanzamento }}">
+                    <span class="sr-only">20% Complete (warning)</span>
+                </div>
+            </div>
+
+
 
         </div>
     </div>
@@ -77,11 +99,12 @@
             <table class="table table-striped">
 
                 <thead>  <tr>
-                    <th></th>
-                    <th></th>
-                    <th>Corso</th>
-                    <th align="center">Data conseguimento</th>
-                    <th></th>
+                    <th width="1%"></th>
+                    <th width="1%"></th>
+                    <th width="40%">Corso</th>
+                    <th align="center" width="20%">Data conseguimento</th>
+                    <th align="center" width="10%">Data scadenza</th>
+                    <th width="10%"></th>
 
                 </tr>
                 </thead>
@@ -95,10 +118,22 @@
                             @if($corso->esonerato == 1)
                                 {{ $corso->description }}
                             @else
-                                {{ $corso->data_superamento }}
+                                @if($corso->data_superamento)
+                                {{ date('d/m/Y',strtotime($corso->data_superamento )) }}
+                                @endif
                             @endif
 
                         </td>
+
+                        <td align="center">
+                            @if($corso->esonerato == 1 )
+                            @else
+                                {{ $corso->data_scadenza }}
+                            @endif
+
+                        </td>
+
+
                         <td>
                             <a class="" href="#{{$corso->corso_id}}" title="Dettaglio corso" onclick="showDetailCorso({{$corso->corso_id}})">
                                 <i class="fa fa-eye fa-2x"></i></a>

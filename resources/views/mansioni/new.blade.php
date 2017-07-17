@@ -1,12 +1,11 @@
 @extends('cache.index')
 
-@section('page_heading','Attribuisci corsi alla mansione ' .  $datiRecuperati['nome'])
+@section('page_heading','Crea nuova mansione e attribuisci corsi ')
 @section('body')
 
     {{
-           Form::model($datiRecuperati,
-           ['method' => 'put', 'url' =>'mansioni/'. $datiRecuperati['id']])
-    }}
+           Form::open(['url' =>'mansioni/'])
+           }}
 
 
     <div class="col-sm-12">
@@ -14,7 +13,7 @@
             <div class="col-sm-5">
                 <div class="form-group">
                     {{ Form::label('nome', 'Nome:') }}
-                    {{ Form::text('nome', null, ['class' => 'form-control']) }}
+                    {{ Form::text('nome', null,   ['class' => 'form-control']) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('settore_id', 'Settore:') }}
@@ -24,7 +23,7 @@
 
                 <div class="pull-right">
                     {{ Form::submit('Salva', ['class' => 'btn btn-tanit']) }}
-                    {{ Form::close() }}
+
                 </div>
 
             </div>
@@ -47,8 +46,8 @@
                     </div>
                     <hr>
 
-                    {{ Form::select('_corsi[]',$lista_corsi, $datiRecuperati->_corsi->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
-
+                    {{ Form::select('_corsi[]',$lista_corsi, null,  ['class' => 'form-control, list-group', 'multiple']) }}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>
@@ -58,8 +57,10 @@
 @stop
 
 @section('action_button')
-        {{ Form::open(array('url' => '/mansioni', 'action'=>'index' , 'method' => 'get' )) }}
-        {{ Form::submit('Torna a mansioni', ['class' => 'btn btn-tanit btn-xs']) }}
-        {{Form::close()}}
+    {{ Form::open(array('url' => '/mansioni', 'action'=>'index' , 'method' => 'get' )) }}
+    {{ Form::submit('Torna a mansioni', ['class' => 'btn btn-tanit btn-xs']) }}
+    {{Form::close()}}
 
 @stop
+
+

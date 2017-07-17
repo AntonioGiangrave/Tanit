@@ -15,6 +15,15 @@
 
 
 @stop
+
+@section('action_button')
+    <a class="btn btn-tanit" href="/usersformazione/{{$datiRecuperati['id']}}"> Libretto formativo </a>
+    @role(['admin', 'azienda'])
+    <a class="btn btn-tanit" href="/users?societa_id={{$datiRecuperati['societa_id']}}"> Monitora la formazione dei dipendenti </a>
+    @endrole
+@stop
+
+
 @section('body')
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -123,6 +132,27 @@
 
             </div>
         </div>
+
+        @role(['admin', 'azienda'])
+        <br><br><br>
+        <div class="row">
+            <div class="text-center bg-danger">
+                <hr>
+
+                <b>CLICCANDO SUL PULSANTE ELIMINERAI DEFINITIVAMENTE QUESTO UTENTE</b> <br>
+
+
+                {{ Form::open(array('url' => 'users/' . $datiRecuperati['id'], 'class' => 'bg-danger')) }}
+
+                {{ Form::hidden('_method', 'DELETE') }}
+                {{ Form::submit('CANCELLA', array('class' => 'btn btn-danger btn-xs')) }}
+                {{ Form::close() }}
+
+            </div>
+        </div>
+        @endrole
+
+
     </div>
 
 @stop

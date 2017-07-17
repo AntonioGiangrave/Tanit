@@ -11893,7 +11893,7 @@ $(function() {
 		$(".resetfilter").click(function () {
 			$("#txtSearch").val('');
 			var search = $('#txtSearch').val().toLowerCase();
-			$(".list-group-item").each(function () {
+			$(".filtrabile .list-group-item").each(function () {
 				if ($(this).html().toLowerCase().indexOf(search) != -1) {
 					$(this).show();
 				}
@@ -11905,9 +11905,10 @@ $(function() {
 
 		//filtri su liste
 		$(".soloselezionati").click(function () {
+			
 			$("#txtSearch").val('');
 			var search = $('#txtSearch').val().toLowerCase();
-			$(".list-group-item").each(function () {
+			$(".filtrabile .list-group-item").each(function () {
 				if ($(this).hasClass('active')) {
 					$(this).show();
 				}
@@ -11920,7 +11921,7 @@ $(function() {
 		//filtri su liste
 		$("#txtSearch").on('keyup', function () {
 			var search = $(this).val().toLowerCase();
-			$(".list-group-item").each(function () {
+			$(".filtrabile .list-group-item").each(function () {
 				if ($(this).html().toLowerCase().indexOf(search) != -1) {
 					$(this).show();
 				}
@@ -11929,8 +11930,21 @@ $(function() {
 				}
 			});
 		});
-		
-		
+
+
+
+		// pulsante HELP
+		$("#puntointerrogativo").click(function (event) {
+			event.preventDefault();
+			console.log('slide');
+			$( ".help" ).slideToggle( "slow", function() {
+				// Animation complete.
+			});
+		});
+
+
+
+
 
 
 

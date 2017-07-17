@@ -56,9 +56,9 @@ class corsiController extends Controller
         $data = new \App\corsi;
         $data->titolo = $request->input('titolo');
         $data->durata = $request->input('durata');
-        $data->aula = $request->input('aula')?: null;
-        $data->fad= $request->input('fad') ?: null;
-        $data->cfp= $request->input('info_cfp') ;
+//        $data->aula = $request->input('aula')?: null;
+//        $data->fad= $request->input('fad') ?: null;
+//        $data->cfp= $request->input('info_cfp') ;
         $data->validita= $request->input('validita');
         $data->programma= $request->input('programma');
 

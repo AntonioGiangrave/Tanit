@@ -17,7 +17,7 @@
 
     {{--ho disattivato la possibilità di scegliere mansioni multiple, questa era la riga originaria--}}
     {{--{{ Form::select('_mansioni[]',$lista_mansioni, $datiRecuperati->_mansioni->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}--}}
-
-    {{ Form::select('_mansioni[]',$lista_mansioni, $datiRecuperati->_mansioni->lists('id')->toArray(),  ['class' => 'form-control, list-group']) }}
-
+    <div class="filtrabile">
+        {{ Form::select('_mansioni[]',$lista_mansioni, $datiRecuperati->_mansioni->lists('id')->toArray(),  ['class' => 'form-control, list-group']) }}
+    </div>
 </div>

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\societa;
 use Auth;
+use Mail;
+
 
 class societaController extends Controller
 {
@@ -44,7 +46,27 @@ class societaController extends Controller
      */
     public function create()
     {
-        //
+
+        $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
+        $data['lista_settori'] = \App\settori::lists('settore' , 'id');
+        $data['lista_fondi'] = \App\fondiprofessionali::lists('name' , 'id');
+
+        return view('societa.new', $data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_demo()
+    {
+
+        $data['lista_ateco'] =   \App\ateco::lists('codice' , 'id');
+        $data['lista_settori'] = \App\settori::lists('settore' , 'id');
+        $data['lista_fondi'] = \App\fondiprofessionali::lists('name' , 'id');
+
+        return view('societa.new_demo', $data);
     }
 
     /**
@@ -55,7 +77,112 @@ class societaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        {
+            $this->validate($request, [
+                'ragione_sociale' => 'required',
+                'email' => 'required|email',
+            ], [
+                'ragione_sociale.required' => 'La ragione sociale è obbligatoria',
+                'email.required' => 'L\'email è  obbligatoria'
+            ]);
+
+            $societa = new \App\societa;
+
+            $societa->ragione_sociale= $request->input('ragione_sociale');
+            $societa->ateco_id= $request->input('ateco_id');
+            $societa->descrizione_attivita = $request->input('descrizione_attivita');
+            $societa->ref_aziendale= $request->input('ref_aziendale');
+            $societa->n_dipendenti= $request->input('n_dipendenti');
+            $societa->piva= $request->input('piva');
+            $societa->cod_fiscale= $request->input('cod_fiscale');
+            $societa->email= $request->input('email');
+            $societa->pec= $request->input('pec');
+            $societa->indirizzo_sede_legale= $request->input('indirizzo_sede_legale');
+            $societa->telefono= $request->input('telefono');
+            $societa->cellulare= $request->input('cellulare');
+            $societa->cap= $request->input('cap');
+            $societa->regione= $request->input('regione');
+            $societa->sito= $request->input('sito');
+            $societa->fondo_id= $request->input('fondo_id');
+
+            if($request->input('demo')==1)
+                $societa->demo= 1;
+
+            $societa->save();
+
+
+//            CREO L'UTENTE TUTOR DELL'AZIENDA
+            $tutor= new \App\User;
+            $tutor->name= '['.$societa->ragione_sociale.']';
+            $tutor->nome = 'Tutor'. '['.$societa->ragione_sociale.']';
+            $tutor->cognome = 'Tutor' . '['.$societa->ragione_sociale.']';
+            $tutor->email=$societa->email;
+            $tutor->societa_id=$societa->id;
+            $tutor->password = bcrypt($societa->piva);
+            $tutor->attivazione = uniqid();
+            
+            $tutor->bloccato = 1;
+
+            //Mando la mail di attivazione
+            Mail::send('emails.attivazione_soc', ['tutor' => $tutor, 'societa' => $societa], function ($m) use ($tutor) {
+                $m->from('info@tanitsrl.it', 'TANIT');
+                $m->to($tutor->email, $tutor->nome);
+                $m->subject('Attivazione account');
+            });
+
+
+            $tutor->save();
+
+//            CREO L'ANAGRAFICA
+            $user_profiles= new \App\user_profiles();
+            $user_profiles->user_id= $tutor->id;
+            $user_profiles->id= $tutor->id;
+            $user_profiles->save();
+
+//            GLI ASSEGNO AI GRUPPI AZIENDA E DEMO OPZIONALE
+            $tutor->roles()->attach(['role_id' => 3]); //AZIENDA
+            if($request->input('demo')==1)
+                $tutor->roles()->attach(['role_id' => 4]); //DEMO
+
+//            GLI ASSEGNO COME TUTOR DELL'AZIENDA DEMO
+            $tutor->_tutor_societa()->attach(['societa_id' => $societa->id]);
+
+
+//            CREO UTENTI DEMO
+            if($request->input('demo')==1){
+                $nomi = ['Mario', 'Stefano', 'Martina', 'Francesca', 'Angelo', 'Paolo', 'Martina', 'Mattia', 'Massimo'];
+                $cognomi = ['Rossi', 'Picasso', 'Cafiero', 'Bianchi', 'Resato', 'Stagnari', 'Ressotti', 'Lombardi', 'Cersoli' ];
+
+                for ($i = 0; $i<=3 ; $i++){
+                    $user_demo= new \App\User;
+                    $user_demo->nome = $nomi[array_rand($nomi)];
+                    $user_demo->cognome = $cognomi[array_rand($cognomi)];
+                    $user_demo->name = $user_demo->nome.".".$user_demo->cognome;
+                    $email = strtolower(substr($user_demo->nome, 0 , 1).".".$user_demo->nome."@test.".$societa->ragione_sociale.".it");
+//                    $user_demo->email=preg_replace("/[^A-Za-z0-9?!]/",'',$email);
+                    $user_demo->email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+                    $user_demo->societa_id=$societa->id;
+                    $user_demo->password = bcrypt($user_demo->email);
+                    $user_demo->save();
+
+
+                    $user_demo_profiles= new \App\user_profiles();
+                    $user_demo_profiles->user_id= $user_demo->id;
+                    $user_demo_profiles->id= $user_demo->id;
+                    $user_demo_profiles->save();
+
+//                    GRUPPO USER
+                    $user_demo->roles()->attach(['role_id' => 1]);
+
+
+                }
+//NON lo faccio accedere perchè prima deve attivare
+//                Auth::login($tutor);
+            }
+
+            return redirect('attivazione');
+        }
     }
 
     /**

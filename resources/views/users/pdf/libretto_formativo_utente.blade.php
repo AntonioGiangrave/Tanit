@@ -8,6 +8,11 @@ $image_path = '/images/logo.png';
 <p>Societa: <b>{{ $utente->societa->ragione_sociale}}</b>  </p>
 <p>Mansioni ricoperte: <b>{{ implode(",", $utente->_mansioni->lists('nome')->all())}}</b>  </p>
 
+@if($utente->_raggiungimento_eqf())
+            <h4>Hai ottenuto la certificazione EQF livello {{ $utente->_mansioni()->first()->eqf }}</h4>
+            <i class="fa fa-trophy fa-5x " aria-hidden="true"></i>
+@endif
+
 <hr>
 
 <?php $i=1; ?>

@@ -25,6 +25,9 @@ class Authenticate
             }
         }
 
+//        if(Auth::user()->bloccato)
+//            return redirect('/attivazione')->withErros('Utente non attivo');
+
         return $next($request);
     }
 }

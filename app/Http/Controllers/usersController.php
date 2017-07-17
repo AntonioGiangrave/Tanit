@@ -17,6 +17,7 @@ use Input;
 use PDF;
 
 
+
 class usersController extends Controller {
 
     //
@@ -92,11 +93,14 @@ class usersController extends Controller {
         /******************************************************************
         DA COMPLETARE !!!!!!
          ******************************************************************/
-        $data['status'] = array(
-            1 => 'Disoccupato' ,
-            2 => 'Occupato Senza datore',
-            3 => 'Occupato tempo determinato'
-        );
+//        $data['status'] = array(
+//            1 => 'Disoccupato' ,
+//            2 => 'Occupato Senza datore',
+//            3 => 'Occupato tempo determinato'
+//        );
+
+        $data['status'] = DB::table('status')->lists('nome', 'id');
+
 
         $data['lista_albi'] =   \App\albi_professionali::orderBy('nome')->lists('nome' , 'id');
         $data['lista_incarichi_sicurezza'] =  \App\incarichi_sicurezza::where('id','>', '2')->orderBy('ordinamento')->lists('nome' , 'id');
@@ -116,7 +120,12 @@ class usersController extends Controller {
 
         $data['datiRecuperati'] = User::with('_registro_formazione', '_avanzamento_formazione', 'user_profiles')->find($id);
 
-        $data['totaleFormazione']=$data['datiRecuperati']->_registro_formazione->count();
+
+        $data['totaleFormazione']=$data['datiRecuperati']->_registro_formazione()->count();
+        $data['totaleFormazioneRuolo']=$data['datiRecuperati']->_registro_formazione_ruolo()->count();
+        $data['totaleFormazioneSicurezza']=$data['datiRecuperati']->_registro_formazione_sicurezza()->count();
+
+
         $data['avanzamentoFormazione']=$data['datiRecuperati']->_avanzamento_formazione()->count();
         $data['avanzamentoSicurezza']=$data['datiRecuperati']->_get_tot_avanzamento_formazione_sicurezza();
         $data['avanzamentoRuolo']=$data['datiRecuperati']->_get_tot_avanzamento_formazione_ruolo();
@@ -159,9 +168,17 @@ class usersController extends Controller {
             'telefono' => $request->input('telefono'),
             'titolo_studio' => $request->input('titolo_studio'),
             'status_id' => $request->input('status_id'),
+            'costo_orario_lordo' => $request->input('costo_orario_lordo'),
+            'inquadramento' => $request->input('inquadramento'),
+            'ccnl' => $request->input('ccnl'),
+            'mansione_ruolo' => $request->input('mansione_ruolo'),
+            'divisione' => $request->input('divisione'),
+
+
         ));
 
-        $user->groups()->sync($request->get('groups'));
+        if($request->get('groups'))
+            $user->groups()->sync($request->get('groups'));
 
         $user->_albi_professionali()->sync( (array) $request->get('_albi_professionali'));
 
@@ -191,13 +208,7 @@ class usersController extends Controller {
 
         $data['societa'] = \App\societa::lists('ragione_sociale', 'id')->all();
 
-
-
-
-
         return view('users.new', $data);
-
-
     }
 
     public function store(Request $request)
@@ -253,11 +264,69 @@ class usersController extends Controller {
                 return view('errors.403');
         }
 
-        
+
         $data['utente'] = $utente;
         $pdf = PDF::loadView('users.pdf.libretto_formativo_utente', $data);
         return $pdf->stream();
     }
+
+
+    public function attivazione(Request $request)
+    {
+
+
+        $this->validate($request, [
+            'attivazione' => 'required'
+
+        ], [
+            'attivazione' => 'Inserisci il codice'
+
+        ]);
+
+
+        $codice = $request->input('attivazione');
+        \Debugbar::info($codice);
+
+        $user = \App\User::where('attivazione', $codice)->first();
+
+        \Debugbar::info($user);
+
+        if($user) {
+            $user->bloccato = 0;
+            $user->attivazione = '';
+            $user->save();
+
+            Auth::login($user);
+            return redirect('/home')->with('ok_message', 'Puoi iniziare a gestire la tua Azienda!');
+        }
+        else
+            return back()->withErrors('Codice errato');
+    }
+
+    public function destroy($id)
+    {
+        // delete
+        $user = \App\User::find($id);
+        $societaid= $user->societa_id;
+
+
+        $user->groups()->detach();
+        $user->_albi_professionali()->detach();
+        $user->_incarichi_sicurezza()->detach();
+        $user->_mansioni()->detach();
+        $user->_tutor_societa()->detach();
+        $user->_esoneri_laurea()->detach();
+
+        $userprofile = \App\user_profiles::where('user_id', $id)->delete();
+        $res = \App\registro_formazione::where('user_id',  $id)->delete();
+
+        $user->delete();
+
+        // redirect
+//        Session::flash('message', 'Utente cancellato correttamente');
+        return redirect('/users?societa_id='.$societaid)->with('ok_message', 'Il profilo è stato eliminato');;
+    }
+
 
 
 }

@@ -1,7 +1,7 @@
 <br>
 
 <div class="form-group filterlist">
-        <div class="row">
+    <div class="row">
         <div class="col-sm-4">
             {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Filtra']) }}
         </div>
@@ -15,6 +15,7 @@
 
     </div>
     <hr>
-    {{ Form::select('_corsi_sicurezza_specifica[]',$lista_corsi, $datiRecuperati->_corsi_sicurezza_specifica->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
-
+    <div class="filtrabile">
+        {{ Form::select('_corsi_sicurezza_specifica[]',$lista_corsi, $datiRecuperati->_corsi_sicurezza_specifica->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
+    </div>
 </div>

@@ -12,7 +12,8 @@
 *
 * ======================================================= */
 body {
-  font-family: "Work Sans", Arial, sans-serif;
+  /*font-family: "Work Sans", Arial, sans-serif;*/
+  font-family: Verdana, Helvetica, "Gill Sans", sans-serif;
   font-weight: 300;
   /*font-size: 16px; ORIGINALE*/
   font-size: 13px;
@@ -298,9 +299,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #fh5co-header {
-  padding: 30px 0;
+  border-bottom: 1px solid #7f7f7f;
   margin-bottom: 10px;
+  padding: 10px 0;
 }
+
 #fh5co-header #fh5co-logo {
   float: left;
   margin-left: -10px;
@@ -778,10 +781,9 @@ select[size] {
   clear: both;
   borde-top: 1px solid #ccc;
   line-height: 1.5;
-  background: lightgrey;
   padding-top: 10px;
-
 }
+
 #fh5co-footer h3 {
   font-size: 20px;
 }

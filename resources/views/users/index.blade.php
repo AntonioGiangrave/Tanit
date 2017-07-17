@@ -101,13 +101,13 @@
                         </td>
                         <td>
                             @role(['admin', 'azienda'])
-                            <a class="text-muted" href="users/{{$dip->id}}/edit" title="Modfica"><i class="fa fa-pencil fa-2x"></i></a>
-                            <a class="text-muted" href="usersformazione/{{$dip->id}}" title="Visualizza la formazione"><i class="fa fa-mortar-board fa-2x"></i></a>
-                            <a class="text-muted" href="pdf_user_libretto_formativo/{{$dip->id}}" target="_blank" title="Scarica libretto formativo"><i class="fa fa-file-text fa-2x"></i></a>
+                            <a class="text-muted" href="users/{{$dip->id}}/edit" title="Modfica"><i class="fa fa-pencil fa-2x red"></i></a>
+                            <a class="text-muted" href="usersformazione/{{$dip->id}}" title="Visualizza la formazione"><i class="fa fa-mortar-board fa-2x black "></i></a>
+                            <a class="text-muted" href="pdf_user_libretto_formativo/{{$dip->id}}" target="_blank" title="Scarica libretto formativo "><i class="fa fa-file-text fa-2x celeste"></i></a>
                             @endrole
 
                             @if($dip->hasRole('azienda'))
-                                <a class="text-muted" href="#" title="Utente tutor/amministratore"><i class="fa fa-address-card fa-2x"></i></a>
+                                <a class="text-muted" href="#" title="Utente tutor/amministratore"><i class="fa fa-address-card fa-2x yellow"></i></a>
                             @endif
 
                         </td>

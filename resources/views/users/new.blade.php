@@ -31,18 +31,12 @@
             </div>
 
             <div class="col-md-4">
-
                 <div class="form-group">
                     {{ Form::label('societa_id', 'Società di appartenenza:') }}
-                    {{ Form::select('societa_id', $societa, null, ['class' => 'form-control']) }}
+                    {{ Form::select('societa_id', $societa, Auth::user()->societa_id, ['class' => 'form-control']) }}
                 </div>
-
-
             </div>
-
-
         </div>
-
         <hr>
 
 

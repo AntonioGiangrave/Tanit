@@ -43,13 +43,26 @@ Route::get('/test', function() {
 
 
 
+Route::resource('new_societa_demo', 'societaController@create_demo');
+Route::resource('societa', 'societaController');
+
+Route::get('/attivazione', function() {
+    return View::make('users.attivazione');
+});
+Route::resource('users/attivazione', 'usersController@attivazione');
+
 
 
 Route::group(array('middleware' => 'auth'), function() {
 
 
     Route::get('/home', function() {
-        return View::make('cache.home_loggato');
+
+        if(Auth::user()->hasRole('azienda')){
+                return redirect('users');
+        }
+        else
+            return View::make('cache.home_loggato');
     });
 
 
@@ -62,7 +75,8 @@ Route::group(array('middleware' => 'auth'), function() {
 //        return View::make('users.edit_classe_rischio', $data);
 //    });
 
-    Route::resource('societa', 'societaController');
+
+
     Route::resource('corsi', 'corsiController');
     Route::resource('mansioni', 'mansioniController');
     Route::resource('ateco', 'atecoController');
@@ -207,7 +221,8 @@ Route::get('/loginazienda', function() {
 Route::get('/logingestoremultiplo', function() {
     $user= \App\User::find(3);
     Auth::login($user);
-    return View::make('cache.home_loggato');
+
+    return redirect('home');
 });
 
 

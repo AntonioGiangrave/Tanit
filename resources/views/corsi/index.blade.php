@@ -20,13 +20,7 @@
                 <thead>  <tr>
                     <th>Titolo</th>
                     <th>Durata</th>
-                    <th>Aula</th>
-                    <th>FAD</th>
                     <th>Tipo</th>
-                    <th>CFP</th>
-                    <th>Validita</th>
-
-
                     <th> </th>
                 </tr>
                 </thead>
@@ -37,11 +31,16 @@
                     <tr>
                         <td>{{ $single->titolo}}</td>
                         <td>{{ $single->durata }}</td>
-                        <td> @if( $single->aula ) <span title="{{ $single->_aula->descrizione ." - ".$single->_aula->indirizzo }}"><i class="fa fa-check"></i></span> @endif </td>
-                        <td> @if( $single->fad ) <span title="{{ $single->_fad->descrizione ." - ".$single->_fad->indirizzo }}"><i class="fa fa-check"></i></span> @endif </td>
-                        <td> <span  class="badge" >{{$single->tipo}}</span> </td>
-                        <td> @if( $single->cfp ) <i class="fa fa-check"></i> @endif </td>
-                        <td>{{ $single->validita}}</td>
+
+                        @if($single->tipo == 'R')
+                            <td> <span  class="badge green" >{{$single->tipo}}</span> </td>
+                        @endif
+
+                        @if($single->tipo == 'S')
+                            <td> <span  class="badge orange" >{{$single->tipo}}</span> </td>
+                        @endif
+
+
                         <td>
                             <a class="btn btn-tanit btn-xs "   href="/corsi/{{$single->id}}/edit">modifica</a>
                         </td>
@@ -59,4 +58,9 @@
 
 
 
+@stop
+
+
+@section('help')
+    Questi sono tutti i corsi attualmente disponibili sulla piattaforma. Contatta il gestore per richiederne di altri.
 @stop

@@ -34,7 +34,10 @@ class mansioniController extends Controller
      */
     public function create()
     {
-        //
+
+        $data['lista_corsi'] = \App\corsi::where('tipo','R')->orderBy('titolo')->lists('titolo' , 'id');
+        $data['lista_settori'] = \App\settori::lists('settore' , 'id');
+        return view('mansioni.new', $data);
     }
 
     /**
@@ -45,6 +48,9 @@ class mansioniController extends Controller
      */
     public function store(Request $request)
     {
+
+        var_dump($_REQUEST);
+
         $this->validate($request, [
             'nome' => 'required'
 
@@ -53,7 +59,7 @@ class mansioniController extends Controller
         ]);
 
         $data = new \App\mansioni;
-        $data->nome= $request->input('titolo');
+        $data->nome= $request->input('nome');
         $data->settore_id = $request->input('settore_id');
 
         $data->save();

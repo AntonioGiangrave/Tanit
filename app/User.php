@@ -119,6 +119,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
+
+    public function _registro_formazione_ruolo(){
+        $tot = $this->_registro_formazione()->whereHas('_corsi' , function($q){
+            $q->where('tipo','R');
+        });
+        return $tot;
+    }
+
+    public function _registro_formazione_sicurezza(){
+        $tot = $this->_registro_formazione()->whereHas('_corsi' , function($q){
+            $q->where('tipo','S');
+        });
+        return $tot;
+    }
+
+
+
     public function _get_tot_avanzamento_formazione_ruolo()
     {
         $tot = $this->_avanzamento_formazione()->whereHas('_corsi' , function($q){
@@ -129,11 +146,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function _get_tot_avanzamento_formazione_sicurezza()
     {
-        $tot = $this->_avanzamento_formazione()->whereHas('_corsi' , function($q){
-            $q->where('tipo','S');
+        $tot = $this->_avanzamento_formazione()->whereHas('_corsi', function ($q) {
+            $q->where('tipo', 'S');
         })->count();
         return $tot;
     }
+
+
 
     public function _get_percentuale_formazione($percent = true)
     {

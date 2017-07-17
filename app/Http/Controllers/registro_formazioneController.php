@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\corsi;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,6 +12,7 @@ use Auth;
 use Session;
 use Redirect;
 use Mail;
+use Carbon\Carbon;
 
 class registro_formazioneController extends Controller
 {
@@ -132,7 +134,7 @@ class registro_formazioneController extends Controller
 
         \Debugbar::info(Session()->all());
 
-        $all_user = \App\User::with('societa')
+        $all_user = \App\User::with('societa', '_mansioni')
             ->whereHas('_registro_formazione', function($query) use($id){
                 $query->where('corso_id', $id)->whereNull('data_superamento')->whereNull('sessione_id');
             });
@@ -150,11 +152,26 @@ class registro_formazioneController extends Controller
 
         $data['utenti']= $all_user ->orderBy('societa_id')->get();
         $data['aziende']= $all_user ->select('societa_id')->distinct()->get();
+        $data['mansioni'] = array();
+
+        foreach ($data['utenti'] as $user){
+            $data['mansioni'] =  array_merge($data['mansioni'] , $user->_mansioni->pluck('id',  'nome' )->toArray());
+        }
+
+
+
+//        $data['mansioni'] = $all_user->
+//        foreach ($all_user as $user) {
+//            $data['mansioni']->push($user->id);
+//        }
+//
+        \Debugbar::log($data['mansioni']);
+
 
         $data['sessioniAula'] = \App\aule_sessioni::where('id_corso', $id)->with('_aula');
         if(Session('sessioneaula_id_fondo'))
             $data['sessioniAula'] = $data['sessioniAula']->whereDate('dal', '>', \Carbon\Carbon::now()->addMonths(2));
-        
+
         $data['sessioniAula']= $data['sessioniAula']->get();
 
         $data['fondiprofessionali'] = ['0' => 'Nessun Fondo']+ \App\fondiprofessionali::lists('name','id')->toArray();
@@ -174,20 +191,31 @@ class registro_formazioneController extends Controller
     {
 
         $data_superamento=$_REQUEST['data_superamento'];
+        $id_corso =         $_REQUEST['corso_id'];
+
+
         if($data_superamento == '')
             $data_superamento = null;
 
-        \Debugbar::info($data_superamento);
+
+        $corso = \App\corsi::find($id_corso);
+        $data_scadenza= null;
+        if($corso->scadenza) {
+            $data_scadenza =  Carbon::createFromFormat('Y-m-d', $data_superamento, 'Europe/London')->addYear($corso->scadenza)->toDateString();
+        }
 
 
         DB::table('registro_formazione')
             ->where('user_id', $_REQUEST['user_id'])
-            ->where('corso_id' ,$_REQUEST['corso_id'])
-            ->update(['data_superamento' => $data_superamento ]);
+            ->where('corso_id' ,$id_corso)
+            ->update([
+                'data_superamento' => $data_superamento,
+                'data_scadenza' => $data_scadenza
+            ]);
 
         return 'true';
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

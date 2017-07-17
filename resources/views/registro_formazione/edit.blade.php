@@ -4,6 +4,14 @@
     Iscrizione al corso {{$corso->titolo }}
 @stop
 
+@section('action_button')
+
+    @role(['admin', 'azienda'])
+    <a class="btn btn-tanit" href="/registro_formazione"> Gestione personale da formare </a>
+    @endrole
+
+@stop
+
 @section('body')
 
     {{Form::Open(['name'=> 'prenotazioni' , 'id'=> 'prenotazioni' , 'method' => 'post' , 'url' =>'registro_formazione']) }}
@@ -23,30 +31,40 @@
                 <div id="list_sessione" class="list-group">
                     @if($sessioniAula->count() > 0 || !is_null($corso->_fad))
                         @foreach($sessioniAula as $sessione)
-                            <?php $posti_occupati= $sessione->_posti_occupati()->count(); ?>
 
-                            @if($posti_occupati < $sessione->_aula->posti )
+                            @if($sessione->_aula->fad)
+
                                 <a href="#" data-value="{{$sessione->id}}"
                                    class="list-group-item
                                    @if((int)Session::get('sessioneaula_id_sessione')== $sessione->id) active @endif
                                            " {{-- fineclass--}}
-                                   postiliberi="{{$sessione->_aula->posti - $posti_occupati}}"
+                                   postiliberi="9999"
                                 >
-                                    {{$sessione->descrizione}} - dal {{$sessione->dal}} ({{ $sessione->_aula->descrizione }})
-                                    <span class="badge">Posti occupati {{$posti_occupati}}/{{$sessione->_aula->posti}}</span>
+                                    {{$sessione->descrizione}} ({{ $sessione->_aula->descrizione }})
+                                    <span class="badge">FAD</span>
                                 </a>
+
+
+                            @else
+                                <?php $posti_occupati= $sessione->_posti_occupati()->count(); ?>
+
+                                @if($posti_occupati < $sessione->_aula->posti )
+                                    <a href="#" data-value="{{$sessione->id}}"
+                                       class="list-group-item
+                                   @if((int)Session::get('sessioneaula_id_sessione')== $sessione->id) active @endif
+                                               " {{-- fineclass--}}
+                                       postiliberi="{{$sessione->_aula->posti - $posti_occupati}}"
+                                    >
+                                        {{$sessione->descrizione}} - dal {{$sessione->dal}} ({{ $sessione->_aula->descrizione }})
+                                        <span class="badge">Posti occupati {{$posti_occupati}}/{{$sessione->_aula->posti}}</span>
+                                    </a>
+                                @endif
                             @endif
+
+
+
                         @endforeach
 
-                        @if(!is_null($corso->_fad))
-                            <a href="#" data-value="{{ $corso->_fad->session_id }}"
-                               class="list-group-item
-                                @if((int)Session::get('sessioneaula_id_sessione')== $corso->_fad->session_id) active @endif
-                                ">
-                                {{ $corso->_fad->descrizione}} ({{ $corso->_fad->indirizzo}})
-                                <span class="badge">FAD</span>
-                            </a>
-                        @endif
                     @else
                         <p>Non ci sono sessioni attive per questo corso </p>
 
@@ -61,11 +79,15 @@
                 <h4>Quali utenti vuoi iscrivere?
                     {{--<span  class="badge pull-right" id="selezionati">Nessun utente selezionato</span>--}}
                 </h4>
-                <ul class="list-group utenti_da_iscrivere" data-toggle="items">
+                <ul class="list-group filtrabile utenti_da_iscrivere" data-toggle="items">
                     @foreach($utenti as $utente)
                         <a href="#"
                            data-value="{{$utente->id}}"
                            data-filter="{{$utente->societa->id}}"
+
+                           {{--data-value="{{$utente->id}}"--}}
+                           data-mansione="{{$utente->_mansioni->implode('id')}}"
+
                            class="list-group-item" >
                             {{ Str::upper($utente->nome)}} {{Str::upper($utente->cognome) }}
                             <span class="badge">{{$utente->societa->ragione_sociale}}</span>
@@ -76,18 +98,51 @@
             <div class="col-sm-6">
                 <h4>Filtri</h4>
 
+                <h5>Cerca nominativo</h5>
+                {{--<input type="text" id="search" onkeyup="cercaNominativo()" placeholder="Cerca nominativo..." class="form-control">--}}
+                {{--<br>--}}
 
-                <h4>Quanti</h4>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        {{ Form::text('txtSearch',null,  [ 'id'=> 'txtSearch', 'class' => 'form-control', 'placeholder' => 'Cerca...']) }}
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-tanit btn-xs resetfilter"   href="#">visualizza tutti</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-tanit btn-xs soloselezionati"   href="#">visualizza selezionati</a>
+                    </div>
+
+                </div>
+
+                <hr>
+
+
+                <h5>Quanti</h5>
                 <button id="btn_seleziona_piuchepuoi" class="btn btn-default btn-xs">Seleziona più utenti possibile</button>
                 <button id="btn_seleziona_clear" class="btn btn-default btn-xs">Azzera selezione</button>
 
                 <hr>
-                <h4>Di quale societa</h4>
+                <h5>Di quale societa</h5>
                 <ul class="list-group2 filtra_societa" data-toggle="items">
 
                     @foreach($aziende as $azienda)
                         <a href="#" data-value="{{$azienda->societa->id}}" class="list-group-item" >
                             {{$azienda->societa->ragione_sociale}}
+                        </a>
+                    @endforeach
+                    <hr>
+                </ul>
+
+                <hr>
+                <h5>Con quale mansione</h5>
+                <ul class="list-group2 filtra_mansione" data-toggle="items">
+
+                    @foreach($mansioni as $key => $value)
+                        <a href="#" data-value="{{$value}}" class="list-group-item" >
+                        {{$key}}
                         </a>
                     @endforeach
                     <hr>
@@ -158,6 +213,7 @@
                 $('.utenti_da_iscrivere .list-group-item').removeClass('active');
                 $('.utenti_da_iscrivere a').show();
 
+
                 var quanti  = $('#list_sessione').find('.active').attr('postiliberi');
                 for(i = 0; i < quanti; i++) {
                     $(".utenti_da_iscrivere .list-group-item " ).eq(i).addClass("active");
@@ -187,6 +243,13 @@
                 var Filter = $(this).attr('data-value');
                 $('.utenti_da_iscrivere a').show();
                 $('.utenti_da_iscrivere a:not([data-filter="' + Filter + '"])').hide();
+            });
+
+            //filtra per mansione
+            $('.filtra_mansione .list-group-item ').on('click', function (e) {
+                var Filter = $(this).attr('data-value');
+                $('.utenti_da_iscrivere a').show();
+                $('.utenti_da_iscrivere a:not([data-mansione="' + Filter + '"])').hide();
             });
 
         });

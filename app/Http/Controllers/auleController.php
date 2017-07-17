@@ -26,7 +26,10 @@ class auleController extends Controller
      */
     public function create()
     {
-        //
+
+        $data['aule'] = \App\aule::all();
+
+        return view('aule.new', $data);
     }
 
     /**
@@ -37,7 +40,29 @@ class auleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'descrizione' => 'required',
+            'posti' => 'required',
+        ], [
+            'descriozione.required' => 'Manca la descrizione',
+            'posti.required' => 'Indicare il numero di posti. Se fad indica 99999'
+        ]);
+
+        $aula = new \App\aule();
+
+
+        $aula->descrizione= $request->input('descrizione');
+        $aula->indirizzo= $request->input('indirizzo');
+        $aula->fad= $request->input('fad');
+        $aula->posti= $request->input('posti');
+
+        $aula->save();
+
+
+        $data['aule'] = \App\aule::all();
+        return view('aule.index', $data);
+
+
     }
 
     /**

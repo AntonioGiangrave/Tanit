@@ -14,6 +14,7 @@
 
     </div>
     <hr>
-    {{ Form::select('_corsi_rspp[]',$lista_corsi, $datiRecuperati->_corsi_rspp->lists('id')->toArray(),  ['class' => 'form-control, list-group', 'multiple']) }}
-
+    <div class="filtrabile">
+        {{ Form::select('_corsi_rspp[]',$lista_corsi, $datiRecuperati->_corsi_rspp->lists('id')->toArray(),  ['class' => 'form-control list-group', 'multiple']) }}
+    </div>
 </div>

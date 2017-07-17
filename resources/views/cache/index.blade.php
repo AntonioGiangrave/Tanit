@@ -45,7 +45,7 @@
 		<header id="fh5co-header" role="banner">
 			<div class="container">
 				<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
-				<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Tanit"></a></div>
+				{{--<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Tanit"></a></div>--}}
 				<nav id="fh5co-main-nav" role="navigation">
 					<ul>
 
@@ -54,11 +54,11 @@
 						@endrole
 
 						@role(['admin' , 'azienda'])
-						<li><a href="/societa">Aziende</a></li>
+						<li><a href="/societa">Gestisci il profilo della tua Azienda</a></li>
 						@endrole
 
 						@role(['admin',  'azienda'])
-						<li><a href="/registro_formazione">Prenotazione corsi</a></li>
+						<li><a href="/registro_formazione">Gestione formazione</a></li>
 						@endrole
 
 						@role(['admin'])
@@ -84,13 +84,13 @@
 								<li><a class="li_width"  href="/ateco">Ateco</a></li>
 								<br>
 
-								<li><a class="li_width"  href="/aule">Aule</a></li>
+								<li><a class="li_width"  href="/aule">Aule e Fad</a></li>
 								<br>
 
-								<li><a class="li_width"  href="/fad">Fad</a></li>
-								<br>
+								{{--<li><a class="li_width"  href="/fad">Fad</a></li>--}}
+								{{--<br>--}}
 
-								<li><a class="li_width"  href="/aule_sessioni">Sessioni aula</a></li>
+								<li><a class="li_width"  href="/aule_sessioni">Sessioni corsi</a></li>
 								<br>
 
 							</ul>
@@ -186,6 +186,20 @@
 
 				@yield('body')
 
+
+
+
+				{{--H E L P--}}
+
+				<div id="help">
+					<div class="text-right">
+						<a id="puntointerrogativo" href=""> <img width="100px" src="/images/puntointerrogativo.png"></a>
+						<div class="help ">
+							@yield('help')
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 
@@ -193,66 +207,50 @@
 		<footer id="fh5co-footer" role="contentinfo">
 			<div class="container">
 				<div class="row row-bottom-padded-sm">
-					<div class="col-md-4 col-sm-12">
+					<div class="col-md-4 col-sm-6">
 						<div class="fh5co-footer-widget">
-							<h3>TANIT</h3>
-							<p>Via Carlo Innocenzo Frugoni 15/5 - 16121 GENOVA
-								Telefono- Fax:  010. 8683343
-								Email: segreteria@tanit.it
-								PEC:tanit@pec.it
+							<p>Via Angelo Scarsellini 147, 16149 Genova <BR>
+								Telefono- Fax:  010.0898257 <br>
+								Email: segreteria@tanit.it <br>
+								PEC:tanit@pec.it <br>
 								Website: www.tanitsrl.it</p>
 						</div>
 					</div>
-					<div class="col-md-3 col-md-push-1 col-sm-12 col-sm-push-0">
-						<div class="fh5co-footer-widget">
-							<h3>LINKS</h3>
-							<ul class="fh5co-footer-link">
-								<li><a href="#">Home</a></li>
-								<li><a href="#">-</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-3 col-md-push-2 col-sm-12 col-sm-push-0">
 
-						<div class="fh5co-footer-widget">
-							<h3>FOLLOW US</h3>
-							<ul class="fh5co-social">
-								<li class="facebook"><a href="#"><i class="icon-facebook2"></i></a></li>
-								<li class="twitter"><a href="#"><i class="icon-twitter"></i></a></li>
-								<li class="linkedin"><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li class="message"><a href="#"><i class="icon-mail"></i></a></li>
-							</ul>
-						</div>
+					<div class="col-md-4 col-md-push-6 col-sm-6">
+						<div id="fh5co-logo"><a href="/"><img src="/images/logo.png" alt="Logo Tanit"></a></div>
 					</div>
+
+
+
+					{{--<div class="col-md-3 col-md-push-1 col-sm-12 col-sm-push-0">--}}
+					{{--<div class="fh5co-footer-widget">--}}
+					{{--<h3>LINKS</h3>--}}
+					{{--<ul class="fh5co-footer-link">--}}
+					{{--<li><a href="#">Home</a></li>--}}
+					{{--<li><a href="#">-</a></li>--}}
+					{{--</ul>--}}
+					{{--</div>--}}
+					{{--</div>--}}
+					{{--<div class="col-md-3 col-md-push-2 col-sm-12 col-sm-push-0">--}}
+
+					{{--<div class="fh5co-footer-widget">--}}
+					{{--<h3>FOLLOW US</h3>--}}
+					{{--<ul class="fh5co-social">--}}
+					{{--<li class="facebook"><a href="#"><i class="icon-facebook2"></i></a></li>--}}
+					{{--<li class="twitter"><a href="#"><i class="icon-twitter"></i></a></li>--}}
+					{{--<li class="linkedin"><a href="#"><i class="icon-linkedin"></i></a></li>--}}
+					{{--<li class="message"><a href="#"><i class="icon-mail"></i></a></li>--}}
+					{{--</ul>--}}
+					{{--</div>--}}
+					{{--</div>--}}
 				</div>
-
-
-
-				<div class="row">
-					<div class="col-md-2">
-						<p class="pull-left">Accedi come:</p>
-					</div>
-					<div class="col-md-2">
-						<a href="/loginuser">Dipendenti</a>
-					</div>
-					<div class="col-md-2">
-						<a href="/loginazienda">Azienda</a>
-					</div>
-					<div class="col-md-2">
-						<a href="/logingestoremultiplo">Azienda [Gestore Multiplo]</a>
-					</div>
-					<div class="col-md-2">
-						<a href="/loginadmin">Admin</a>
-					</div>
-				</div>
-
-
 
 				<div class="row">
 					<div class="col-md-12">
 						<div class="fh5co-copyright">
 							<p class="pull-left">&copy; 2016. All Rights Reserved. </p>
-							<p class="pull-right">Designed by <a href="http://www.gallerygroup.it" target="_blank">GGallery</a> </p>
+							<p class="pull-right">Designed by <b><a href="http://www.gallerygroup.it" target="_blank">GGallery</a></b> </p>
 						</div>
 					</div>
 				</div>
@@ -262,11 +260,38 @@
 
 			</div>
 
+		</footer>
+
+
+		<div class="row">
+			<div class="col-md-2">
+				<p class="pull-left">Accedi come:</p>
+			</div>
+			<div class="col-md-2">
+				<a href="/loginuser">Dipendenti</a>
+			</div>
+			<div class="col-md-2">
+				<a href="/loginazienda">Azienda</a>
+			</div>
+			<div class="col-md-2">
+				<a href="/logingestoremultiplo">Azienda [Gestore Multiplo]</a>
+			</div>
+			<div class="col-md-2">
+				<a href="/loginadmin">Admin</a>
+			</div>
+		</div>
+
+
 
 	</div>
-	</footer>
 </div>
-</div>
+
+
+
+
+
+
+
 
 <div class="gototop js-top">
 	<a href="#" class="js-gotop"><i class="icon-chevron-down"></i></a>
@@ -274,7 +299,6 @@
 
 <script src="{{ asset("assets/scripts/frontend.js") }}" type="text/javascript"></script>
 @yield('script')
-
 
 
 </body>

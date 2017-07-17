@@ -34,7 +34,7 @@
 }
 
 .progress-tall {
-    height: 80px !important;
+    height: 40px !important;
 }
 
 
@@ -75,4 +75,90 @@
 
 .li_width{
     width: 150px;
+}
+
+
+#help{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 500px;
+    z-index: 15000;
+}
+
+.help {
+    background-color: #0F71AE;
+    padding: 20px 50px;
+    font-size: larger;
+    display: none;
+    color: white;
+}
+
+
+.row-bottom-padded-sm {
+    padding-bottom: 0px !important;
+}
+
+#fh5co-footer .fh5co-footer-widget {
+    margin-bottom: 0px !important;
+}
+
+#fh5co-footer h3 {
+    color : #fff;
+}
+
+#fh5co-footer {
+    background: #1072af;
+    color : #fff;
+}
+
+#fh5co-footer .fh5co-copyright {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+}
+
+#fh5co-footer a
+{
+    color: #fff !important;
+}
+
+#fh5co-footer p
+{
+    margin: 0 0 10px !important;
+}
+
+#fh5co-main-nav a
+{
+    color: #1072af !important;
+}
+
+.progress-bar {
+    color: white !important;
+}
+
+
+.green{
+background: green;
+}
+
+.orange{
+    background: orange;
+}
+
+
+
+.red{
+    color: #ff3f00;
+}
+
+.black{
+    color: black;
+}
+
+.celeste{
+    color: lightblue;
+}
+
+.yellow{
+color: yellowgreen;
 }
