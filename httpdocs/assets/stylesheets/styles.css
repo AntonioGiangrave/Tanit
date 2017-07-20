@@ -14734,7 +14734,8 @@ p {
 
 h1, h2, h3, h4, h5, h6 {
   color: #000;
-  font-family: "Work Sans", Arial, sans-serif;
+  /*font-family: "Work Sans", Arial, sans-serif;*/
+  font-family: Verdana, Helvetica, "Gill Sans", sans-serif;
   font-weight: 400;
   margin: 0 0 20px 0;
   padding: 0;
@@ -14764,7 +14765,8 @@ h1, h2, h3, h4, h5, h6 {
 .btn {
   margin-right: 4px;
   margin-bottom: 4px;
-  font-family: "Work Sans", Arial, sans-serif;
+  /*font-family: "Work Sans", Arial, sans-serif;*/
+  font-family: Verdana, Helvetica, "Gill Sans", sans-serif;
   font-size: 16px;
   font-weight: 400;
   -webkit-border-radius: 5px;
@@ -15957,6 +15959,10 @@ select[size] {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.selectpicker{
+  width: auto !important;
+}
 
 /*! jQuery UI - v1.12.1 - 2016-09-14
 * http://jqueryui.com

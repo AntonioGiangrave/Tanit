@@ -5,11 +5,7 @@
 @section('action_button')
 
     @role(['admin', 'azienda'])
-    @if($societa_id)
-        <a class="btn btn-tanit" href="/users?societa_id={{$societa_id}}"> Monitora la formazione dei dipendenti </a>
-    @else
         <a class="btn btn-tanit" href="/users"> Monitora la formazione dei dipendenti </a>
-    @endif
     @endrole
 
 @stop
@@ -18,15 +14,20 @@
 
 
     @role((['admin', 'azienda']))
-    {{ Form::open(array('url' => '/registro_formazione', 'action'=>'index' , 'method' => 'get')) }}
+
+    {{ Form::open(array('url' => '/registro_formazione_index',   'method' => 'post')) }}
+
+
+    @if($societa->count() > 1)
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                {{ Form::label('societa_id', 'Azienda:') }}
-                {{ Form::select('societa_id', $societa, $societa_id,['class' => 'form-control']) }}
+                {{ Form::select('societa[]', $societa, $societa_selezionate,['id'=> 'societa_selezionate', 'class' => '  selectpicker  ', 'multiple']) }}
             </div>
         </div>
     </div>
+@endif
+
     {{Form::close()}}
 
     @endrole
@@ -70,14 +71,40 @@
         </div>
     </div>
 
-@stop
+    @stop
 
-@section('script')
+    @section('script')
+
+            <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/js/bootstrap-select.min.js"></script>
+
+
+
+
+
     <script type="text/javascript">
 
-        $('#societa_id').on('change', function(e){
+        $('#societa_selezionate').on('change', function(e){
             $(this).closest('form').submit();
         });
+
+        $(document).ready(function() {
+            $('.selectpicker').selectpicker({
+                style: 'btn btn-tanit btn-xs scelta-societa selectpicker',
+                size: 10
+            });
+
+            $('.selectpicker').on('change', function(e){
+                var tmp =  $('.scelta-societa span').first().text();
+                if(tmp.length > 50)
+                    tmp = "Selezione multipla"
+                $('.scelta-societa span').first().text(tmp);
+            });
+        });
+
 
     </script>
 

@@ -49,7 +49,7 @@
 
 						<div class="form-group">
 							<div class="col-md-8 col-md-offset-4">
-								<button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+								<button type="submit" class="btn btn-tanit" style="margin-right: 15px;">
 									Login
 								</button>
 

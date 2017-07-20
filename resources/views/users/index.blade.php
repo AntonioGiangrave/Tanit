@@ -1,18 +1,22 @@
 @extends('cache.index')
 
 @section('page_heading')
+
     @role((['admin', 'azienda']))
-    @if($societa->count() > 0)
-        {{ Form::open(array('url' => '/users', 'action'=>'index' , 'method' => 'get', 'class' => 'form-inline')) }}
+    @if($societa->count() > 1)
+        <h3>Monitora personale</h3>
+        {{ Form::open(array('url' => '/usersControllerindex',   'method'=>'post' ,  'class' => 'form-inline')) }}
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group ">
-                    {{ Form::label('societa_id', 'Seleziona azienda:') }}
-                    {{ Form::select('societa_id', $societa, $societa_id,['class' => 'form-control']) }}
+                    {{ Form::label('societa', 'Seleziona aziende :') }}
+                    {{ Form::select('societa[]', $societa, $societa_selezionate,['id'=> 'societa_selezionate', 'class' => '  selectpicker  ', 'multiple']) }}
                 </div>
             </div>
         </div>
         {{Form::close()}}
+    @else
+        <h3>Monitora personale</h3>
     @endif
     @endrole
 
@@ -22,10 +26,12 @@
     @role((['admin', 'azienda']))
     @if($societa->count() > 0)
         {{ Form::open(array('url' => '/sync_azienda', 'action'=>'index' , 'method' => 'post', 'class' => 'form-inline')) }}
-        {{ Form::hidden('sync_societa_id',  $societa_id , ['class' => 'form-control', 'hidden'=>'hidden', 'id'=>'sync_societa_id', 'name'=>'sync_societa_id']) }}
+        {{ Form::hidden('sync_societa_id', implode(",", $societa_selezionate) , ['class' => 'form-control', 'hidden'=>'hidden', 'id'=>'sync_societa_id', 'name'=>'sync_societa_id']) }}
         {{ Form::submit('SINCRONIZZA', ['class' => 'btn btn-tanit btn-xs']) }}
 
         <a href="/users/create" class="btn btn-tanit btn-xs">NUOVO UTENTE</a>
+
+        <a target="_blank" href="/pdf_stato_formazione" class="btn btn-tanit btn-xs">STAMPA</a>
 
         {{Form::close()}}
     @endif
@@ -35,11 +41,18 @@
 @section('body')
     <div class="row">
         <div class="col-sm-12">
-            <table class="table table-striped">
+
+            <input type="text" id="search" onkeyup="cercaItem()" placeholder="Cerca utente..." class="form-control">
+            <br>
+
+            <table id="tabella" class="table table-striped">
 
                 <thead>  <tr>
                     <th>Cognome</th>
                     <th>Nome</th>
+                    @if(count($societa_selezionate) > 1)
+                        <th>Societa</th>
+                    @endif
                     <th>Classe</th>
                     <th>Avanzamento formazione</th>
                     <th> </th>
@@ -62,6 +75,10 @@
 
                         <td>{{ Str::title($dip->cognome) }}</td>
                         <td>{{ Str::title($dip->nome) }}</td>
+                        @if(count($societa_selezionate) > 1)
+                            <td><span class="badge">{{ Str::title($dip->societa->ragione_sociale) }}</span></td>
+                        @endif
+
                         <td>
                             <?php $classe_dip = $dip->_get_classe_rischio(); ?>
 
@@ -121,15 +138,62 @@
             </table>
         </div>
     </div>
-@stop
+    @stop
 
 
-@section('script')
+    @section('script')
+
+            <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/js/bootstrap-select.min.js"></script>
+
+
+
+
+
     <script type="text/javascript">
 
-        $('#societa_id').on('change', function(e){
+        $('#societa_selezionate').on('change', function(e){
             $(this).closest('form').submit();
         });
+
+        $(document).ready(function() {
+            $('.selectpicker').selectpicker({
+                style: 'btn btn-tanit btn-xs scelta-societa selectpicker',
+                size: 10
+            });
+
+            $('.selectpicker').on('change', function(e){
+                var tmp =  $('.scelta-societa span').first().text();
+                if(tmp.length > 50)
+                    tmp = "Selezione multipla"
+                $('.scelta-societa span').first().text(tmp);
+            });
+        });
+
+
+        function cercaItem() {
+            // Declare variables
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("tabella");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
 
     </script>
 

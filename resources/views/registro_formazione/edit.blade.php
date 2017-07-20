@@ -125,6 +125,18 @@
                 <button id="btn_seleziona_clear" class="btn btn-default btn-xs">Azzera selezione</button>
 
                 <hr>
+
+                <h5>Con quale mansione</h5>
+                <ul class="list-group2 filtra_mansione" data-toggle="items">
+
+                    @foreach($mansioni as $key => $value)
+                        <a href="#" data-value="{{$value}}" class="list-group-item" >
+                        {{$key}}
+                        </a>
+                    @endforeach
+                    <hr>
+                </ul>
+
                 <h5>Di quale societa</h5>
                 <ul class="list-group2 filtra_societa" data-toggle="items">
 
@@ -137,16 +149,6 @@
                 </ul>
 
                 <hr>
-                <h5>Con quale mansione</h5>
-                <ul class="list-group2 filtra_mansione" data-toggle="items">
-
-                    @foreach($mansioni as $key => $value)
-                        <a href="#" data-value="{{$value}}" class="list-group-item" >
-                        {{$key}}
-                        </a>
-                    @endforeach
-                    <hr>
-                </ul>
 
             </div>
             <div class="pull-right">
@@ -167,6 +169,9 @@
     <script type="text/javascript">
         $( document ).ready(function() {
 
+
+            var filter_societa='';
+            var filter_mansione='';
 
             $('#prenotazioni').submit(function( event ) {
 
@@ -236,20 +241,24 @@
 
                 $('#selezionati').html('0 selezionati');
 
+                filter_societa= '';
+                filter_mansione= '';
+
             });
 
-            //filtra per societa
+//            filtra per societa
             $('.filtra_societa .list-group-item ').on('click', function (e) {
-                var Filter = $(this).attr('data-value');
+                filter_societa = $(this).attr('data-value');
                 $('.utenti_da_iscrivere a').show();
-                $('.utenti_da_iscrivere a:not([data-filter="' + Filter + '"])').hide();
+                $('.utenti_da_iscrivere a:not([data-filter="' + filter_societa + '"])').hide();
             });
 
             //filtra per mansione
             $('.filtra_mansione .list-group-item ').on('click', function (e) {
-                var Filter = $(this).attr('data-value');
+                filter_mansione = $(this).attr('data-value');
                 $('.utenti_da_iscrivere a').show();
-                $('.utenti_da_iscrivere a:not([data-mansione="' + Filter + '"])').hide();
+                $('.utenti_da_iscrivere a:not([data-mansione="' + filter_mansione + '"])').hide()
+
             });
 
         });

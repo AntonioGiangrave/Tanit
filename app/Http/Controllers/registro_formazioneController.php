@@ -12,6 +12,7 @@ use Auth;
 use Session;
 use Redirect;
 use Mail;
+use Input;
 use Carbon\Carbon;
 
 class registro_formazioneController extends Controller
@@ -23,36 +24,68 @@ class registro_formazioneController extends Controller
      */
     public function index(Request $request)
     {
+
+        $societa_selezionate=Input::get('societa');
+
+        if ($societa_selezionate)
+            Session::put('societa_selezionate', $societa_selezionate);
+
+        $societa_selezionate = Session::get('societa_selezionate');
+
+
+
+
+
         $corsi = registro_formazione::whereNull('data_superamento')->whereNull('sessione_id')->with('_corsi._sessioni' )->groupBy('corso_id');
 
-        $societa_id=$request->input('societa_id');
+//        $societa_id=$request->input('societa_id');
 
         if(Auth::user()->hasRole('azienda')) {
 
-            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
+
+            //elenco per Dropdown sopra
+            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             });
 
+            if(empty($societa_selezionate)) {
+                $societa_selezionate = array($societa->first()->id);
+            }
 
-            $corsi = $corsi->whereHas('_user', function($query) use($societa){
-                $query->whereIn('societa_id',  $societa->lists('id'));
-            });
+//            $corsi = $corsi->whereHas('_user', function($query) use($societa_selezionate){
+//                $query->whereIn('societa_id',  $societa_selezionate);
+//            });
+
+
         }
 
-        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
-            if($societa = \App\societa::find($societa_id))
-                $corsi->whereHas('_user', function($query) use($societa_id){
-                    $query->where('societa_id', $societa_id);
-                });
+
+        if(Auth::user()->hasAnyRole(['admin' ])) {
+
+            if(empty($societa_selezionate)) {
+                $societa = \App\societa::orderBy('ragione_sociale')->get();
+                $societa_selezionate = array($societa->first()->id);
+            }
+
+//            $corsi->whereHas('_user', function($query) use($societa_selezionate){
+//                $query->whereIn('societa_id', $societa_selezionate);
+//            });
+
+            //elenco per Dropdown sopra
+            $societa =   \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id')->toArray();
+
         }
+
+        $corsi = $corsi->whereHas('_user', function($query) use($societa_selezionate){
+            $query->whereIn('societa_id',  $societa_selezionate);
+        });
 
         $corsi = $corsi->select('corso_id' ,DB::raw('count(*) as total'));
         $data['corsi'] = $corsi->get();
+        $data['societa'] = $societa;
+        $data['societa_selezionate'] = $societa_selezionate;
 
-        //Recupero le societa nel caso fossi gestore multiplo
-        $societa =  [''=>'Tutte le società'] + \App\societa::orderBy('ragione_sociale')->lists('ragione_sociale', 'id')->toArray();
-
-        return view('registro_formazione.index', $data)->with('societa', $societa)->with('societa_id', $societa_id);
+        return view('registro_formazione.index', $data);
     }
 
     /**
@@ -132,6 +165,22 @@ class registro_formazioneController extends Controller
     public function edit($id)
     {
 
+
+        $societa_selezionate=Input::get('societa');
+
+        if ($societa_selezionate)
+            Session::put('societa_selezionate', $societa_selezionate);
+
+        $societa_selezionate = Session::get('societa_selezionate');
+
+        if(empty($societa_selezionate)){
+            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+
+            $societa_selezionate = array($societa->first()->id);
+        }
+
         \Debugbar::info(Session()->all());
 
         $all_user = \App\User::with('societa', '_mansioni')
@@ -141,13 +190,10 @@ class registro_formazioneController extends Controller
 
         //Se sono azienda pesco solo le mie societa
         if(Auth::user()->hasAnyRole(['admin'])) {
-
+            $all_user = $all_user->whereIn('societa_id', $societa_selezionate);
         }
         else{
-            $societa = \App\societa::orderBy('ragione_sociale')->whereHas('_tutor', function($query) {
-                $query->where('user_id', Auth::user()->id);
-            });
-            $all_user = $all_user->whereIn('societa_id', $societa->lists('id'));
+            $all_user = $all_user->whereIn('societa_id', $societa_selezionate);
         }
 
         $data['utenti']= $all_user ->orderBy('societa_id')->get();
@@ -157,15 +203,6 @@ class registro_formazioneController extends Controller
         foreach ($data['utenti'] as $user){
             $data['mansioni'] =  array_merge($data['mansioni'] , $user->_mansioni->pluck('id',  'nome' )->toArray());
         }
-
-
-
-//        $data['mansioni'] = $all_user->
-//        foreach ($all_user as $user) {
-//            $data['mansioni']->push($user->id);
-//        }
-//
-        \Debugbar::log($data['mansioni']);
 
 
         $data['sessioniAula'] = \App\aule_sessioni::where('id_corso', $id)->with('_aula');

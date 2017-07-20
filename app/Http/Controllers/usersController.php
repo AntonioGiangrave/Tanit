@@ -9,6 +9,8 @@ use App\User;
 use App\registro_formazione;
 use Illuminate\Http\Request;
 
+use Session;
+
 use Spatie\Permission\Models\Role;
 
 use Auth;
@@ -23,11 +25,16 @@ class usersController extends Controller {
     //
     public function index(Request $request) {
 
-        $societa_id=$request->input('societa_id');
+        $societa_selezionate=Input::get('societa');
+
+        if ($societa_selezionate)
+            Session::put('societa_selezionate', $societa_selezionate);
+
+        $societa_selezionate = Session::get('societa_selezionate');
+
 
         //Recupero gli utenti della societa
         $data = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles', 'roles' , '_mansioni')->orderBy('cognome');
-
 
         if(Auth::user()->hasAnyRole(['azienda'])) {
 
@@ -36,11 +43,11 @@ class usersController extends Controller {
                 $query->where('user_id', Auth::user()->id);
             })->get();
 
-            if(!$societa_id)
-                $societa_id = $societa->first()->id;
+            if(empty($societa_selezionate))
+                $societa_selezionate = array($societa->first()->id);
 
             //SOLO UTENTI DELLA SOCIETA RICHIESTA O DELLA PRIMA DELLA LISTA
-            $data->where('societa_id', $societa_id);
+            $data->whereIn('societa_id', $societa_selezionate);
 
 //            Visualizzo solo i dipendenti
             $data = $data->whereHas('roles', function($query) {
@@ -48,16 +55,15 @@ class usersController extends Controller {
             });
         }
 
-        if(Auth::user()->hasAnyRole(['admin', 'superuser'])) {
+        if(Auth::user()->hasAnyRole(['admin'])) {
             //Recupero le societa nel caso fossi gestore multiplo
             $societa = \App\societa::orderBy('ragione_sociale')->get();
 
-            if(!$societa_id)
-                $societa_id = $societa->first()->id;
+            if(empty($societa_selezionate))
+                $societa_selezionate = array($societa->first()->id);
 
             //SOLO UTENTI DELLA SOCIETA RICHIESTA O DELLA PRIMA DELLA LISTA
-            $data->where('societa_id', $societa_id);
-
+            $data->whereIn('societa_id', $societa_selezionate);
         }
 
         $data= $data->get();
@@ -65,17 +71,21 @@ class usersController extends Controller {
         $societa = $societa->lists('ragione_sociale', 'id');
 
 
-        return view('users.index', compact('data'))->with('societa', $societa)->with('societa_id', $societa_id);
+        return view('users.index', compact('data'))
+            ->with('societa', $societa)
+            ->with('societa_selezionate', $societa_selezionate);
+
     }
 
     public function user_sync(Request $request){
 
         //verificare questo campo che gli passo, potrebbe essere sbagliato ma cozzava con la schermata users.index
-        $societa_id=$request->input('sync_societa_id');
+        $societa_id=explode(",",$request->input('sync_societa_id'));
 
-        $data['societa'] = \App\societa::find($societa_id);
+        $data['elencosocieta'] = \App\societa::whereIn('id',$societa_id)->get();
 
-        $data['users'] = User::where('societa_id', $societa_id)->orderBy('cognome');
+
+        $data['users'] = User::whereIn('societa_id', $societa_id)->orderBy('cognome');
         $data['users']= $data['users']->get();
 
         $data['userslist'] = json_encode($data['users']->lists('id'));
@@ -154,6 +164,9 @@ class usersController extends Controller {
 //        $user->referente_id= $request->input('referente_id');
         $user->societa_id= $request->input('societa_id');
 
+        if($request->input('new_password'))
+            $user->password =  bcrypt($request->input('new_password'));
+
         $user->push();
 
         $save = $user->user_profiles()->update(array(
@@ -213,6 +226,7 @@ class usersController extends Controller {
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'nome' => 'required',
             'cognome' => 'required',
@@ -228,6 +242,11 @@ class usersController extends Controller {
         $data->cognome= $request->input('cognome');
         $data->email = $request->input('email')?: null;
         $data->societa_id= $request->input('societa_id') ?: null;
+
+        if($request->input('new_password'))
+            $data->password =  bcrypt($request->input('new_password'));
+
+
         $data->save();
 
 
@@ -268,6 +287,48 @@ class usersController extends Controller {
         $data['utente'] = $utente;
         $pdf = PDF::loadView('users.pdf.libretto_formativo_utente', $data);
         return $pdf->stream();
+    }
+
+
+    public function pdf_stato_formazione()
+    {
+
+        $societa_selezionate = Session::get('societa_selezionate', null);
+
+        if(!$societa_selezionate)
+            return view('errors.403');
+
+        //Recupero le societa nel caso fossi gestore multiplo
+        $societa = \App\societa::whereIn('id', $societa_selezionate);
+        
+        //Recupero gli utenti della societa
+        $userdata = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles', 'roles' , '_mansioni');
+
+        //SOLO UTENTI DELLE SOCIETA IN SESSIONE
+        $userdata->whereIn('societa_id', $societa_selezionate);
+
+//            Visualizzo solo i dipendenti
+        $userdata = $userdata->whereHas('roles', function($query) {
+            $query->where('name', 'user');
+        });
+
+        $userdata = $userdata->orderBy('societa_id');
+
+
+        $data['utenti']= $userdata->get();
+
+
+
+        $data['lista_societa']= $societa->get();
+        $data['societa_selezionate'] = $societa_selezionate;
+        
+        $pdf = PDF::loadView('users.pdf.stato_formazione_aziendale', $data);
+        return $pdf->stream();
+        
+        
+//        return view('users.pdf.stato_formazione_aziendale', $data);
+//            ->with('societa', $societa)
+//            ->with('societa_selezionate', $societa_selezionate);
     }
 
 

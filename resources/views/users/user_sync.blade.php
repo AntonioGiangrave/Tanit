@@ -1,7 +1,11 @@
 @extends('cache.index')
 
 @section('page_heading')
-    Allineamento formazione per <a href="/users?societa_id={{$societa->id}}">{{ $societa->ragione_sociale }}</a>
+    Allineamento formazione per: <br>
+    @foreach($elencosocieta  as $societa)
+        <a href="/users?societa_id={{$societa->id}}">{{ $societa->ragione_sociale }}</a> <br>
+
+    @endforeach
 @stop
 
 

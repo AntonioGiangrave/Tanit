@@ -26,7 +26,12 @@
                 <tr>
                     <td>{{ Str::upper($dip->cognome) }}</td>
                     <td>{{ Str::upper($dip->nome) }}</td>
-                    <td>{{ $dip->email }}</td>
+                    <td>
+                        @if($dip->hasRole('azienda'))
+                            <span class="badge">TUTOR</span>
+
+                        @endif
+                    </td>
 
                     <td>
 
@@ -45,8 +50,11 @@
                     <td>
 
                         @role(['admin', 'azienda'])
-                        <a class="text-muted" href="/usersformazione/{{$dip->id}}/edit"><i class="fa fa-pencil fa-2x"></i></a>
-                        <a class="text-muted" href="pdf_user_libretto_formativo/{{$dip->id}}" target="_blank" title="Scarica libretto formativo"><i class="fa fa-file-text fa-2x"></i></a>
+
+                        <a class="text-muted" href="/users/{{$dip->id}}/edit" title="Modfica"><i class="fa fa-pencil fa-2x red"></i></a>
+                        <a class="text-muted" href="/usersformazione/{{$dip->id}}" title="Visualizza la formazione"><i class="fa fa-mortar-board fa-2x black "></i></a>
+                        <a class="text-muted" href="/pdf_user_libretto_formativo/{{$dip->id}}" target="_blank" title="Scarica libretto formativo "><i class="fa fa-file-text fa-2x celeste"></i></a>
+
                         @endrole
 
                     </td>

@@ -47,16 +47,7 @@
                     {{ Form::text('cognome', null, ['class' => 'form-control']) }}
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {{ Form::label('email', 'La tua email:') }}
 
-                    {{ Form::text('email', null, ['class' => 'form-control']) }}
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
             <div class="col-md-4">
 
                 <div class="form-group">
@@ -74,6 +65,29 @@
                 </div>
 
             </div>
+
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ Form::label('email', 'La tua email/username:') }}
+
+                    {{ Form::text('email', null, ['class' => 'form-control']) }}
+                </div>
+            </div>
+
+            @role(['admin'])
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ Form::label('password', 'Password:') }}
+
+                    {{ Form::password('new_password',  ['class' => 'form-control' , 'placeholder' => 'compila per resettare']) }}
+                </div>
+            </div>
+            @endrole
+
 
         </div>
 

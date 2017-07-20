@@ -22,9 +22,7 @@ Route::get('/', function() {
 
 
 
-//Route::get('/home', function() {
-//    return View::make('cache.home');
-//});
+
 
 
 
@@ -67,9 +65,11 @@ Route::group(array('middleware' => 'auth'), function() {
 
 
     Route::resource('users', 'usersController');
+    Route::resource('usersControllerindex', 'usersController@index');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');
     Route::resource('pdf_user_libretto_formativo', 'usersController@pdf_libretto_formativo_utente');
+    Route::resource('pdf_stato_formazione', 'usersController@pdf_stato_formazione');
 //    Route::get('user_classe_rischio/{id}', function($id){
 //        $data['datiRecuperati'] = \App\User::find($id);
 //        return View::make('users.edit_classe_rischio', $data);
@@ -81,6 +81,10 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('mansioni', 'mansioniController');
     Route::resource('ateco', 'atecoController');
     Route::resource('registro_formazione', 'registro_formazioneController');
+    Route::resource('registro_formazione_index', 'registro_formazioneController@index');
+    
+    
+    
     Route::resource('set_data_superamento', 'registro_formazioneController@update');
 
 
@@ -198,6 +202,8 @@ Route::post('register', 'Auth\AuthController@postRegister');
 /////LOGIN AS
 
 Route::get('/loginuser', function() {
+    Session::flush();
+
     $user= \App\User::find(4);
     Auth::login($user);
     return View::make('cache.home_loggato');
@@ -205,6 +211,7 @@ Route::get('/loginuser', function() {
 
 
 Route::get('/loginadmin', function() {
+    Session::flush();
     $user= \App\User::find(1);
     Auth::login($user);
     return View::make('cache.home_loggato');
@@ -212,17 +219,20 @@ Route::get('/loginadmin', function() {
 
 
 Route::get('/loginazienda', function() {
+    Session::flush();
     $user= \App\User::find(5);
     Auth::login($user);
-    return View::make('cache.home_loggato');
+
+    return redirect('/users');
 });
 
 
 Route::get('/logingestoremultiplo', function() {
+    Session::flush();
     $user= \App\User::find(3);
     Auth::login($user);
 
-    return redirect('home');
+    return redirect('/users');
 });
 
 

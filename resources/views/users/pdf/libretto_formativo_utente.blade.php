@@ -2,7 +2,7 @@
 $image_path = '/images/logo.png';
 ?>
 
-<div id="fh5co-logo"><img src="{{ public_path() . $image_path }}" alt="Logo Tanit"></div>
+    <div id="fh5co-logo"><img src="{{ public_path() . $image_path }}" alt="Logo Tanit"></div>
 <hr>
 <h3>Libretto formativo di {{ Str::upper($utente->nome)}} {{ Str::upper($utente->cognome)}} </h3>
 <p>Societa: <b>{{ $utente->societa->ragione_sociale}}</b>  </p>
