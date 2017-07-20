@@ -39,6 +39,7 @@ $image_path = '/images/logo.png';
         @if(count($societa_selezionate) > 1)
             <th>Societa</th>
         @endif
+        <th>Classe di rischio</th>
         <th>Avanzamento formazione</th>
         <th> </th>
     </tr>
