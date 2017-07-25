@@ -87,10 +87,10 @@
 								<li><a class="li_width"  href="/aule">Aule e Fad</a></li>
 								<br>
 
-								{{--<li><a class="li_width"  href="/fad">Fad</a></li>--}}
-								{{--<br>--}}
-
 								<li><a class="li_width"  href="/aule_sessioni">Sessioni corsi</a></li>
+								<br>
+
+								<li><a class="li_width"  href="/importa">Importa dati</a></li>
 								<br>
 
 							</ul>

@@ -75,6 +75,8 @@ Route::group(array('middleware' => 'auth'), function() {
 //        return View::make('users.edit_classe_rischio', $data);
 //    });
 
+    Route::resource('importa', 'importController');
+    Route::resource('do_import', 'importController@do_import');
 
 
     Route::resource('corsi', 'corsiController');
