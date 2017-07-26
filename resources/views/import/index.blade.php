@@ -12,6 +12,8 @@
         Form::open(array('url' => '/do_import',   'method'=>'post' ,  'class' => ' '))
         }}
 
+
+
         <div class="row">
             <div class="col-md-6">
 
@@ -53,7 +55,23 @@ linda,repetto,lrepetto@gmail.com',
         {{ Form::submit('Importa', array('class' => 'btn btn-danger btn-xs')) }}
         {{ Form::close() }}
 
+        <hr><hr>
 
+        <div class="row">
+            <div class="col-md-12">
+                {{ Form::label('Campi disponibili per importazione utente:') }}
+                {{ $userfield  }}
+
+            </div></div>
+        <div class="row">
+            <div class="col-md-12">
+
+                {{ Form::label('Campi disponibili per importazione societa:') }}
+                {{ $societafield  }}
+
+            </div>
+        </div>
+        <br>
 
     </div>
 

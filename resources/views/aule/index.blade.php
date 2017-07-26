@@ -31,22 +31,43 @@
                             <td>{{ $single->descrizione}}</td>
                             <td>{{ $single->indirizzo}}</td>
                             <td>illimitati </td>
-                            <td></td>
+                            <td>
+
+
+                                {{ Form::open(array('url' => 'aule/' . $single->id )) }}
+
+                                {{ Form::hidden('_method', 'DELETE') }}
+                                {{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i>', array( 'class' => 'btn btn-xs btn-danger' , 'type' => 'submit' )) }}
+                                {{ Form::close() }}
+
+
+
+                            </td>
                         </tr>
                     @else
                         <tr>
                             <td>{{ $single->descrizione}}</td>
                             <td>{{ $single->indirizzo}}</td>
                             <td>{{ $single->posti}}</td>
+
                             <td>
 
-                                {{--@role(['admin'])--}}
-                                {{--<a class="btn btn-tanit btn-xs disabled  "   href="/ateco/{{$single->id}}/edit">modifica </a>--}}
-                                {{--@endrole--}}
+
+                                {{ Form::open(array('url' => 'aule/' . $single->id )) }}
+
+                                {{ Form::hidden('_method', 'DELETE') }}
+                                {{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i>', array('class' => 'btn btn-xs btn-danger' , 'type' => 'submit')) }}
+                                {{ Form::close() }}
+
+
+
                             </td>
                         </tr>
 
                     @endif
+
+
+
                 @endforeach
                 </tbody>
             </table>

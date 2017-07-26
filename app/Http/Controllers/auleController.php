@@ -107,6 +107,22 @@ class auleController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $aula = \App\aule::find($id);
+
+
+//
+//        $user->groups()->detach();
+//        $user->_albi_professionali()->detach();
+//        $user->_incarichi_sicurezza()->detach();
+//        $user->_mansioni()->detach();
+//        $user->_tutor_societa()->detach();
+//        $user->_esoneri_laurea()->detach();
+//
+//        $userprofile = \App\user_profiles::where('user_id', $id)->delete();
+//        $res = \App\registro_formazione::where('user_id',  $id)->delete();
+
+        $aula->delete();
+        return redirect('/aule')->with('ok_message', 'L\'aula è stata eliminata');
     }
 }

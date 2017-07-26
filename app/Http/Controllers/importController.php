@@ -14,6 +14,19 @@ class importController extends Controller
 
     public function index(Request $request) {
 
+        $userfield = \App\User::first();
+        $userfield = $userfield->getFillable();
+
+        $userprofiles = \App\user_profiles::first();
+        $userprofiles = $userprofiles->getFillable();
+
+        $societa = \App\societa::first();
+        $societa = $societa->getFillable();
+
+        $data['userfield'] = implode(", " ,array_merge($userfield, $userprofiles));
+        $data['societafield'] = implode(", " ,$societa);
+            
+        
         $data['societa'] = \App\societa::lists('ragione_sociale', 'id');
 
         return view('import.index', $data);
@@ -53,12 +66,15 @@ class importController extends Controller
                     return redirect()->back()->withErrors($error_field)->withInput();
                 }
 
-                foreach ($data as $user) {
-                    $user = explode(",", $user);
-                    $data = array_combine($headers, $user);
-                    $data['societa_id'] = $societa;
+                foreach ($data as $row) {
+                    $row = explode(",", $row);
+                    $user = array_combine($headers, $row);
+                    $user['societa_id'] = $societa;
 
-                    $user_data = array_intersect_key($data, array_flip($user_field));
+                    if(array_key_exists('password', $user))
+                        $user['password'] = bcrypt($user['password']);
+
+                    $user_data = array_intersect_key($user, array_flip($user_field));
                     $user_profile_data = array_intersect_key($data, array_flip($user_profile_field));
 
                     $id = $this->insertUser($user_data);
