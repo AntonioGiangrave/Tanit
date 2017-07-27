@@ -9731,7 +9731,7 @@ canvas.round {
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 500px;
+    max-width: 500px;
     z-index: 15000;
 }
 
