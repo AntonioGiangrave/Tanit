@@ -18,7 +18,7 @@
     {{ Form::open(array('url' => '/registro_formazione_index',   'method' => 'post')) }}
 
 
-    @if($societa->count() > 1)
+    @if(sizeof($societa) > 1)
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">

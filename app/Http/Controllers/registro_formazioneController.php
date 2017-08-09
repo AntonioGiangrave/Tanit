@@ -85,6 +85,8 @@ class registro_formazioneController extends Controller
         $data['societa'] = $societa;
         $data['societa_selezionate'] = $societa_selezionate;
 
+        \Debugbar::log($societa);
+
         return view('registro_formazione.index', $data);
     }
 

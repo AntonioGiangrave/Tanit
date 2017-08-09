@@ -123,7 +123,7 @@
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
                            href="#collapse1">
-                            Utenti iscritti <i class="fa fa-arrow-circle-down"></i>
+                            Utenti iscritti <i class="fa fa-arrow-circle-down"> </i>
                         </a>
                     </h4>
                 </div>
@@ -139,6 +139,20 @@
                                     <td>
                                         <a class="btn btn-tanit btn-xs" href="/users/{{$rf->_user->id}}/edit" title="modfica"><i class="fa fa-pencil"></i></a>
                                         <a class="btn btn-tanit btn-xs" href="/usersformazione/{{$rf->_user->id}}/edit"><i class="fa fa-mortar-board "></i></a>
+
+
+
+                                    </td>
+                                    <td>
+                                        {{ Form::open(array('class' => 'form-inline' ,  'url'=>'/aule_sessioni_del_iscrione/','method'=>'POST')) }}
+
+
+
+                                        {{ Form::hidden('id_sessione', $datiRecuperati['id'], ['class' => 'form-control']) }}
+                                        {{ Form::hidden('id_utente', $rf->_user->id, ['class' => 'form-control']) }}
+
+                                        {{ Form::submit('DISISCRIVI' , ['class' => 'btn btn btn-danger btn-xs']) }}
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                             @endforeach

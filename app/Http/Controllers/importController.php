@@ -25,8 +25,8 @@ class importController extends Controller
 
         $data['userfield'] = implode(", " ,array_merge($userfield, $userprofiles));
         $data['societafield'] = implode(", " ,$societa);
-            
-        
+
+
         $data['societa'] = \App\societa::lists('ragione_sociale', 'id');
 
         return view('import.index', $data);
@@ -43,12 +43,12 @@ class importController extends Controller
 
         $data = explode("\n", $data);
 
-        $headers = explode(",",array_shift($data));
+        $headers = explode(";",array_shift($data));
         $headers = array_map('trim', $headers);
 
         $error_field = array();
 
-       
+
         switch ($tipo)
         {
             case 'utenti': {
@@ -66,20 +66,25 @@ class importController extends Controller
                     return redirect()->back()->withErrors($error_field)->withInput();
                 }
 
+                \Debugbar::info($headers, 'headers');
+
                 foreach ($data as $row) {
-                    $row = explode(",", $row);
-                    $user = array_combine($headers, $row);
-                    $user['societa_id'] = $societa;
+                    $row = explode(";", $row);
 
-                    if(array_key_exists('password', $user))
-                        $user['password'] = bcrypt($user['password']);
+                    if(sizeof($row) == sizeof($headers)) {
+                        \Debugbar::info($row, 'row');
+                        $user = array_combine($headers, $row);
+                        $user['societa_id'] = $societa;
 
-                    $user_data = array_intersect_key($user, array_flip($user_field));
-                    $user_profile_data = array_intersect_key($data, array_flip($user_profile_field));
+                        if (array_key_exists('password', $user))
+                            $user['password'] = bcrypt($user['password']);
 
-                    $id = $this->insertUser($user_data);
-                    $this->insertUserProfile($id, $user_profile_data);
+                        $user_data = array_intersect_key($user, array_flip($user_field));
+                        $user_profile_data = array_intersect_key($data, array_flip($user_profile_field));
 
+                        $id = $this->insertUser($user_data);
+                        $this->insertUserProfile($id, $user_profile_data);
+                    }
                 }
             }
                 break;
@@ -98,7 +103,7 @@ class importController extends Controller
                 }
 
                 foreach ($data as $singolasocieta) {
-                    $singolasocieta= explode(",", $singolasocieta);
+                    $singolasocieta= explode(";", $singolasocieta);
                     $data = array_combine($headers, $singolasocieta);
 
                     $societa_data = array_intersect_key($data, array_flip($societa_field));

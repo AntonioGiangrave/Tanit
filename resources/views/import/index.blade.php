@@ -76,6 +76,3 @@ linda,repetto,lrepetto@gmail.com',
     </div>
 
 @stop
-
-
-

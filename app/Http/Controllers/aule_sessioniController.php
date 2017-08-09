@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use PDF;
+use DB;
 class aule_sessioniController extends Controller
 {
     /**
@@ -144,8 +145,30 @@ class aule_sessioniController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+
+
+        $id_utente = $request->input('id_utente');
+        $id_sessione = $request->input('id_sessione');
+
+
+
+        DB::table('registro_formazione')
+            ->where('user_id', $id_utente)
+            ->where('sessione_id' ,$id_sessione)
+            ->update([
+                'sessione_id' => null
+
+            ]);
+
+
+//        var_dump($id_sessione);
+//        var_dump($id_utente);
+
+
+
+        return redirect('aule_sessioni/'.$id_sessione.'/edit')->with('ok_message', 'Dati aggiornati');
     }
 }

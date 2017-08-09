@@ -170,12 +170,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function _get_classe_rischio(){
-        if(!$this->user_profiles->classe_rischio) {
-            $this->user_profiles->classe_rischio = $this->_set_classe_rischio();
-            $this->save();
+        try {
+
+            if (!$this->user_profiles->classe_rischio) {
+                $this->user_profiles->classe_rischio = $this->_set_classe_rischio();
+                $this->save();
+            }
+
+            return $this->user_profiles->classe_rischio;
+        }catch (Exception $e){
+
+            \Debugbar::log($e);
         }
 
-        return  $this->user_profiles->classe_rischio;
     }
 
     public function _set_classe_rischio(){

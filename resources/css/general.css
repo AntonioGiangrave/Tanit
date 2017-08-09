@@ -162,3 +162,16 @@ background: green;
 .yellow{
 color: yellowgreen;
 }
+
+
+
+ /*customizzazione perche porco giuda su chrome non si vede la freccetta verso il basso*/
+ select {
+     -webkit-appearance: none !important;
+     -moz-appearance: none !important;;
+     appearance: none !important;;
+     background: url(dropdown.ico) right / 20px no-repeat #fff !important;;
+     padding-right: 20px !important;
+ }
+
+

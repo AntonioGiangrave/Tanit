@@ -111,6 +111,10 @@ class auleController extends Controller
         $aula = \App\aule::find($id);
 
 
+        $sessioni = \App\aule_sessioni::where('id_aula' , $aula->id);
+
+        $sessioni->delete();
+
 //
 //        $user->groups()->detach();
 //        $user->_albi_professionali()->detach();

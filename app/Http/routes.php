@@ -87,6 +87,7 @@ Route::group(array('middleware' => 'auth'), function() {
     
     
     
+    
     Route::resource('set_data_superamento', 'registro_formazioneController@update');
 
 
@@ -97,7 +98,7 @@ Route::group(array('middleware' => 'auth'), function() {
 
     Route::group(['middleware' => ['role:admin' ]], function () {
         Route::resource('aule_sessioni', 'aule_sessioniController');
-
+        Route::resource('aule_sessioni_del_iscrione', 'aule_sessioniController@destroy');
         //pdf riepilog info sessione e registro.
         Route::resource('aule_sessioni_pdf', 'aule_sessioniController@pdf_sessione');
 //        Route::resource('aule_sessioni_uploadpdf', 'aule_sessioniController@pdf_sessione');
