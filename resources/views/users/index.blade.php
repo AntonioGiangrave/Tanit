@@ -199,6 +199,10 @@
 
     @stop
 
+
+
+
+
             <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -230,3 +234,15 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+    @role(['admin', 'azienda'])
+@section('help')
+    Per visualizzare le informazioni sul personale, clicca sulle icone. Da lì potrai effettuare modifiche, gesrtire i singoli utenti e scaricare il libretto formativo.
+    Da qui puoi gestire l’elenco dei dipendenti associati all’azienda. Puoi effettuare una ricerca digitando il nome utente nel campo “cerca”, modificare le informazioni, verificare lo stato di avanzamento di ciascun utente o scaricare il libretto formativo.
+@stop
+
+@endrole

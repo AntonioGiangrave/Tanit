@@ -110,3 +110,11 @@
 
 @stop
 
+
+@role(['admin', 'azienda'])
+@section('help')
+    Clicca sull’icona “Gestisci” per iscrivere gli utenti ai corsi di formazione associati.<br>
+    La formazione obbligatoria è contrassegnata da una apposita icona.
+@stop
+
+@endrole

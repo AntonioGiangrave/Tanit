@@ -264,3 +264,12 @@
         });
     </script>
 @stop
+
+
+@role(['admin', 'azienda'])
+@section('help')
+    Seleziona dall’elenco il tuo fondo interprofessionale e la data del corso di tuo interesse per finalizzare l’iscrizione.
+    Successivamente verifica la disponibilità residua per la data che hai scelto e le eventuali sessioni in e-learning del corso di tuo interesse.
+@stop
+
+@endrole

@@ -95,3 +95,9 @@
 
 
 
+@role(['admin', 'azienda'])
+@section('help')
+    Compila il form per aggiungere un utente all’elenco dei dipendenti
+@stop
+
+@endrole

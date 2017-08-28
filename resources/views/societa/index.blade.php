@@ -78,3 +78,10 @@
     </script>
 
 @stop
+
+@role(['admin', 'azienda'])
+@section('help')
+    In questa pagina puoi gestire tutte le informazioni collegate alle aziende. Da qui puoi effettuare una ricerca digitando il nome azienda nel campo “cerca” o modificare le informazioni del profilo aziendale.
+@stop
+
+@endrole

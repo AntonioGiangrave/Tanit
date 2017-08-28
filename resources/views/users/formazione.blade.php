@@ -277,3 +277,10 @@
 
     </script>
 @stop
+
+
+@role(['admin', 'azienda'])
+    @section('help')
+        qui puoi visualizzare e gestire tutte le informazioni sui corsi di formazione associati a ciascun utente. Accanto a ogni corso trovi delle icone. Clicca su <strong>“Dettagli corso”</strong> per visualizzare info aggiuntive e prenotare un posto in aula nella prima data utile, oppure su <strong> “Riscatta corso” </strong>se l’utente in passato ha già frequentato quel corso
+    @stop
+@endrole
