@@ -9757,8 +9757,8 @@ canvas.round {
 }
 
 #fh5co-footer {
-    background: #1072af;
-    color : #fff;
+    /*background: #1072af;*/
+    color : #1072af;
 }
 
 #fh5co-footer .fh5co-copyright {
@@ -9768,7 +9768,7 @@ canvas.round {
 
 #fh5co-footer a
 {
-    color: #fff !important;
+    color: #1072af !important;
 }
 
 #fh5co-footer p
@@ -9824,7 +9824,41 @@ color: yellowgreen;
  }
 
 
+.payoff {
+    color: white;
+    font-family: monospace;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 0;
+    padding-left: 50px;
+}
 
+.titolo {
+    color: white;
+    font-family: monospace;
+    font-size: 110px;
+    font-weight: 500;
+    line-height: 123px;
+    padding-left: 50px;
+}
+
+.intro {
+    background-image: url("/images/home.jpg");
+    background-position-y: -225px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    line-height: 43px;
+    margin: 0 15px 32px;
+    min-height: 270px;
+    padding-top: 171px;
+}
+
+.backgroundwhite
+{
+    background-color: white;
+    margin-top: 50px;
+    padding-top: 35px;
+}
 /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates

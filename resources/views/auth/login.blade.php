@@ -8,7 +8,7 @@
 
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
-							<strong>Whoops!</strong> Ahi, ci sono dei problemi col tuo login.<br><br>
+							<strong>Ops!</strong> ci sono dei problemi col tuo login.<br><br>
 							<ul>
 								@foreach ($errors->all() as $error)
 									<li>{{ $error }}</li>

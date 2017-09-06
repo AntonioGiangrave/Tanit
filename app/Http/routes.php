@@ -16,7 +16,9 @@ use Spatie\Permission\Models\Role;
 
 
 Route::get('/', function() {
-    return View::make('cache.home');
+    if(Auth::check())
+        return View::make('cache.home');
+    return View::make('cache.intro');
 });
 
 
