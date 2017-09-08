@@ -7,7 +7,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Tanit Formazione</title>
+	<title>QUID</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="TANIT" />
 	<meta name="keywords" content="formazione job" />
@@ -78,7 +78,7 @@
 				<div class="container-fluid">
 
 					<div class="titolo">QUID</div>
-					<div class="payoff">The training app</div>
+					<div class="payoff">The Training Hub</div>
 
 					<div class="row backgroundwhite ">
 						<div class="col-md-6 ">
