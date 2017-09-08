@@ -263,23 +263,23 @@
 		</footer>
 
 
-		<div class="row">
-			<div class="col-md-2">
-				<p class="pull-left">Accedi come:</p>
-			</div>
-			<div class="col-md-2">
-				<a href="/loginuser">Dipendenti</a>
-			</div>
-			<div class="col-md-2">
-				<a href="/loginazienda">Azienda</a>
-			</div>
-			<div class="col-md-2">
-				<a href="/logingestoremultiplo">Azienda [Gestore Multiplo]</a>
-			</div>
-			<div class="col-md-2">
-				<a href="/loginadmin">Admin</a>
-			</div>
-		</div>
+		{{--<div class="row">--}}
+			{{--<div class="col-md-2">--}}
+				{{--<p class="pull-left">Accedi come:</p>--}}
+			{{--</div>--}}
+			{{--<div class="col-md-2">--}}
+				{{--<a href="/loginuser">Dipendenti</a>--}}
+			{{--</div>--}}
+			{{--<div class="col-md-2">--}}
+				{{--<a href="/loginazienda">Azienda</a>--}}
+			{{--</div>--}}
+			{{--<div class="col-md-2">--}}
+				{{--<a href="/logingestoremultiplo">Azienda [Gestore Multiplo]</a>--}}
+			{{--</div>--}}
+			{{--<div class="col-md-2">--}}
+				{{--<a href="/loginadmin">Admin</a>--}}
+			{{--</div>--}}
+		{{--</div>--}}
 
 
 

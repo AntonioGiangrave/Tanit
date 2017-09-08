@@ -78,7 +78,7 @@
 				<div class="container-fluid">
 
 					<div class="titolo">QUID</div>
-					<div class="payoff">Gestisci la tua formazione</div>
+					<div class="payoff">The training app</div>
 
 					<div class="row backgroundwhite ">
 						<div class="col-md-6 ">

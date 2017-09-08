@@ -110,6 +110,10 @@
 #fh5co-footer {
     /*background: #1072af;*/
     color : #1072af;
+    margin-top: 30px;
+    padding-top: 10px;
+    border-top: 5px solid;
+
 }
 
 #fh5co-footer .fh5co-copyright {
