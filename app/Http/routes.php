@@ -206,16 +206,16 @@ Route::post('register', 'Auth\AuthController@postRegister');
 
 /////LOGIN AS
 
-Route::get('/loginuser', function() {
-    Session::flush();
+//Route::get('/loginuser', function() {
+//    Session::flush();
+//
+//    $user= \App\User::find(4);
+//    Auth::login($user);
+//    return View::make('cache.home_loggato');
+//});
 
-    $user= \App\User::find(4);
-    Auth::login($user);
-    return View::make('cache.home_loggato');
-});
 
-
-Route::get('/loginadmin', function() {
+Route::get('/PbkXLp6WHp0SkRLSCyWabqfqeCTR2TacCeW1DeW6eSgr790ZS4RV0o768jMu', function() {
     Session::flush();
     $user= \App\User::find(1);
     Auth::login($user);
@@ -223,22 +223,22 @@ Route::get('/loginadmin', function() {
 });
 
 
-Route::get('/loginazienda', function() {
-    Session::flush();
-    $user= \App\User::find(5);
-    Auth::login($user);
+//Route::get('/loginazienda', function() {
+//    Session::flush();
+//    $user= \App\User::find(5);
+//    Auth::login($user);
+//
+//    return redirect('/users');
+//});
 
-    return redirect('/users');
-});
 
-
-Route::get('/logingestoremultiplo', function() {
-    Session::flush();
-    $user= \App\User::find(3);
-    Auth::login($user);
-
-    return redirect('/users');
-});
+//Route::get('/logingestoremultiplo', function() {
+//    Session::flush();
+//    $user= \App\User::find(3);
+//    Auth::login($user);
+//
+//    return redirect('/users');
+//});
 
 
 /////FINE LOGIN AS
