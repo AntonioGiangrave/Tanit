@@ -11,7 +11,7 @@
 Per completare la procedura di attivazione clicca sul seguente link .
 
 <p>
-    clicca sul seguente link : <a href="www.tanitsrl.it/attivazione?attivazione={{ $tutor->attivazione }}">ATTIVA</a>
+    clicca sul seguente link : <a href="quid.tanitsrl.it/attivazione?attivazione={{ $tutor->attivazione }}">ATTIVA</a>
 <br>   e inserisci il codice: {{ $tutor->attivazione }}
 </p>
 

@@ -181,7 +181,7 @@
 <div class="row">
     <div class="col-sm-4">
         <div class="form-group">
-            {{ Form::label('fondo_id', 'Codice ATECO:') }}
+            {{ Form::label('fondo_id', 'Fondo interprofessionale:') }}
             {{ Form::select('fondo_id',  $lista_fondi ,$datiRecuperati->fondo_id, ['class' => 'form-control']) }}
         </div>
     </div>

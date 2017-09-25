@@ -49,6 +49,12 @@ Route::resource('societa', 'societaController');
 Route::get('/attivazione', function() {
     return View::make('users.attivazione');
 });
+
+Route::get('/delete_users', function() {
+    return View::make('users.delete');
+});
+
+
 Route::resource('users/attivazione', 'usersController@attivazione');
 
 
@@ -67,6 +73,10 @@ Route::group(array('middleware' => 'auth'), function() {
 
 
     Route::resource('users', 'usersController');
+
+    Route::get('usersDeleteAll', 'usersController@deleteAll');
+    
+    
     Route::resource('usersControllerindex', 'usersController@index');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');

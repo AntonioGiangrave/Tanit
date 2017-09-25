@@ -24,6 +24,8 @@
 	<meta name="twitter:url" content="" />
 	<meta name="twitter:card" content="" />
 
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 	<!-- <link rel="shortcut icon" href="favicon.ico"> -->
 
@@ -211,7 +213,7 @@
 						<div class="fh5co-footer-widget">
 							<p>Via Angelo Scarsellini 147, 16149 Genova <BR>
 								Telefono- Fax:  010.0898257 <br>
-								Email: segreteria@tanit.it <br>
+								Email: segreteria@tanitsrl	.it <br>
 								PEC:tanit@pec.it <br>
 								Website: www.tanitsrl.it</p>
 						</div>

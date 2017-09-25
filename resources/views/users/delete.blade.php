@@ -28,10 +28,12 @@
         {{ Form::open(array('url' => '/sync_azienda', 'action'=>'index' , 'method' => 'post', 'class' => 'form-inline')) }}
         {{ Form::hidden('sync_societa_id', implode(",", $societa_selezionate) , ['class' => 'form-control', 'hidden'=>'hidden', 'id'=>'sync_societa_id', 'name'=>'sync_societa_id']) }}
         {{ Form::submit('SINCRONIZZA', ['class' => 'btn btn-tanit btn-xs']) }}
-        <a href="/users/create" class="btn btn-tanit btn-xs">NUOVO UTENTE</a>
-        <a target="_blank" href="/pdf_stato_formazione" class="btn btn-tanit btn-xs">STAMPA</a>
-        {{Form::close()}}
 
+        <a href="/users/create" class="btn btn-tanit btn-xs">NUOVO UTENTE</a>
+
+        <a target="_blank" href="/pdf_stato_formazione" class="btn btn-tanit btn-xs">STAMPA</a>
+
+        {{Form::close()}}
     @endif
     @endrole
 @stop
@@ -43,11 +45,9 @@
             <input type="text" id="search" onkeyup="cercaItem()" placeholder="Cerca utente..." class="form-control">
             <br>
 
-            <table id="tabella" class="table table-striped" data-click-to-select="true">
+            <table id="tabella" class="table table-striped">
 
                 <thead>  <tr>
-                    <th style="width: 8px;">
-                        <input id="master" type="checkbox" class="group-checkable" data-set="#tabella .checkboxes" /></th>
                     <th>Cognome</th>
                     <th>Nome</th>
                     @if(count($societa_selezionate) > 1)
@@ -71,9 +71,8 @@
                     $_percentuale_formazione = (int)$_percentuale_formazione."%" ;
                     ?>
 
-                    <tr id="{{ $dip->id }}">
+                    <tr>
 
-                        <td><input type="checkbox" name="users[]" class="checkboxes" data-id="{{ $dip->id }}" /></td>
                         <td>{{ Str::title($dip->cognome) }}</td>
                         <td>{{ Str::title($dip->nome) }}</td>
                         @if(count($societa_selezionate) > 1)
@@ -137,12 +136,8 @@
 
 
             </table>
-            {{--{{ Form::hidden('token', csrf_token(), ['type'=>'hidden']) }}--}}
-
         </div>
     </div>
-
-    <button style="margin-bottom: 10px" class="btn btn-danger btn-xs delete_all pull-right" data-url="{{ url('usersDeleteAll') }}">ELIMINA UTENTI</button>
     @stop
 
 
@@ -159,104 +154,6 @@
 
 
     <script type="text/javascript">
-
-
-
-        $('#master').on('click', function(e) {
-            if($(this).is(':checked',true))
-            {
-                $(".checkboxes").prop('checked', true);
-            } else {
-                $(".checkboxes").prop('checked',false);
-            }
-        });
-
-        $('.delete_all').on('click', function(e) {
-            var allVals = [];
-            $(".checkboxes:checked").each(function() {
-                allVals.push($(this).attr('data-id'));
-            });
-
-            if(allVals.length <=0)
-            {alert("Seleziona utenti");
-            }  else {
-                var check = confirm("Sei sicuro di cancellare qesti utenti? (confermando potrebbero essere necessari alcuni secondi per completare l'operazione) ");
-                if(check == true){
-                    var join_selected_values = allVals.join(",");
-                    $.ajax({
-                        url: $(this).data('url'),
-                        type: 'get',
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
-                        data: 'ids='+join_selected_values,
-                        success: function (data) {
-
-                            if (data['success']) {
-
-                                $(".checkboxes:checked").each(function() {
-
-                                    $(this).parents("tr").remove();
-
-                                });
-
-                                alert(data['success']);
-                            } else if (data['error']) {
-                                alert(data['error']);
-                            } else {
-                                alert('Errore nella procedura');
-                            }
-                        },
-                        error: function (data) {
-                            alert(data.responseText);
-                        }
-                    });
-
-                    $.each(allVals, function( index, value ) {
-                        $('table tr').filter("[data-row-id='" + value + "']").remove();
-                    });
-                }
-            }
-        });
-
-//        $('[data-toggle=confirmation]').confirmation({
-//            rootSelector: '[data-toggle=confirmation]',
-//            onConfirm: function (event, element) {
-//                element.trigger('confirm');
-//            }
-//        });
-
-        $(document).on('confirm', function (e) {
-            var ele = e.target;
-            e.preventDefault();
-
-            $.ajax({
-                url: ele.href,
-                type: 'get',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                success: function (data) {
-                    if (data['success']) {
-                        $("#" + data['tr']).slideUp("slow");
-                        alert(data['success']);
-                    } else if (data['error']) {
-                        alert(data['error']);
-                    } else {
-                        alert('Whoops Something went wrong!!');
-                    }
-                },
-
-                error: function (data) {
-                    alert(data.responseText);
-                }
-
-            });
-
-            return false;
-
-        });
-
-
-
-
-
 
         $('#societa_selezionate').on('change', function(e){
             $(this).closest('form').submit();

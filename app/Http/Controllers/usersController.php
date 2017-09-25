@@ -300,7 +300,7 @@ class usersController extends Controller {
 
         //Recupero le societa nel caso fossi gestore multiplo
         $societa = \App\societa::whereIn('id', $societa_selezionate);
-        
+
         //Recupero gli utenti della societa
         $userdata = User::with('_registro_formazione', '_avanzamento_formazione', 'societa.ateco', 'user_profiles', 'roles' , '_mansioni');
 
@@ -321,11 +321,11 @@ class usersController extends Controller {
 
         $data['lista_societa']= $societa->get();
         $data['societa_selezionate'] = $societa_selezionate;
-        
+
         $pdf = PDF::loadView('users.pdf.stato_formazione_aziendale', $data);
         return $pdf->stream();
-        
-        
+
+
 //        return view('users.pdf.stato_formazione_aziendale', $data);
 //            ->with('societa', $societa)
 //            ->with('societa_selezionate', $societa_selezionate);
@@ -364,28 +364,80 @@ class usersController extends Controller {
             return back()->withErrors('Codice errato');
     }
 
-    public function destroy($id)
+    public function destroy($ids)
     {
         // delete
-        $user = \App\User::find($id);
-        $societaid= $user->societa_id;
 
 
-        $user->groups()->detach();
-        $user->_albi_professionali()->detach();
-        $user->_incarichi_sicurezza()->detach();
-        $user->_mansioni()->detach();
-        $user->_tutor_societa()->detach();
-        $user->_esoneri_laurea()->detach();
+            $user = \App\User::find($id);
 
-        $userprofile = \App\user_profiles::where('user_id', $id)->delete();
-        $res = \App\registro_formazione::where('user_id',  $id)->delete();
+            $tmp = $user->nome. " " . $user->cognome;
+            $societaid = $user->societa_id;
 
-        $user->delete();
 
-        // redirect
-//        Session::flash('message', 'Utente cancellato correttamente');
-        return redirect('/users?societa_id='.$societaid)->with('ok_message', 'Il profilo è stato eliminato');;
+            $user->groups()->detach();
+            $user->_albi_professionali()->detach();
+            $user->_incarichi_sicurezza()->detach();
+            $user->_mansioni()->detach();
+            $user->_tutor_societa()->detach();
+            $user->_esoneri_laurea()->detach();
+
+            $userprofile = \App\user_profiles::where('user_id', $id)->delete();
+            $res = \App\registro_formazione::where('user_id', $id)->delete();
+
+            $user->delete();
+            \Debugbar::info("Cancellato " . $tmp);
+
+
+        // Redirect
+        // Session::flash('message', 'Utente cancellato correttamente');
+        return redirect('/users?societa_id='.$societaid)->with('ok_message', 'Il profilo è stato eliminato');
+    }
+
+    /**
+
+     * Show the application dashboard.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function deleteAll(Request $request)
+    {
+        try {
+            $ids = $request->ids;
+            $ids = explode(",", $ids);
+
+
+            foreach ($ids as $id) {
+                $user = \App\User::find($id);
+
+                $tmp = $user->nome . " " . $user->cognome;
+                $societaid = $user->societa_id;
+
+
+                $user->groups()->detach();
+                $user->_albi_professionali()->detach();
+                $user->_incarichi_sicurezza()->detach();
+                $user->_mansioni()->detach();
+                $user->_tutor_societa()->detach();
+                $user->_esoneri_laurea()->detach();
+
+                $userprofile = \App\user_profiles::where('user_id', $id)->delete();
+                $res = \App\registro_formazione::where('user_id', $id)->delete();
+
+                $user->delete();
+                \Debugbar::info("Cancellato " . $tmp);
+
+            }
+            return response()->json(['success' => "Utenti cancellati correttamente."]);
+        }
+        catch (Exception $e )
+        {
+            return response()->json(['Error' => "Problemi nell'eliminazione"]);
+        }
     }
 
 

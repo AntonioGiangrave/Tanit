@@ -33,7 +33,7 @@ class registro_formazioneController extends Controller
         $societa_selezionate = Session::get('societa_selezionate');
 
 
-
+        \Debugbar::info($societa_selezionate);
 
 
         $corsi = registro_formazione::whereNull('data_superamento')->whereNull('sessione_id')->with('_corsi._sessioni' )->groupBy('corso_id');
@@ -50,6 +50,7 @@ class registro_formazioneController extends Controller
 
             if(empty($societa_selezionate)) {
                 $societa_selezionate = array($societa->first()->id);
+                Session::put('societa_selezionate', $societa_selezionate);
             }
 
 //            $corsi = $corsi->whereHas('_user', function($query) use($societa_selezionate){
@@ -65,6 +66,7 @@ class registro_formazioneController extends Controller
             if(empty($societa_selezionate)) {
                 $societa = \App\societa::orderBy('ragione_sociale')->get();
                 $societa_selezionate = array($societa->first()->id);
+                Session::put('societa_selezionate', $societa_selezionate);
             }
 
 //            $corsi->whereHas('_user', function($query) use($societa_selezionate){
@@ -180,6 +182,7 @@ class registro_formazioneController extends Controller
                 $query->where('user_id', Auth::user()->id);
             });
 
+            \Debugbar::info($societa_selezionate);
             $societa_selezionate = array($societa->first()->id);
         }
 
