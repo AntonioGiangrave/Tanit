@@ -21,52 +21,39 @@
                     <th>Indirizzo</th>
                     <th>Posti</th>
                     <th> </th>
+                    <th> </th>
                 </tr>
                 </thead>
                 <tbody>
 
                 @foreach($aule as $single)
-                    @if($single->fad)
-                        <tr>
+
+                    <tr>
+
+                        @if($single->fad)
                             <td>{{ $single->descrizione}}</td>
                             <td>{{ $single->indirizzo}}</td>
                             <td>illimitati </td>
-                            <td>
 
-
-                                {{ Form::open(array('url' => 'aule/' . $single->id )) }}
-
-                                {{ Form::hidden('_method', 'DELETE') }}
-                                {{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i>', array( 'class' => 'btn btn-xs btn-danger' , 'type' => 'submit' )) }}
-                                {{ Form::close() }}
-
-
-
-                            </td>
-                        </tr>
-                    @else
-                        <tr>
+                        @else
                             <td>{{ $single->descrizione}}</td>
                             <td>{{ $single->indirizzo}}</td>
                             <td>{{ $single->posti}}</td>
+                        @endif
 
-                            <td>
+                        <td>
+                            {{ Form::open(array('url' => 'aule/' . $single->id .'/edit')) }}
+                            {{ Form::hidden('_method', 'GET') }}
+                            {{ Form::button('<i class="fa fa-pencil" aria-hidden="true"></i>', array('class' => 'btn btn-xs btn-tanit' , 'type' => 'submit')) }}
+                            {{ Form::close() }}
+                        </td>
 
-
-                                {{ Form::open(array('url' => 'aule/' . $single->id )) }}
-
-                                {{ Form::hidden('_method', 'DELETE') }}
-                                {{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i>', array('class' => 'btn btn-xs btn-danger' , 'type' => 'submit')) }}
-                                {{ Form::close() }}
-
-
-
-                            </td>
-                        </tr>
-
-                    @endif
-
-
+                        <td>
+                            {{ Form::open(array('url' => 'aule/' . $single->id )) }}
+                            {{ Form::hidden('_method', 'DELETE') }}
+                            {{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i>', array('class' => 'btn btn-xs btn-danger' , 'type' => 'submit')) }}
+                            {{ Form::close() }}
+                        </td>
 
                 @endforeach
                 </tbody>

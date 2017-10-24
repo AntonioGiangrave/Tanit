@@ -364,7 +364,7 @@ class usersController extends Controller {
             return back()->withErrors('Codice errato');
     }
 
-    public function destroy($ids)
+    public function destroy($id)
     {
         // delete
 
@@ -421,6 +421,7 @@ class usersController extends Controller {
                 $user->groups()->detach();
                 $user->_albi_professionali()->detach();
                 $user->_incarichi_sicurezza()->detach();
+
                 $user->_mansioni()->detach();
                 $user->_tutor_societa()->detach();
                 $user->_esoneri_laurea()->detach();

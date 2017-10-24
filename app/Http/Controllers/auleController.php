@@ -84,7 +84,10 @@ class auleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['datiRecuperati'] = \App\aule::find($id);
+
+
+        return view('aule.editaula', $data);
     }
 
     /**
@@ -96,7 +99,28 @@ class auleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'descrizione' => 'required',
+            'posti' => 'required',
+        ], [
+            'descriozione.required' => 'Manca la descrizione',
+            'posti.required' => 'Indicare il numero di posti. Se fad indica 99999'
+        ]);
+
+        $aula = \App\aule::find($id);
+
+
+        $aula->descrizione= $request->input('descrizione');
+        $aula->indirizzo= $request->input('indirizzo');
+        $aula->fad= $request->input('fad');
+        $aula->posti= $request->input('posti');
+
+        $aula->save();
+
+
+        $data['aule'] = \App\aule::all();
+        return view('aule.index', $data);
+
     }
 
     /**
@@ -110,23 +134,20 @@ class auleController extends Controller
 
         $aula = \App\aule::find($id);
 
+        try {
+            $sessioni = \App\aule_sessioni::where('id_aula', $aula->id);
+            $sessioni->delete();
+            $aula->delete();
 
-        $sessioni = \App\aule_sessioni::where('id_aula' , $aula->id);
+        }catch (Exception $e){
 
-        $sessioni->delete();
+            var_dump($e);
 
-//
-//        $user->groups()->detach();
-//        $user->_albi_professionali()->detach();
-//        $user->_incarichi_sicurezza()->detach();
-//        $user->_mansioni()->detach();
-//        $user->_tutor_societa()->detach();
-//        $user->_esoneri_laurea()->detach();
-//
-//        $userprofile = \App\user_profiles::where('user_id', $id)->delete();
-//        $res = \App\registro_formazione::where('user_id',  $id)->delete();
+            return back()->withErrors('Impossibile cancellare quest\'aula. ');
+        }
 
-        $aula->delete();
+
+
         return redirect('/aule')->with('ok_message', 'L\'aula è stata eliminata');
     }
 }
