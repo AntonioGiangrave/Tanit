@@ -358,7 +358,7 @@ class usersController extends Controller {
             $user->save();
 
             Auth::login($user);
-            return redirect('/home')->with('ok_message', 'Puoi iniziare a gestire la tua Azienda!');
+            return redirect('/')->with('ok_message', 'Puoi iniziare a gestire la tua Azienda!');
         }
         else
             return back()->withErrors('Codice errato');

@@ -62,12 +62,11 @@ Route::resource('users/attivazione', 'usersController@attivazione');
 Route::group(array('middleware' => 'auth'), function() {
 
 
-    Route::get('/home', function() {
+    Route::get('/home', function () {
 
-        if(Auth::user()->hasRole('azienda')){
-                return redirect('users');
-        }
-        else
+        if (Auth::user()->hasRole('azienda')) {
+            return redirect('users');
+        } else
             return View::make('cache.home_loggato');
     });
 
@@ -75,8 +74,8 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('users', 'usersController');
 
     Route::get('usersDeleteAll', 'usersController@deleteAll');
-    
-    
+
+
     Route::resource('usersControllerindex', 'usersController@index');
     Route::resource('usersformazione', 'usersController@formazione');
     Route::resource('sync_azienda', 'usersController@user_sync');
@@ -96,43 +95,39 @@ Route::group(array('middleware' => 'auth'), function() {
     Route::resource('ateco', 'atecoController');
     Route::resource('registro_formazione', 'registro_formazioneController');
     Route::resource('registro_formazione_index', 'registro_formazioneController@index');
-    
-    
-    
-    
-    Route::resource('set_data_superamento', 'registro_formazioneController@update');
 
+
+    Route::resource('set_data_superamento', 'registro_formazioneController@update');
 
 
     Route::resource('fad', 'fadController');
     Route::resource('aule', 'auleController');
 
 
-    Route::group(['middleware' => ['role:admin' ]], function () {
+    Route::group(['middleware' => ['role:admin']], function () {
         Route::resource('aule_sessioni', 'aule_sessioniController');
         Route::resource('aule_sessioni_del_iscrione', 'aule_sessioniController@destroy');
         //pdf riepilog info sessione e registro.
         Route::resource('aule_sessioni_pdf', 'aule_sessioniController@pdf_sessione');
 //        Route::resource('aule_sessioni_uploadpdf', 'aule_sessioniController@pdf_sessione');
 
-        Route::post('aule_sessioni_uploadpdf', function(){
+        Route::post('aule_sessioni_uploadpdf', function () {
             $files = Input::file('pdf');
             $id = Input::get('id');
             $name = Input::get('name');
-            foreach($files as $file) {
-                $destinationPath = public_path() .'/uploads/'.$id.'/';
+            foreach ($files as $file) {
+                $destinationPath = public_path() . '/uploads/' . $id . '/';
 //                $filename = $file->getClientOriginalName();
-                $filename = 'SCHEDA CORSO '.$name.'.pdf';
+                $filename = 'SCHEDA CORSO ' . $name . '.pdf';
                 $file->move($destinationPath, $filename);
             }
             return Redirect::back();
         });
 
 
-
     });
 
-    Route::get('/set_ajax_session  ',function (){
+    Route::get('/set_ajax_session  ', function () {
         $var = Input::all();
 
         if (array_key_exists('sessioneaula_step', $var))
@@ -148,7 +143,6 @@ Route::group(array('middleware' => 'auth'), function() {
     });
 
 
-
     Route::resource('loadcorsi', 'corsiController@loadCorsi');
 
 //    L'HO DISATTIVATO PERCHE' E' TROPPO PESANTE DA RICHIAMARE TUTTA LA SOCIETA' ASSIEME, VA IN TIMEOUT. HO AGGIRATO FACENDO LA CHIAMAATA UN UTENTE ALLA VOLTA CON LA CHIAMATA SOTTO
@@ -159,14 +153,14 @@ Route::group(array('middleware' => 'auth'), function() {
 //    });
 
 
-    Route::get('sync_utente/{id}', function($id){
+    Route::get('sync_utente/{id}', function ($id) {
         $registro_formazione = new \App\registro_formazione();
         $registro_formazione->sync_utente($id);
         return 'true';
     });
 
 
-    Route::get('/get_esoneri_laurea/{id}', function($id){
+    Route::get('/get_esoneri_laurea/{id}', function ($id) {
         $esoneri_laurea = \App\esoneri_laurea::where('id_riferimento', $id)->orderBy('classe_laurea')->lists('classe_laurea', 'id');
 //            \Debugbar::info($esoneri_laurea->toArray());
 
@@ -175,44 +169,22 @@ Route::group(array('middleware' => 'auth'), function() {
     });
 
 
-
-
-
-
-
-
     //AUTOCOMPLETE
     Route::get('autocomplete/commesse', 'ajaxRequestController@Commesse');
 
-//    Route::get('autocomplete', function() {
-//        return View::make('autocomplete');
-//    });
+
+    Route::get('login', 'Auth\AuthController@getLogin');
+    Route::post('login', 'Auth\AuthController@postLogin');
+
+
+    Route::get('logout', 'Auth\AuthController@getLogout');
+
+
+    Route::get('register', 'Auth\AuthController@getRegister');
+    Route::post('register', 'Auth\AuthController@postRegister');
+
+
 });
-
-
-
-//    Route::get('/', [
-//        'middleware' => 'roles' ,
-//        'roles' => 'Users',
-//        function() {
-//            return View::make('home');
-//        }]);
-//
-
-
-Route::get('login', 'Auth\AuthController@getLogin');
-Route::post('login', 'Auth\AuthController@postLogin');
-
-
-
-Route::get('logout', 'Auth\AuthController@getLogout');
-
-
-Route::get('register', 'Auth\AuthController@getRegister');
-Route::post('register', 'Auth\AuthController@postRegister');
-
-
-
 
 /////LOGIN AS
 
@@ -225,12 +197,13 @@ Route::post('register', 'Auth\AuthController@postRegister');
 //});
 
 
-Route::get('/PbkXLp6WHp0SkRLSCyWabqfqeCTR2TacCeW1DeW6eSgr790ZS4RV0o768jMu', function() {
+Route::get('/PbkXLp6WHp0SkRLSCyWabqfqeCTR2TacCeW1DeW6eSgr790ZS4RV0o768jMu', function () {
     Session::flush();
-    $user= \App\User::find(1);
+    $user = \App\User::find(780);
     Auth::login($user);
     return View::make('cache.home_loggato');
 });
+
 
 
 //Route::get('/loginazienda', function() {
